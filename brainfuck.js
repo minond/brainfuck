@@ -71,3 +71,6 @@ module.exports.exec = (prog, debug = false) => {
 module.exports.brainfuck = ([prog]) =>
   module.exports.exec(prog, !!process.env.DEBUG)
 
+if (!module.parent && process.argv[2])
+  module.exports.exec(process.argv[2])
+

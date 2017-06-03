@@ -22,6 +22,32 @@ module.exports.exec = (prog, debug = false) => {
     console.log('cmd: %s\tcurr: %s[%s]\tmem: %s', cmd, pointer, curr(),
       JSON.stringify(memory))
 
+  const find_end = (idx) => {
+    var stack = 1
+
+    // assuming we're starting from opening bracket
+    idx++
+
+    while (cmds[idx]) {
+      switch (cmds[idx]) {
+      case '[':
+        stack++
+        break
+
+      case ']':
+        stack--
+        break
+      }
+
+      if (!stack)
+        break
+      else
+        idx++
+    }
+
+    return idx
+  }
+
   const ops = {
     '+': () => save((curr() === 255 ? 0 : curr() + 1)),
     '-': () => save((curr() || 256) - 1),
@@ -34,9 +60,13 @@ module.exports.exec = (prog, debug = false) => {
     cmd = cmds[idx]
 
     if (cmd === '[') {
-      // XXX should jump to end of loop
-      // if (curr() === 0) process.exit(123)
-      jumps.push(idx)
+      if (curr() === 0) {
+        var tmp = idx
+        idx = find_end(idx)
+      } else {
+        jumps.push(idx)
+      }
+
       tick(cmd)
     } else if (cmd === ']') {
       lidx = jumps[jumps.length - 1]
@@ -73,4 +103,4 @@ module.exports.brainfuck = ([prog]) =>
   module.exports.exec(prog, !!process.env.DEBUG)
 
 if (!module.parent && process.argv[2])
-  module.exports.exec(process.argv[2])
+  module.exports.exec(process.argv[2], !!process.env.DEBUG)

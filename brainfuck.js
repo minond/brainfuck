@@ -94,12 +94,11 @@ const exec = module.exports.exec = (prog, debug = false) => {
     !!process.env.DEBUG && '-+<>[]'.indexOf(cmd) !== -1
 
   const tick = () => {
-    if (idx < len) {
-      if (can_debug(cmd)) {
-        dump(cmd)
-      }
+    if (can_debug(cmd)) {
+      dump(cmd)
+    }
 
-      idx++
+    if (idx++ < len) {
       setImmediate(run)
     }
   }

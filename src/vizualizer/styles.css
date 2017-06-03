@@ -65,20 +65,12 @@ body {
 }
 
 
-.lh-copy {
-  line-height: 1.5;
-}
-
 .pa3 {
   padding: 1rem;
 }
 
 .f3 {
   font-size: 1.5rem;
-}
-
-.measure {
-  max-width: 30em;
 }
 
 @media screen and (min-width: 30em) {
@@ -99,57 +91,12 @@ body {
   }
 }
 
-.bl {
-    border-left-style: solid;
-    border-left-width: 1px;
-}
-
-.b--blue {
-    border-color: #357edd;
-}
-
-.bw2 {
-    border-width: .25rem;
-}
-
-.athelas {
-    font-family: athelas, georgia, serif;
-}
-
-.fs-normal {
-    font-style: normal;
-}
-
-.tracked {
-    letter-spacing: .1em;
-}
-
 .pa4 {
-    padding: 2rem;
-}
-
-.pl4 {
-    padding-left: 2rem;
-}
-
-.ml0 {
-    margin-left: 0;
-}
-
-.mt0 {
-    margin-top: 0;
-}
-
-.ttu {
-    text-transform: uppercase;
-}
-
-.f5 {
-    font-size: 1rem;
+  padding: 2rem;
 }
 
 .f6 {
-    font-size: .875rem;
+  font-size: .875rem;
 }
 
 .ba {
@@ -214,18 +161,6 @@ body {
 .dim:active {
   opacity: .8;
   transition: opacity .15s ease-out;
-}
-
-@media screen and (min-width: 30em) and (max-width: 60em) {
-    .f4-m {
-        font-size: 1.25rem;
-    }
-}
-
-@media screen and (min-width: 60em) {
-    .f3-l {
-        font-size: 1.5rem;
-    }
 }
 
 /* Modules */

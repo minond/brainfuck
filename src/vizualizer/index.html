@@ -11,28 +11,51 @@
     <link rel="stylesheet" href="/dist/styles.css">
   </head>
   <body>
-    <article class="pa3 pa5-ns">
-      <h1 class="f3 f1-m f-headline-l">Brainfuck</h1>
+    <section class="pa3 pa5-ns">
+      <h1 class="f3 f1-m f-headline-l tipitop">Brainfuck</h1>
 
-      <blockquote class="athelas ml0 mt0 pl4 bl bw2 b--blue">
-        <p class="f5 f4-m f3-l lh-copy measure mt0">Brainfuck is an esoteric
-        programming language created in 1993 by Urban Müller, and notable for
-        its extreme minimalism. The language consists of only eight simple
-        commands and an instruction pointer. While it is fully Turing-complete,
-        it is not intended for practical use...</p>
-        <cite class="f6 ttu tracked fs-normal">
-          <span>-</span>
-          <a href="https://en.wikipedia.org/wiki/Brainfuck"
-            target="_blank">https://en.wikipedia.org/wiki/Brainfuck</a>
-        </cite>
-      </blockquote>
-    </article>
+      <button class="editor-ctrl f6 link dim ba ph3 pv2 mb2 dib black">Run</button>
+      <button class="editor-ctrl f6 link dim ba ph3 pv2 mb2 dib black">Pause</button>
+      <button class="editor-ctrl f6 link dim ba ph3 pv2 mb2 dib black">Step</button>
+
+      <div contenteditable="true" class="editor">+++++ +++++             initialize counter (cell #0) to 10
+[                       use loop to set 70/100/30/10
+    > +++++ ++              add  7 to cell #1
+    > +++++ +++++           add 10 to cell #2
+    > +++                   add  3 to cell #3
+    > +                     add  1 to cell #4
+<<<< -                  decrement counter (cell #0)
+]
+> ++ .                  print 'H'
+> + .                   print 'e'
++++++ ++ .              print 'l'
+.                       print 'l'
++++ .                   print 'o'
+> ++ .                  print ' '
+<< +++++ +++++ +++++ .  print 'W'
+> .                     print 'o'
++++ .                   print 'r'
+----- - .               print 'l'
+----- --- .             print 'd'
+> + .                   print '!'
+> .                     print '\n'</div>
+
+      <!-- <blockquote class="athelas ml0 mt0 pl4 bl bw2 b&#45;&#45;blue"> -->
+      <!--   <p class="f5 f4&#45;m f3&#45;l lh&#45;copy measure mt0">Brainfuck is an esoteric -->
+      <!--   programming language created in 1993 by Urban Müller, and notable for -->
+      <!--   its extreme minimalism. The language consists of only eight simple -->
+      <!--   commands and an instruction pointer. While it is fully Turing&#45;complete, -->
+      <!--   it is not intended for practical use...</p> -->
+      <!--   <cite class="f6 ttu tracked fs&#45;normal"> -->
+      <!--     <span>&#45;</span> -->
+      <!--     <a href="https://en.wikipedia.org/wiki/Brainfuck" -->
+      <!--       target="_blank">https://en.wikipedia.org/wiki/Brainfuck</a> -->
+      <!--   </cite> -->
+      <!-- </blockquote> -->
+
+    </section>
 
     <img class="fuckyeah" src="/dist/retro-pixel-computer.gif" />
-    <!-- <img class="fuckyeah" -->
-    <!--   src="https://media.giphy.com/media/MzX5hCfR5nP20/200w_d.gif" /> -->
-    <!-- <img class="fuckyeah" -->
-    <!--   src="https://media.giphy.com/media/aj48wfS5SKWfC/200w_d.gif" /> -->
 
     <script src="/dist/browser.js"></script>
   </body>

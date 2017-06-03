@@ -11,34 +11,19 @@
     <link rel="stylesheet" href="/dist/styles.css">
   </head>
   <body>
-    <section class="pa3 pa5-ns">
+    <section class="pa3 pa5-ns cf">
       <h1 class="f3 f1-m f-headline-l tipitop">Brainfuck</h1>
 
-      <button class="editor-ctrl f6 link dim ba ph3 pv2 mb2 dib black">Run</button>
-      <button class="editor-ctrl f6 link dim ba ph3 pv2 mb2 dib black">Pause</button>
-      <button class="editor-ctrl f6 link dim ba ph3 pv2 mb2 dib black">Step</button>
+      <div class="fl w-100 w-50-ns bg-near-white tc">
+        <button class="editor-ctrl f6 link dim ba ph3 pv2 mb2 dib black">Run</button>
+        <button class="editor-ctrl f6 link dim ba ph3 pv2 mb2 dib black">Pause</button>
+        <button class="editor-ctrl f6 link dim ba ph3 pv2 mb2 dib black">Step</button>
 
-      <div contenteditable="true" class="editor">+++++ +++++             initialize counter (cell #0) to 10
-[                       use loop to set 70/100/30/10
-    > +++++ ++              add  7 to cell #1
-    > +++++ +++++           add 10 to cell #2
-    > +++                   add  3 to cell #3
-    > +                     add  1 to cell #4
-<<<< -                  decrement counter (cell #0)
-]
-> ++ .                  print 'H'
-> + .                   print 'e'
-+++++ ++ .              print 'l'
-.                       print 'l'
-+++ .                   print 'o'
-> ++ .                  print ' '
-<< +++++ +++++ +++++ .  print 'W'
-> .                     print 'o'
-+++ .                   print 'r'
------ - .               print 'l'
------ --- .             print 'd'
-> + .                   print '!'
-> .                     print '\n'</div>
+        <div contenteditable="true" class="editor"></div>
+      </div>
+
+      <div class="fl w-100 w-50-ns bg-near-white tc">
+      </div>
 
       <!-- <blockquote class="athelas ml0 mt0 pl4 bl bw2 b&#45;&#45;blue"> -->
       <!--   <p class="f5 f4&#45;m f3&#45;l lh&#45;copy measure mt0">Brainfuck is an esoteric -->
@@ -52,11 +37,34 @@
       <!--       target="_blank">https://en.wikipedia.org/wiki/Brainfuck</a> -->
       <!--   </cite> -->
       <!-- </blockquote> -->
-
     </section>
 
     <img class="fuckyeah" src="/dist/retro-pixel-computer.gif" />
 
     <script src="/dist/browser.js"></script>
+    <script>
+    document.querySelector('.editor').innerText = "" +
+"+++++ +++++             initialize counter (cell #0) to 10\n" +
+"[                       use loop to set 70/100/30/10\n" +
+"    > +++++ ++              add  7 to cell #1\n" +
+"    > +++++ +++++           add 10 to cell #2\n" +
+"    > +++                   add  3 to cell #3\n" +
+"    > +                     add  1 to cell #4\n" +
+"<<<< -                  decrement counter (cell #0)\n" +
+"]\n" +
+"> ++ .                  print 'H'\n" +
+"> + .                   print 'e'\n" +
+"+++++ ++ .              print 'l'\n" +
+".                       print 'l'\n" +
+"+++ .                   print 'o'\n" +
+"> ++ .                  print ' '\n" +
+"<< +++++ +++++ +++++ .  print 'W'\n" +
+"> .                     print 'o'\n" +
+"+++ .                   print 'r'\n" +
+"----- - .               print 'l'\n" +
+"----- --- .             print 'd'\n" +
+"> + .                   print '!'\n" +
+"> .                     print '\\n'"
+    </script>
   </body>
 </html>

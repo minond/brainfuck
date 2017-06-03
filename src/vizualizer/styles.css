@@ -36,6 +36,35 @@ body {
 
 /*! TACHYONS v4.6.1 | http://tachyons.io */
 
+.cf:before, .cf:after {
+  content: " ";
+  display: table;
+}
+
+.cf:after {
+  clear: both;
+}
+
+.cf {
+  *zoom: 1;
+}
+
+.fl {
+  float: left;
+  _display: inline;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+@media screen and (min-width: 30em) {
+  .w-50-ns {
+    width: 50%;
+  }
+}
+
+
 .lh-copy {
   line-height: 1.5;
 }

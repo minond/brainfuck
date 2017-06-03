@@ -140,7 +140,7 @@ const exec = (prog, user_hooks) => {
   }
 
   // moves on to the next command. checks that we still have commands left to
-  // read and also show debugging information. using a `setImmediate` (or one
+  // read and also show debugging information. in a `process.nextTick` (or one
   // of its siblings) to prevent call stack overflows
   const internal_tick = () => {
     if (can_debug(cmd)) {
@@ -148,7 +148,7 @@ const exec = (prog, user_hooks) => {
     }
 
     if (idx++ < len && typeof cmds[idx] === 'string') {
-      setImmediate(run, 0)
+      process.nextTick(run, 0)
     }
   }
 

@@ -1,5 +1,22 @@
 'use strict'
 
+const node_read = (cb) => {
+  const readline = require('readline');
+
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  rl.question('input: ', (input) => {
+    rl.close();
+    cb(input);
+  });
+}
+
+const read = (cb) =>
+  node_read(cb)
+
 const exec = module.exports.exec = (prog) => {
   const cmds = prog.split('')
   const len = cmds.length
@@ -58,9 +75,6 @@ const exec = module.exports.exec = (prog) => {
     // XXX send to param stream
     '.': () => process.stdout.write(String.fromCharCode(curr())),
 
-    // XXX take user input
-    ',': () => {},
-
     '[': () => {
       if (curr() === 0) {
         idx = find_end(idx)
@@ -85,20 +99,26 @@ const exec = module.exports.exec = (prog) => {
 
     if (cmd in ops) {
       ops[cmd]()
+      tick()
+    } else if (cmd === ',') {
+      read((input) => {
+        save(input.charCodeAt(0))
+        tick();
+      })
+    } else {
+      tick()
     }
-
-    tick()
   }
 
   const can_debug = (cmd) =>
-    !!process.env.DEBUG && '-+<>[]'.indexOf(cmd) !== -1
+    !!process.env.DEBUG && '-+<>[],.'.indexOf(cmd) !== -1
 
   const tick = () => {
     if (can_debug(cmd)) {
       dump(cmd)
     }
 
-    if (idx++ < len && cmds[idx]) {
+    if (idx++ < len && typeof cmds[idx] === 'string') {
       setImmediate(run)
     }
   }

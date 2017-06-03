@@ -1,42 +1,124 @@
 @import '../../node_modules/tachyons/src/_normalize.css';
 
 body {
-    cursor: default;
+  cursor: default;
+}
+
+.inverted {
+  background-color: black;
+  color: white;
+}
+
+.fuckyeah {
+  height: 150px;
+  position: absolute;
+  bottom: 25px;
+  right: 30px;
 }
 
 .lh-copy {
-    line-height: 1.5;
+  line-height: 1.5;
 }
 
 .pa3 {
-    padding: 1rem;
+  padding: 1rem;
 }
 
 .f3 {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 .measure {
-    max-width: 30em;
+  max-width: 30em;
 }
 
 @media screen and (min-width: 30em) {
-    .pa5-ns {
-        padding: 4rem;
-    }
+  .pa5-ns {
+    padding: 4rem;
+  }
 }
 
 @media screen and (min-width: 30em) and (max-width: 60em) {
-    .f1-m {
-        font-size: 3rem;
+  .f1-m {
+    font-size: 3rem;
+  }
+}
+
+@media screen and (min-width: 60em) {
+  .f-headline-l {
+    font-size: 6rem;
+  }
+}
+
+.bl {
+    border-left-style: solid;
+    border-left-width: 1px;
+}
+
+.b--blue {
+    border-color: #357edd;
+}
+
+.bw2 {
+    border-width: .25rem;
+}
+
+.athelas {
+    font-family: athelas, georgia, serif;
+}
+
+.fs-normal {
+    font-style: normal;
+}
+
+.tracked {
+    letter-spacing: .1em;
+}
+
+/* .black-90 { */
+/*     color: rgba(0, 0, 0, .9); */
+/* } */
+
+.pa4 {
+    padding: 2rem;
+}
+
+.pl4 {
+    padding-left: 2rem;
+}
+
+.ml0 {
+    margin-left: 0;
+}
+
+.mt0 {
+    margin-top: 0;
+}
+
+.ttu {
+    text-transform: uppercase;
+}
+
+.f5 {
+    font-size: 1rem;
+}
+
+.f6 {
+    font-size: .875rem;
+}
+
+@media screen and (min-width: 30em) and (max-width: 60em) {
+    .f4-m {
+        font-size: 1.25rem;
     }
 }
 
 @media screen and (min-width: 60em) {
-    .f-headline-l {
-        font-size: 6rem;
+    .f3-l {
+        font-size: 1.5rem;
     }
 }
+
 
 /*! TACHYONS v4.6.1 | http://tachyons.io */
 
@@ -47,11 +129,11 @@ body {
 /* @import '../../node_modules/tachyons/src/_background-size'; */
 /* @import '../../node_modules/tachyons/src/_background-position'; */
 /* @import '../../node_modules/tachyons/src/_outlines'; */
-/* @import '../../node_modules/tachyons/src/_borders'; */
-/* @import '../../node_modules/tachyons/src/_border-colors'; */
+@import '../../node_modules/tachyons/src/_borders';
+@import '../../node_modules/tachyons/src/_border-colors';
 /* @import '../../node_modules/tachyons/src/_border-radius'; */
 /* @import '../../node_modules/tachyons/src/_border-style'; */
-/* @import '../../node_modules/tachyons/src/_border-widths'; */
+@import '../../node_modules/tachyons/src/_border-widths';
 /* @import '../../node_modules/tachyons/src/_box-shadow'; */
 /* @import '../../node_modules/tachyons/src/_code'; */
 /* @import '../../node_modules/tachyons/src/_coordinates'; */
@@ -59,12 +141,12 @@ body {
 /* @import '../../node_modules/tachyons/src/_display'; */
 /* @import '../../node_modules/tachyons/src/_flexbox'; */
 /* @import '../../node_modules/tachyons/src/_floats'; */
-/* @import '../../node_modules/tachyons/src/_font-family'; */
-/* @import '../../node_modules/tachyons/src/_font-style'; */
+@import '../../node_modules/tachyons/src/_font-family';
+@import '../../node_modules/tachyons/src/_font-style';
 /* @import '../../node_modules/tachyons/src/_font-weight'; */
 /* @import '../../node_modules/tachyons/src/_forms'; */
 /* @import '../../node_modules/tachyons/src/_heights'; */
-/* @import '../../node_modules/tachyons/src/_letter-spacing'; */
+@import '../../node_modules/tachyons/src/_letter-spacing';
 @import '../../node_modules/tachyons/src/_line-height';
 /* @import '../../node_modules/tachyons/src/_links'; */
 /* @import '../../node_modules/tachyons/src/_lists'; */
@@ -74,14 +156,14 @@ body {
 /* @import '../../node_modules/tachyons/src/_position'; */
 /* @import '../../node_modules/tachyons/src/_opacity'; */
 /* @import '../../node_modules/tachyons/src/_rotations'; */
-/* @import '../../node_modules/tachyons/src/_skins'; */
+@import '../../node_modules/tachyons/src/_skins';
 /* @import '../../node_modules/tachyons/src/_skins-pseudo'; */
 @import '../../node_modules/tachyons/src/_spacing';
 /* @import '../../node_modules/tachyons/src/_negative-margins'; */
 /* @import '../../node_modules/tachyons/src/_tables'; */
 /* @import '../../node_modules/tachyons/src/_text-decoration'; */
 /* @import '../../node_modules/tachyons/src/_text-align'; */
-/* @import '../../node_modules/tachyons/src/_text-transform'; */
+@import '../../node_modules/tachyons/src/_text-transform';
 @import '../../node_modules/tachyons/src/_type-scale';
 @import '../../node_modules/tachyons/src/_typography';
 /* @import '../../node_modules/tachyons/src/_utilities'; */

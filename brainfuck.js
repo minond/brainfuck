@@ -78,6 +78,8 @@ module.exports.exec = (prog, debug = false) => {
 
       tick(cmd)
     } else if (cmd === ',') {
+      // XXX take user input
+      tick()
     } else if (cmd in ops) {
       ops[cmd]()
       tick(cmd)

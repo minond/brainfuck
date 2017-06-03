@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports.exec = (prog, debug = false) => {
+const exec = module.exports.exec = (prog, debug = false) => {
   const cmds = prog.split('')
   const len = cmds.length
 
@@ -30,19 +30,20 @@ module.exports.exec = (prog, debug = false) => {
 
     while (cmds[idx]) {
       switch (cmds[idx]) {
-      case '[':
-        stack++
-        break
+        case '[':
+          stack++
+          break
 
-      case ']':
-        stack--
-        break
+        case ']':
+          stack--
+          break
       }
 
-      if (!stack)
+      if (!stack) {
         break
-      else
+      } else {
         idx++
+      }
     }
 
     return idx
@@ -53,56 +54,62 @@ module.exports.exec = (prog, debug = false) => {
     '-': () => save((curr() || 256) - 1),
     '<': () => --pointer,
     '>': () => ++pointer,
+
+    // XXX send to param stream
     '.': () => process.stdout.write(String.fromCharCode(curr())),
+
+    // XXX take user input
+    ',': () => {},
+
+    '[': () => {
+      if (curr() === 0) {
+        idx = find_end(idx)
+      } else {
+        jumps.push(idx)
+      }
+    },
+
+    ']': () => {
+      lidx = jumps[jumps.length - 1]
+
+      if (curr() !== 0) {
+        idx = lidx
+      } else {
+        jumps.pop()
+      }
+    },
   }
 
   const run = () => {
     cmd = cmds[idx]
 
-    if (cmd === '[') {
-      if (curr() === 0) {
-        var tmp = idx
-        idx = find_end(idx)
-      } else {
-        jumps.push(idx)
-      }
-
-      tick(cmd)
-    } else if (cmd === ']') {
-      lidx = jumps[jumps.length - 1]
-
-      if (curr() !== 0)
-        idx = lidx
-      else
-        jumps.pop()
-
-      tick(cmd)
-    } else if (cmd === ',') {
-      // XXX take user input
-      tick()
-    } else if (cmd in ops) {
+    if (cmd in ops) {
       ops[cmd]()
-      tick(cmd)
-    } else
-      tick('')
+    }
+
+    tick()
   }
+
+  const can_debug = (cmd) =>
+    !!process.env.DEBUG && '-+<>[]'.indexOf(cmd) !== -1
 
   const tick = () => {
     if (idx < len) {
-      debug && "-+<>[]".indexOf(cmd) !== -1 && dump(cmd)
+      if (can_debug(cmd)) {
+        dump(cmd)
+      }
+
       idx++
       setImmediate(run)
-      // setTimeout(run, 1000)
-      // setTimeout(() => run(), 1)
-    } else if (debug)
-      console.log(prog)
+    }
   }
 
   run()
 }
 
 module.exports.brainfuck = ([prog]) =>
-  module.exports.exec(prog, !!process.env.DEBUG)
+  exec(prog, !!process.env.DEBUG)
 
-if (!module.parent && process.argv[2])
-  module.exports.exec(process.argv[2], !!process.env.DEBUG)
+if (!module.parent && process.argv[2]) {
+  exec(process.argv[2], !!process.env.DEBUG)
+}

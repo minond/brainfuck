@@ -12,7 +12,7 @@ browserify_flags = -o $(dist_dir)/browser.js
 docco_flags = --layout parallel --output $(docs_dir)
 watch_flags = --ignoreDotFiles
 
-all: css build docs
+all: css build docs gif
 
 watch-css:
 	$(watch) 'date; make css' src/vizualizer $(watch_flags)

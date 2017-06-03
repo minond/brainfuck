@@ -34,6 +34,7 @@ module.exports.exec = (prog, debug = false) => {
     cmd = cmds[idx]
 
     if (cmd === '[') {
+      // XXX should jump to end of loop
       // if (curr() === 0) process.exit(123)
       jumps.push(idx)
       tick(cmd)
@@ -73,4 +74,3 @@ module.exports.brainfuck = ([prog]) =>
 
 if (!module.parent && process.argv[2])
   module.exports.exec(process.argv[2])
-

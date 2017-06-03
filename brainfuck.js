@@ -1,10 +1,10 @@
 'use strict'
 
-const exec = module.exports.exec = (prog, debug = false) => {
+const exec = module.exports.exec = (prog) => {
   const cmds = prog.split('')
   const len = cmds.length
 
-  var idx = -1
+  var idx = 0
   var lidx
   var cmd
 
@@ -98,7 +98,7 @@ const exec = module.exports.exec = (prog, debug = false) => {
       dump(cmd)
     }
 
-    if (idx++ < len) {
+    if (idx++ < len && cmds[idx]) {
       setImmediate(run)
     }
   }
@@ -107,8 +107,8 @@ const exec = module.exports.exec = (prog, debug = false) => {
 }
 
 module.exports.brainfuck = ([prog]) =>
-  exec(prog, !!process.env.DEBUG)
+  exec(prog)
 
 if (!module.parent && process.argv[2]) {
-  exec(process.argv[2], !!process.env.DEBUG)
+  exec(process.argv[2])
 }

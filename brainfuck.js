@@ -1,5 +1,13 @@
 'use strict'
 
+const IN_BROWSER = typeof window !== 'undefined'
+
+const node_write = (str) =>
+  process.stdout.write(str)
+
+const browser_write = (str) =>
+  console.log(str)
+
 const node_read = (cb) => {
   const readline = require('readline');
 
@@ -14,13 +22,20 @@ const node_read = (cb) => {
   });
 }
 
+const browser_read = (cb) =>
+  cb(prompt('input:'))
+
 const read = (cb) =>
-  node_read(cb)
+  IN_BROWSER ? browser_read(cb) : node_read(cb)
+
+const write = (str) =>
+  IN_BROWSER ? browser_write(str) : node_write(str)
 
 const exec = module.exports.exec = (prog) => {
   const cmds = prog.split('')
   const len = cmds.length
 
+  var steps = 0
   var idx = 0
   var lidx
   var cmd
@@ -36,8 +51,8 @@ const exec = module.exports.exec = (prog) => {
     memory[pointer] = val
 
   const dump = (cmd) =>
-    console.log('cmd: %s\tcurr: %s[%s]\tmem: %s', cmd, pointer, curr(),
-      JSON.stringify(memory))
+    console.log('[%s:%s]\t\tcmd: %s\t\tcurr: %s[%s]\t\tmem: %s', ++steps, idx, cmd,
+      pointer, curr(), JSON.stringify(memory))
 
   const find_end = (idx) => {
     var stack = 1
@@ -73,7 +88,7 @@ const exec = module.exports.exec = (prog) => {
     '>': () => ++pointer,
 
     // XXX send to param stream
-    '.': () => process.stdout.write(String.fromCharCode(curr())),
+    '.': () => write(String.fromCharCode(curr())),
 
     '[': () => {
       if (curr() === 0) {
@@ -119,7 +134,7 @@ const exec = module.exports.exec = (prog) => {
     }
 
     if (idx++ < len && typeof cmds[idx] === 'string') {
-      setImmediate(run)
+      setTimeout(run, 0)
     }
   }
 

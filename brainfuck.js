@@ -9,13 +9,10 @@
 
 // some helper functions. need to know if we should use browser or node apis
 // for i/o. the following functions are read and write implementations for
-// specific environments. they include:
-// - write function for node
-// - write function for browsers
-// - read function for node
-// - read function for browsers
-// - generic read function. use this in the interpreter
-// - generic write function. use this in the interpreter
+// specific environments. they include: a write function for node; a write
+// function for browsers; a read function for node; a read function for
+// browsers; a generic read function. use this in the interpreter; and a
+// generic write function. use this in the interpreter.
 
 'use strict'
 
@@ -51,9 +48,14 @@ const read = (cb) =>
 const write = (str) =>
   in_browser ? browser_write(str) : node_write(str)
 
-// ## the interpreter
+const isset = (val) =>
+  val !== null && val !== undefined
 
-const exec = (prog) => {
+const call = (fn) =>
+  fn()
+
+// ## the interpreter
+const exec = (prog, user_hooks) => {
   // first, split the program into an array of characters so we can take action
   // upon each of them one by one. that is stores in `cmds`. then store the
   // number of "commands" so that we know when to stop and not have to check
@@ -125,8 +127,39 @@ const exec = (prog) => {
     return idx
   }
 
+  // ### hooks
+
+  // hooks allow other programs to interact with the internals of the
+  // interpreter. they allow for custom io functions as well as ways to move on
+  // to the next step and update state
+
+  const internal_update = (state) => {
+    memory = isset(state.memory) ? state.memory : memory
+    pointer = isset(state.pointer) ? state.pointer : pointer
+    idx = isset(state.idx) ? state.idx : idx
+  }
+
+  // moves on to the next command. checks that we still have commands left to
+  // read and also show debugging information. using a `setImmediate` (or one
+  // of its siblings) to prevent call stack overflows
+  const internal_tick = () => {
+    if (can_debug(cmd)) {
+      dump(cmd)
+    }
+
+    if (idx++ < len && typeof cmds[idx] === 'string') {
+      setImmediate(run, 0)
+    }
+  }
+
+  const tick = () =>
+    hooks.tick(internal_tick, internal_update, { memory, pointer, idx })
+
+  const hooks = Object.assign({ read, write, tick: call },
+    user_hooks);
+
   // ### operators
-  // | cmd  | description                                                                                                                                                                         |
+  // | tok  | description                                                                                                                                                                         |
   // |:----:|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
   // | `>`  | increment the data pointer (to point to the next cell to the right).                                                                                                                |
   // | `<`  | decrement the data pointer (to point to the next cell to the left).                                                                                                                 |
@@ -141,7 +174,7 @@ const exec = (prog) => {
     '-': () => save((curr() || 256) - 1),
     '<': () => --pointer,
     '>': () => ++pointer,
-    '.': () => write(String.fromCharCode(curr())),
+    '.': () => hooks.write(String.fromCharCode(curr())),
 
     '[': () => {
       if (curr() === 0) {
@@ -173,26 +206,13 @@ const exec = (prog) => {
       // since read functions may not always be blocking, we handle ',' as a
       // special operator, separately from the flow of the rest of the
       // operators
-      read((input) => {
+      hooks.read((input) => {
         save(input.charCodeAt(0))
-        tick();
+        tick()
       })
     } else {
       // not a brainfuck command - ignore it
       tick()
-    }
-  }
-
-  // moves on to the next command. checks that we still have commands left to
-  // read and also show debugging information. using a `setImmediate` (or one
-  // of its siblings) to prevent call stack overflows
-  const tick = () => {
-    if (can_debug(cmd)) {
-      dump(cmd)
-    }
-
-    if (idx++ < len && typeof cmds[idx] === 'string') {
-      setImmediate(run, 0)
     }
   }
 
@@ -209,8 +229,11 @@ const brainfuck = ([prog]) =>
 
 if (!module.parent && process.argv[2]) {
   exec(process.argv[2])
+} else if (in_browser) {
+  window.brainfuck = exec
+} else {
+  module.exports = { exec, brainfuck }
 }
-
 // ```javascript
 // // in js land
 // brainfuck`-[------->+<]
@@ -228,5 +251,3 @@ if (!module.parent && process.argv[2]) {
 //                      >-----.--[->++++<]
 //                      >-.--------.+++.------.--------.'
 // ```
-
-module.exports = { exec, brainfuck }

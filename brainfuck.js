@@ -153,7 +153,8 @@ const exec = (prog, user_hooks) => {
   }
 
   const tick = () =>
-    hooks.tick(internal_tick, internal_update, { memory, pointer, idx })
+    hooks.tick(internal_tick, internal_update, { pointer, idx,
+      memory: memory.slice(0) })
 
   const hooks = Object.assign({ read, write, tick: call },
     user_hooks);

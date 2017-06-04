@@ -11,28 +11,7 @@
     <link rel="stylesheet" href="/dist/styles.css">
   </head>
   <body>
-    <section class="pa3 pa5-ns cf">
-      <h1 class="f3 f-headline-m tipitop">Brainfuck</h1>
-
-      <div class="editor-section fl w-100 w-50-ns bg-near-white tc">
-        <button id="run" class="editor-ctrl f6 link dim ba ph3 pv2 mb2 dib black">Run</button>
-        <button id="pause" class="editor-ctrl f6 link dim ba ph3 pv2 mb2 dib black">Pause</button>
-        <button id="step" class="editor-ctrl f6 link dim ba ph3 pv2 mb2 dib black">Step</button>
-
-        <div id="editor" contenteditable="true" class="editor"></div>
-      </div>
-
-      <div class="editor-section fl w-100 w-50-ns bg-near-white tc">
-        <!-- these are here just for spacing... -->
-        <button class="editor-ctrl f6 link dim ba ph3 pv2 mb2 dib black hidden">&nbsp;</button>
-        <button class="editor-ctrl f6 link dim ba ph3 pv2 mb2 dib black hidden">&nbsp;</button>
-        <button class="editor-ctrl f6 link dim ba ph3 pv2 mb2 dib black hidden">&nbsp;</button>
-
-        <div contenteditable="true" class="editor"></div>
-      </div>
-    </section>
-
-    <img class="fuckyeah" src="/dist/retro-pixel-computer.gif" />
+    <section id="view"></section>
     <script src="/dist/editor.js"></script>
   </body>
 </html>

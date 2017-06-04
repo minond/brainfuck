@@ -8,6 +8,7 @@ dist_dir = dist
 docs_dir = doc
 assets_dir = assets
 
+browserify_flags = -t [ stringify --extensions [.bf] ]
 docco_flags = --layout parallel --output $(docs_dir)
 watch_flags = --ignoreDotFiles
 

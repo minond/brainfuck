@@ -4,6 +4,10 @@ body {
   cursor: default;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 .tipitop {
   margin-top: 0;
 }
@@ -12,15 +16,21 @@ body {
   border: 1px solid #c0c0c0;
   outline: 0;
   height: 400px;
+  overflow: scroll;
   white-space: pre-wrap;
   font-family: monospace;
-  padding: 1em;
+  padding: 1rem;
 }
 
 .editor-ctrl {
   background: white;
   font-family: monospace;
   text-transform: uppercase;
+}
+
+.editor-section + .editor-section {
+  padding-left: 0;
+  box-sizing: border-box;
 }
 
 .inverted {
@@ -31,7 +41,7 @@ body {
 .fuckyeah {
   height: 150px;
   float: right;
-  margin: 1em 4rem 1em 1em;
+  margin: 1rem 4rem 1rem 1rem;
 }
 
 /*! TACHYONS v4.6.1 | http://tachyons.io */
@@ -61,6 +71,10 @@ body {
 @media screen and (min-width: 30em) {
   .w-50-ns {
     width: 50%;
+  }
+
+  .editor-section + .editor-section {
+    padding-left: 1rem;
   }
 }
 

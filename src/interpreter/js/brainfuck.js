@@ -231,8 +231,6 @@ const brainfuck = ([prog]) =>
 if (!module.parent && process.argv[2]) {
   exec(process.argv[2])
 } else if (in_browser) {
-  window.brainfuck = exec
-} else {
   module.exports = { exec, brainfuck }
 }
 // ```javascript

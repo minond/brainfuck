@@ -14,6 +14,9 @@ watch_flags = --ignoreDotFiles
 
 all: css js docs gif
 
+lint:
+	standard src/interpreter/js/brainfuck.js src/vizualizer/editor.js
+
 watch:
 	$(watch) 'date; make css js' src/vizualizer $(watch_flags)
 

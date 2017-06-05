@@ -16,37 +16,37 @@
 
 'use strict'
 
-const in_browser = typeof window !== 'undefined'
-const input_prompt = 'input: '
+const inBrowser = typeof window !== 'undefined'
+const inputPrompt = 'input: '
 
-const node_write = (str) =>
+const nodeWrite = (str) =>
   process.stdout.write(str)
 
-const browser_write = (str) =>
+const browserWrite = (str) =>
   console.log(str)
 
-const node_read = (cb) => {
-  const readline = require('readline');
+const nodeRead = (cb) => {
+  const readline = require('readline')
 
   const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout,
-  });
+    output: process.stdout
+  })
 
-  rl.question(input_prompt, (input) => {
-    rl.close();
-    cb(input);
-  });
+  rl.question(inputPrompt, (input) => {
+    rl.close()
+    cb(input)
+  })
 }
 
-const browser_read = (cb) =>
-  cb(prompt(input_prompt))
+const browserRead = (cb) =>
+  cb(window.prompt(inputPrompt))
 
 const read = (cb) =>
-  in_browser ? browser_read(cb) : node_read(cb)
+  inBrowser ? browserRead(cb) : nodeRead(cb)
 
 const write = (str) =>
-  in_browser ? browser_write(str) : node_write(str)
+  inBrowser ? browserWrite(str) : nodeWrite(str)
 
 const isset = (val) =>
   val !== null && val !== undefined
@@ -55,14 +55,13 @@ const call = (fn) =>
   fn()
 
 // ## the interpreter
-const exec = (prog, user_hooks) => {
+const exec = (prog, userHooks) => {
   // first, split the program into an array of characters so we can take action
   // upon each of them one by one. that is stores in `cmds`. then store the
   // number of "commands" so that we know when to stop and not have to check
   // the `.length` property over and over again. that is stores in `len`
   const cmds = prog.split('')
   const len = cmds.length
-
 
   // now to the state variables. first, two less important ones: `steps` is
   // used to track how many times the `dump` function has been called and `cmd`
@@ -84,16 +83,17 @@ const exec = (prog, user_hooks) => {
 
   // some helper small functions. `curr` is used for getting the current value
   // in the memory cell we are pointing to. `save` is for setting the value of
-  // the memory cell we are pointing to.  and `can_debug` and `dump` are for
+  // the memory cell we are pointing to.  and `canDebug` and `dump` are for
   // debugging purposes.
   const curr = () =>
     memory[pointer] || 0
 
-  const save = (val) =>
+  const save = (val) => {
     memory[pointer] = val
+  }
 
   // do you want to see the state after every command?
-  const can_debug = (cmd) =>
+  const canDebug = (cmd) =>
     !!process.env.DEBUG && '-+<>[],.'.indexOf(cmd) !== -1
 
   const dump = (cmd) =>
@@ -103,7 +103,7 @@ const exec = (prog, user_hooks) => {
   // finds the matching closing bracket of the start of a loop. see `[` and `]`
   // operators. increment for every `[` and decrement for every `]`. we'll know
   // we're at our closing bracket when we get to zero
-  const find_end = (idx) => {
+  const findEnd = (idx) => {
     var stack = 1
 
     while (cmds[idx]) {
@@ -133,7 +133,7 @@ const exec = (prog, user_hooks) => {
   // interpreter. they allow for custom io functions as well as ways to move on
   // to the next step and update state
 
-  const internal_update = (state) => {
+  const internalUpdate = (state) => {
     memory = isset(state.memory) ? state.memory : memory
     pointer = isset(state.pointer) ? state.pointer : pointer
     idx = isset(state.idx) ? state.idx : idx
@@ -142,8 +142,8 @@ const exec = (prog, user_hooks) => {
   // moves on to the next command. checks that we still have commands left to
   // read and also show debugging information. in a `process.nextTick` (or one
   // of its siblings) to prevent call stack overflows
-  const internal_tick = () => {
-    if (can_debug(cmd)) {
+  const internalTick = () => {
+    if (canDebug(cmd)) {
       dump(cmd)
     }
 
@@ -153,11 +153,12 @@ const exec = (prog, user_hooks) => {
   }
 
   const tick = () =>
-    hooks.tick(internal_tick, internal_update, { pointer, idx,
+    hooks.tick(internalTick, internalUpdate, { pointer,
+      idx,
       memory: memory.slice(0) })
 
   const hooks = Object.assign({ read, write, tick: call },
-    user_hooks);
+    userHooks)
 
   // ### operators
   // | tok  | description                                                                                                                                                                         |
@@ -179,7 +180,7 @@ const exec = (prog, user_hooks) => {
 
     '[': () => {
       if (curr() === 0) {
-        idx = find_end(idx + 1)
+        idx = findEnd(idx + 1)
       } else {
         jumps.push(idx)
       }
@@ -191,7 +192,7 @@ const exec = (prog, user_hooks) => {
       } else {
         jumps.pop()
       }
-    },
+    }
   }
 
   // this is what executes every command
@@ -230,7 +231,7 @@ const brainfuck = ([prog]) =>
 
 if (!module.parent && process.argv[2]) {
   exec(require('fs').readFileSync(process.argv[2]).toString())
-} else if (in_browser) {
+} else if (inBrowser) {
   module.exports = exec
 } else {
   module.exports = { exec, brainfuck }

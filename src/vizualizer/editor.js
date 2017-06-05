@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 const EV_SOFT_RESET = 'reset'
 const EV_START = 'start'
@@ -17,10 +17,10 @@ const app = choo()
 app.use(logger)
 app.use(controls)
 
-app.route('*', editor_view)
+app.route('*', editorView)
 app.mount('#view')
 
-function editor_view(state, emit) {
+function editorView (state, emit) {
   const start = () => {
     emit(EV_SOFT_RESET)
     emit(EV_START)
@@ -37,18 +37,18 @@ function editor_view(state, emit) {
   }
 
   const tick = (tick, update, { memory, pointer, idx }) => {
-    let state_update = { tick, memory, pointer, idx }
+    let stateUpdate = { tick, memory, pointer, idx }
 
     if (state.running) {
-      state_update.tick_timer = setTimeout(tick, state.delay)
+      stateUpdate.tickTimer = setTimeout(tick, state.delay)
     }
 
-    emit(EV_UPDATE_PROG_STATE, state_update)
+    emit(EV_UPDATE_PROG_STATE, stateUpdate)
   }
 
   const step = () =>
-    state.tick ? state.tick() :
-      brainfuck(state.program, { tick, write })
+    state.tick ? state.tick()
+      : brainfuck(state.program, { tick, write })
 
   const pause = () =>
     emit(EV_PAUSE)
@@ -61,19 +61,19 @@ function editor_view(state, emit) {
       <h1 class="f3 f-headline-m tipitop">Brainfuck</h1>
 
       <div class="editor-section fl w-100 w-50-ns bg-near-white tc">
-        ${editor_button('Run', { onclick: start })}
-        ${state.tick && !state.running ? editor_button('Continue', { onclick: cont }) : ''}
-        ${state.running ? editor_button('Pause', { onclick: pause }) : ''}
-        ${state.running ? '' : editor_button('Step', { onclick: step })}
+        ${editorButton('Run', { onclick: start })}
+        ${state.tick && !state.running ? editorButton('Continue', { onclick: cont }) : ''}
+        ${state.running ? editorButton('Pause', { onclick: pause }) : ''}
+        ${state.running ? '' : editorButton('Step', { onclick: step })}
 
         ${editor(state, emit)}
       </div>
 
       <div class="editor-section fl w-100 w-50-ns bg-near-white tc">
         <!-- these are here just for spacing... -->
-        ${editor_button('.', '', 'hidden')}
-        ${editor_button('.', '', 'hidden')}
-        ${editor_button('.', '', 'hidden')}
+        ${editorButton('.', '', 'hidden')}
+        ${editorButton('.', '', 'hidden')}
+        ${editorButton('.', '', 'hidden')}
 
         <div>output: ${state.output}</div>
         <div>pointer: ${state.pointer}</div>
@@ -92,15 +92,15 @@ function editor_view(state, emit) {
  * @param {object} & state
  * @return {void}
  */
-function set_blank_state(state) {
-  if (state.tick_timer) {
-    clearTimeout(state.tick_timer)
+function setBlankState (state) {
+  if (state.tickTimer) {
+    clearTimeout(state.tickTimer)
   }
 
   state.program = helloworld
   state.running = false
   state.tick = null
-  state.tick_timer = null
+  state.tickTimer = null
   state.memory = []
   state.output = ''
   state.pointer = 0
@@ -114,15 +114,15 @@ function set_blank_state(state) {
  * @param {object} emitter
  * @return {void}
  */
-function controls(state, emitter) {
-  set_blank_state(state)
+function controls (state, emitter) {
+  setBlankState(state)
 
   const render = () =>
     emitter.emit('render')
 
-  emitter.on(EV_UPDATE_PROG_STATE, ({ tick, tick_timer, memory, pointer, idx }) => {
+  emitter.on(EV_UPDATE_PROG_STATE, ({ tick, tickTimer, memory, pointer, idx }) => {
     state.tick = tick
-    state.tick_timer = tick_timer
+    state.tickTimer = tickTimer
     state.memory = memory
     state.pointer = pointer
     state.idx = idx
@@ -140,9 +140,9 @@ function controls(state, emitter) {
   })
 
   emitter.on(EV_SOFT_RESET, () => {
-    let curr_prog = state.program
-    set_blank_state(state)
-    state.program = curr_prog
+    let currProg = state.program
+    setBlankState(state)
+    state.program = currProg
     render()
   })
 
@@ -152,7 +152,7 @@ function controls(state, emitter) {
   })
 
   emitter.on(EV_UPDATE_PROG, (program) => {
-    set_blank_state(state)
+    setBlankState(state)
     state.program = program
     render()
   })
@@ -164,7 +164,7 @@ function controls(state, emitter) {
  * @param {object} emitter
  * @return {void}
  */
-function logger(state, emitter) {
+function logger (state, emitter) {
   emitter.on('*', (...args) =>
     console.log('%cchoochoo', 'color: #346fff', ...args))
 }
@@ -175,12 +175,12 @@ function logger(state, emitter) {
  * @param {function} emit
  * @return {html}
  */
-function editor(state, emit) {
-  const update_program = (prog) =>
+function editor (state, emit) {
+  const updateProgram = (prog) =>
     emit(EV_UPDATE_PROG, prog)
 
   const elem = html`<div contenteditable="true" class="editor"
-    oninput=${(e) => update_program(e.target.innerText)}>${state.program}</div>`
+    oninput=${(e) => updateProgram(e.target.innerText)}>${state.program}</div>`
 
   elem.isSameNode = (target) =>
     state.program === target.innerText
@@ -192,22 +192,22 @@ function editor(state, emit) {
  * an editor button component
  * @param {string} value
  * @param {string|object} attrs (default: '')
- * @param {string} extra_classes (default: '')
+ * @param {string} extraClasses (default: '')
  * @return {html}
  */
-function editor_button(value, attrs = '', extra_classes = '') {
-  return button(value, attrs, `editor-ctrl ${extra_classes}`)
+function editorButton (value, attrs = '', extraClasses = '') {
+  return button(value, attrs, `editor-ctrl ${extraClasses}`)
 }
 
 /**
  * a standard button component
  * @param {string} value
  * @param {string|object} attrs (default: '')
- * @param {string} extra_classes (default: '')
+ * @param {string} extraClasses (default: '')
  * @return {html}
  */
-function button(value, attrs = '', extra_classes = '') {
-  return html`<button ${attrs} class="${extra_classes} f6 link dim ba ph3 pv2 mb2 dib black">
+function button (value, attrs = '', extraClasses = '') {
+  return html`<button ${attrs} class="${extraClasses} f6 link dim ba ph3 pv2 mb2 dib black">
     ${value}
   </button>`
 }

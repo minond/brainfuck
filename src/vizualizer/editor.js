@@ -1,5 +1,6 @@
 'use strict';
 
+const EV_UPDATE_PROG_STATE = 'updateprogramstate'
 const EV_UPDATE_PROG = 'updateprogram'
 
 const brainfuck = require('../interpreter/js/brainfuck')
@@ -7,7 +8,6 @@ const html = require('choo/html')
 const choo = require('choo')
 
 const helloworld = require('../bf/helloworld.bf')
-
 const app = choo()
 
 app.use(logger)
@@ -17,8 +17,15 @@ app.route('*', editor_view)
 app.mount('#view')
 
 function editor_view(state, emit) {
+  const hooks = {
+    tick(run, update, { memory, pointer, idx }) {
+      emit(EV_UPDATE_PROG_STATE, { memory, pointer, idx })
+      run()
+    }
+  }
+
   const run = () =>
-    console.log('runnig')
+    brainfuck(state.program, hooks)
 
   return html`
     <section class="pa3 pa5-ns cf">
@@ -46,20 +53,51 @@ function editor_view(state, emit) {
   `
 }
 
+/**
+ * controller middleware
+ * @param {object} state
+ * @param {object} emitter
+ * @return {void}
+ */
 function controls(state, emitter) {
+  state.memory = []
   state.program = helloworld
+  state.pointer = 0
+  state.idx = 0
 
-  emitter.on(EV_UPDATE_PROG, (prog) => {
-    state.program = prog
+  const render = () =>
     emitter.emit('render')
+
+  emitter.on(EV_UPDATE_PROG_STATE, ({ memory, pointer, idx }) => {
+    state.memory = memory
+    state.pointer = pointer
+    state.idx = idx
+    render()
+  })
+
+  emitter.on(EV_UPDATE_PROG, (program) => {
+    state.program = program
+    render()
   })
 }
 
+/**
+ * loggin middleware
+ * @param {object} state
+ * @param {object} emitter
+ * @return {void}
+ */
 function logger(state, emitter) {
   emitter.on('*', (...args) =>
     console.log('%cchoochoo', 'color: #346fff', ...args))
 }
 
+/**
+ * an editor component
+ * @param {object} state
+ * @param {function} emit
+ * @return {html}
+ */
 function editor(state, emit) {
   const update_program = (prog) =>
     emit(EV_UPDATE_PROG, prog)
@@ -73,10 +111,24 @@ function editor(state, emit) {
   return elem
 }
 
+/**
+ * an editor button component
+ * @param {string} value
+ * @param {string|object} attrs (default: '')
+ * @param {string} extra_classes (default: '')
+ * @return {html}
+ */
 function editor_button(value, attrs = '', extra_classes = '') {
   return button(value, attrs, `editor-ctrl ${extra_classes}`)
 }
 
+/**
+ * a standard button component
+ * @param {string} value
+ * @param {string|object} attrs (default: '')
+ * @param {string} extra_classes (default: '')
+ * @return {html}
+ */
 function button(value, attrs = '', extra_classes = '') {
   return html`<button ${attrs} class="${extra_classes} f6 link dim ba ph3 pv2 mb2 dib black">
     ${value}

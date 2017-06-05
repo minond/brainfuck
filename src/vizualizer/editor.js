@@ -1,6 +1,7 @@
 'use strict';
 
 const EV_UPDATE_PROG_STATE = 'updateprogramstate'
+const EV_UPDATE_PROG_OUT_APPEND = 'updateprogramoutappend'
 const EV_UPDATE_PROG = 'updateprogram'
 
 const brainfuck = require('../interpreter/js/brainfuck')
@@ -20,7 +21,11 @@ function editor_view(state, emit) {
   const hooks = {
     tick(run, update, { memory, pointer, idx }) {
       emit(EV_UPDATE_PROG_STATE, { memory, pointer, idx })
-      run()
+      setTimeout(run, 1)
+    },
+
+    write(str) {
+      emit(EV_UPDATE_PROG_OUT_APPEND, str)
     }
   }
 
@@ -45,7 +50,12 @@ function editor_view(state, emit) {
         ${editor_button('.', '', 'hidden')}
         ${editor_button('.', '', 'hidden')}
 
-        <div contenteditable="true" class="editor"></div>
+        <div>output: ${state.output}</div>
+        <div>pointer: ${state.pointer}</div>
+        <div>idx: ${state.idx}</div>
+
+        ${state.memory.map((cell) =>
+          html`<div>${cell}</div>`)}
       </div>
 
       <img class="fuckyeah" src="/dist/retro-pixel-computer.gif" />
@@ -60,8 +70,9 @@ function editor_view(state, emit) {
  * @return {void}
  */
 function controls(state, emitter) {
-  state.memory = []
   state.program = helloworld
+  state.memory = []
+  state.output = ''
   state.pointer = 0
   state.idx = 0
 
@@ -72,6 +83,11 @@ function controls(state, emitter) {
     state.memory = memory
     state.pointer = pointer
     state.idx = idx
+    render()
+  })
+
+  emitter.on(EV_UPDATE_PROG_OUT_APPEND, (str) => {
+    state.output += str
     render()
   })
 

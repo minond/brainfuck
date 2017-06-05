@@ -1,5 +1,8 @@
 'use strict';
 
+const EV_SOFT_RESET = 'reset'
+const EV_START = 'start'
+const EV_PAUSE = 'pause'
 const EV_UPDATE_PROG_STATE = 'updateprogramstate'
 const EV_UPDATE_PROG_OUT_APPEND = 'updateprogramoutappend'
 const EV_UPDATE_PROG = 'updateprogram'
@@ -18,28 +21,50 @@ app.route('*', editor_view)
 app.mount('#view')
 
 function editor_view(state, emit) {
-  const hooks = {
-    tick(run, update, { memory, pointer, idx }) {
-      emit(EV_UPDATE_PROG_STATE, { memory, pointer, idx })
-      setTimeout(run, 1)
-    },
-
-    write(str) {
-      emit(EV_UPDATE_PROG_OUT_APPEND, str)
-    }
+  const start = () => {
+    emit(EV_SOFT_RESET)
+    emit(EV_START)
+    brainfuck(state.program, { tick, write })
   }
 
-  const run = () =>
-    brainfuck(state.program, hooks)
+  const cont = () => {
+    if (state.running || !state.tick) {
+      return
+    }
+
+    emit(EV_START)
+    state.tick()
+  }
+
+  const tick = (tick, update, { memory, pointer, idx }) => {
+    let state_update = { tick, memory, pointer, idx }
+
+    if (state.running) {
+      state_update.tick_timer = setTimeout(tick, state.delay)
+    }
+
+    emit(EV_UPDATE_PROG_STATE, state_update)
+  }
+
+  const step = () =>
+    state.tick ? state.tick() :
+      brainfuck(state.program, { tick, write })
+
+  const pause = () =>
+    emit(EV_PAUSE)
+
+  const write = (str) =>
+    emit(EV_UPDATE_PROG_OUT_APPEND, str)
 
   return html`
     <section class="pa3 pa5-ns cf">
       <h1 class="f3 f-headline-m tipitop">Brainfuck</h1>
 
       <div class="editor-section fl w-100 w-50-ns bg-near-white tc">
-        ${editor_button('Run', { onclick: run })}
-        ${editor_button('Pause')}
-        ${editor_button('Step')}
+        ${editor_button('Run', { onclick: start })}
+        ${state.tick && !state.running ? editor_button('Continue', { onclick: cont }) : ''}
+        ${state.running ? editor_button('Pause', { onclick: pause }) : ''}
+        ${state.running ? '' : editor_button('Step', { onclick: step })}
 
         ${editor(state, emit)}
       </div>
@@ -64,25 +89,60 @@ function editor_view(state, emit) {
 }
 
 /**
+ * @param {object} & state
+ * @return {void}
+ */
+function set_blank_state(state) {
+  if (state.tick_timer) {
+    clearTimeout(state.tick_timer)
+  }
+
+  state.program = helloworld
+  state.running = false
+  state.tick = null
+  state.tick_timer = null
+  state.memory = []
+  state.output = ''
+  state.pointer = 0
+  state.idx = 0
+  state.delay = 100
+}
+
+/**
  * controller middleware
  * @param {object} state
  * @param {object} emitter
  * @return {void}
  */
 function controls(state, emitter) {
-  state.program = helloworld
-  state.memory = []
-  state.output = ''
-  state.pointer = 0
-  state.idx = 0
+  set_blank_state(state)
 
   const render = () =>
     emitter.emit('render')
 
-  emitter.on(EV_UPDATE_PROG_STATE, ({ memory, pointer, idx }) => {
+  emitter.on(EV_UPDATE_PROG_STATE, ({ tick, tick_timer, memory, pointer, idx }) => {
+    state.tick = tick
+    state.tick_timer = tick_timer
     state.memory = memory
     state.pointer = pointer
     state.idx = idx
+    render()
+  })
+
+  emitter.on(EV_START, () => {
+    state.running = true
+    render()
+  })
+
+  emitter.on(EV_PAUSE, () => {
+    state.running = false
+    render()
+  })
+
+  emitter.on(EV_SOFT_RESET, () => {
+    let curr_prog = state.program
+    set_blank_state(state)
+    state.program = curr_prog
     render()
   })
 
@@ -92,6 +152,7 @@ function controls(state, emitter) {
   })
 
   emitter.on(EV_UPDATE_PROG, (program) => {
+    set_blank_state(state)
     state.program = program
     render()
   })

@@ -1,5 +1,7 @@
-a brainfuck interpreter written in javascript and a memory visualizer and
-editor for your browser. many thanks to Daniel B Cristofani for a nice
+#### brainfuck
+
+an written in javascript and a memory visualizer and editor for your browser.
+many thanks to Daniel B Cristofani for a nice
 [intro](http://www.hevanet.com/cristofd/brainfuck/epistle.html) and [sample
 programs](http://www.hevanet.com/cristofd/brainfuck/). pass your programs to
 the interpreter to execute them. you can also declare a `DEBUG` environment

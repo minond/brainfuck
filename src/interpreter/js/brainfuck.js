@@ -229,7 +229,7 @@ const brainfuck = ([prog]) =>
   exec(prog)
 
 if (!module.parent && process.argv[2]) {
-  exec(process.argv[2])
+  exec(require('fs').readFileSync(process.argv[2]).toString())
 } else if (in_browser) {
   module.exports = exec
 } else {
@@ -246,9 +246,5 @@ if (!module.parent && process.argv[2]) {
 
 // ```bash
 // # in your terminal
-// $ node brainfuck.js '-[------->+<]
-//                      >-.-[->+++++<]
-//                      >++.+++++++..+++.[--->+<]
-//                      >-----.--[->++++<]
-//                      >-.--------.+++.------.--------.'
+// $ node brainfuck.js src/bf/squares.bf
 // ```

@@ -84,6 +84,7 @@ function editorView (state, emit) {
         <div>output: ${state.output}</div>
         <div>pointer: ${state.pointer}</div>
         <div>idx: ${state.idx}</div>
+        <div>steps: ${state.steps}</div>
 
         ${state.memory.map((cell) =>
           html`<div>${cell}</div>`)}
@@ -111,6 +112,7 @@ function setBlankState (state) {
   state.output = ''
   state.pointer = 0
   state.idx = 0
+  state.steps = 0
   state.delay = 100
 }
 
@@ -126,12 +128,13 @@ function controls (state, emitter) {
   const render = () =>
     emitter.emit('render')
 
-  emitter.on(EV_UPDATE_PROG_STATE, ({ tick, tickTimer, memory, pointer, idx }) => {
+  emitter.on(EV_UPDATE_PROG_STATE, ({ tick, tickTimer, memory, pointer, idx, steps }) => {
     state.tick = tick
     state.tickTimer = tickTimer
     state.memory = memory
     state.pointer = pointer
     state.idx = idx
+    state.steps = steps
     render()
   })
 

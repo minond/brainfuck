@@ -54,6 +54,9 @@ const isset = (val) =>
 const call = (fn) =>
   fn()
 
+const pass = (x) =>
+  x
+
 // ## the interpreter
 const exec = (prog, userHooks) => {
   // first, split the program into an array of characters so we can take action
@@ -164,7 +167,7 @@ const exec = (prog, userHooks) => {
       steps,
       memory: memory.slice(0) })
 
-  const hooks = Object.assign({ read, write, tick: call, done: call },
+  const hooks = Object.assign({ read, write, tick: call, done: pass },
     userHooks)
 
   // ### operators

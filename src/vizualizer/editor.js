@@ -1,11 +1,12 @@
 'use strict'
 
+const EV_DONE = 'done'
+const EV_PAUSE = 'pause'
 const EV_SOFT_RESET = 'reset'
 const EV_START = 'start'
-const EV_PAUSE = 'pause'
-const EV_UPDATE_PROG_STATE = 'updateprogramstate'
-const EV_UPDATE_PROG_OUT_APPEND = 'updateprogramoutappend'
 const EV_UPDATE_PROG = 'updateprogram'
+const EV_UPDATE_PROG_OUT_APPEND = 'updateprogramoutappend'
+const EV_UPDATE_PROG_STATE = 'updateprogramstate'
 
 const brainfuck = require('../interpreter/js/brainfuck')
 const html = require('choo/html')
@@ -30,7 +31,7 @@ function editorView (state, emit) {
   const start = () => {
     emit(EV_SOFT_RESET)
     emit(EV_START)
-    brainfuck(state.program, { tick, write })
+    brainfuck(state.program, { tick, write, done })
   }
 
   const cont = () => {
@@ -54,7 +55,10 @@ function editorView (state, emit) {
 
   const step = () =>
     state.tick ? state.tick()
-      : brainfuck(state.program, { tick, write })
+      : brainfuck(state.program, { tick, write, done })
+
+  const done = () =>
+    emit(EV_DONE)
 
   const pause = () =>
     emit(EV_PAUSE)
@@ -140,6 +144,12 @@ function controls (state, emitter) {
 
   emitter.on(EV_START, () => {
     state.running = true
+    render()
+  })
+
+  emitter.on(EV_DONE, () => {
+    state.tick = null
+    state.running = false
     render()
   })
 

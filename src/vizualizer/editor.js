@@ -20,6 +20,12 @@ app.use(controls)
 app.route('*', editorView)
 app.mount('#view')
 
+/**
+ * main view
+ * @param {object} state
+ * @param {function} emit
+ * @return {html}
+ */
 function editorView (state, emit) {
   const start = () => {
     emit(EV_SOFT_RESET)
@@ -36,8 +42,8 @@ function editorView (state, emit) {
     state.tick()
   }
 
-  const tick = (tick, update, { memory, pointer, idx }) => {
-    let stateUpdate = { tick, memory, pointer, idx }
+  const tick = (tick, update, { memory, pointer, idx, steps }) => {
+    let stateUpdate = { tick, memory, pointer, idx, steps }
 
     if (state.running) {
       stateUpdate.tickTimer = setTimeout(tick, state.delay)

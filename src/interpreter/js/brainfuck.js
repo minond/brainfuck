@@ -97,7 +97,7 @@ const exec = (prog, userHooks) => {
     !!process.env.DEBUG && '-+<>[],.'.indexOf(cmd) !== -1
 
   const dump = (cmd) =>
-    console.log('[%s:%s]\t\tcmd: %s\t\tcurr: %s[%s]\t\tmem: %s', ++steps, idx, cmd,
+    console.log('[%s:%s]\t\tcmd: %s\t\tcurr: %s[%s]\t\tmem: %s', steps, idx, cmd,
       pointer, curr(), JSON.stringify(memory))
 
   // finds the matching closing bracket of the start of a loop. see `[` and `]`
@@ -147,14 +147,16 @@ const exec = (prog, userHooks) => {
       dump(cmd)
     }
 
-    if (idx++ < len && typeof cmds[idx] === 'string') {
+    steps++
+    idx++
+
+    if (idx < len && typeof cmds[idx] === 'string') {
       process.nextTick(run, 0)
     }
   }
 
   const tick = () =>
-    hooks.tick(internalTick, internalUpdate, { pointer,
-      idx,
+    hooks.tick(internalTick, internalUpdate, { pointer, idx, steps,
       memory: memory.slice(0) })
 
   const hooks = Object.assign({ read, write, tick: call },

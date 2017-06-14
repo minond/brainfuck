@@ -4,25 +4,25 @@ const { test } = require('tap')
 const { readFileSync: read } = require('fs')
 const { exec: brainfuck } = require('../../../src/interpreter/js/brainfuck')
 
-const prog_hello_world = read('./src/bf/helloworld.bf').toString()
-const prog_quine = read('./src/bf/quine.bf').toString()
+const PROG_HELLO_WORLD = read('./src/bf/helloworld.bf').toString()
+const PROG_QUINE = read('./src/bf/quine.bf').toString()
 
-const tests_output = (label, prog, expected_output) => {
+const testsOutput = (label, prog, expectedOutput) => {
   test((t) => {
     var buff = []
 
     brainfuck(prog, {
-      write(str) {
+      write (str) {
         buff.push(str)
       },
 
-      done() {
-        t.ok(buff.join('') === expected_output, label)
+      done () {
+        t.ok(buff.join('') === expectedOutput, label)
         t.done()
       }
     })
   })
 }
 
-tests_output('hello world', prog_hello_world, 'Hello World!\n')
-tests_output('quine', prog_quine, prog_quine.substring(0, 900).replace(/\n/g, ''))
+testsOutput('hello world', PROG_HELLO_WORLD, 'Hello World!\n')
+testsOutput('quine', PROG_QUINE, PROG_QUINE.substring(0, 900).replace(/\n/g, ''))

@@ -152,6 +152,8 @@ const exec = (prog, userHooks) => {
 
     if (idx < len && typeof cmds[idx] === 'string') {
       process.nextTick(run, 0)
+    } else {
+      hooks.done()
     }
   }
 
@@ -159,7 +161,7 @@ const exec = (prog, userHooks) => {
     hooks.tick(internalTick, internalUpdate, { pointer, idx, steps,
       memory: memory.slice(0) })
 
-  const hooks = Object.assign({ read, write, tick: call },
+  const hooks = Object.assign({ read, write, tick: call, done: call },
     userHooks)
 
   // ### operators

@@ -66,6 +66,9 @@ function editorView (state, emit) {
   const write = (str) =>
     emit(EV_UPDATE_PROG_OUT_APPEND, str)
 
+  const normalizeMemory = (mem) =>
+    mem.concat(new Array(10).fill(0)).splice(0, 10)
+
   return html`
     <section class="pa3 pa5-ns cf">
       <h1 class="f3 f-headline-m tipitop">Brainfuck</h1>
@@ -85,13 +88,19 @@ function editorView (state, emit) {
         ${editorButton('.', '', 'hidden')}
         ${editorButton('.', '', 'hidden')}
 
+        <div>
+          ${normalizeMemory(state.memory).map((cell) =>
+            html`
+              <div class="memcell">
+                <span>${cell}</span>
+              </div>
+            `)}
+        </div>
+
         <div>output: ${state.output}</div>
         <div>pointer: ${state.pointer}</div>
         <div>idx: ${state.idx}</div>
         <div>steps: ${state.steps}</div>
-
-        ${state.memory.map((cell) =>
-          html`<div>${cell}</div>`)}
       </div>
 
       <img class="fuckyeah" src="/dist/retro-pixel-computer.gif" />

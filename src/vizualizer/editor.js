@@ -207,8 +207,16 @@ function editor (state, emit) {
   const updateProgram = (prog) =>
     emit(EV_UPDATE_PROG, prog)
 
-  const elem = html`<div contenteditable="true" class="editor"
-    oninput=${(e) => updateProgram(e.target.innerText)}>${state.program}</div>`
+  const elem = html`<pre><code contenteditable="true" class="editor language-brainfuck"
+    oninput=${(e) => updateProgram(e.target.innerText)}>${state.program}</code></pre>`
+
+  /* global bililiteRange */
+  /* global Prism */
+  try {
+    bililiteRange.fancyText(
+      elem.querySelector('code'),
+      Prism.highlightElement)
+  } catch (ignore) {}
 
   elem.isSameNode = (target) =>
     state.program === target.innerText

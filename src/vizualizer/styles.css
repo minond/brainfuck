@@ -4,6 +4,10 @@ body {
   cursor: default;
 }
 
+pre {
+  margin: 0;
+}
+
 .hidden {
   visibility: hidden;
 }
@@ -13,6 +17,8 @@ body {
 }
 
 .editor {
+  display: block;
+  margin: 0;
   font-size: 1rem;
   cursor: text;
   border: 1px solid #c0c0c0;
@@ -76,6 +82,26 @@ body {
   float: right;
   margin: 1rem 4rem 1rem 1rem;
 }
+
+/* syntax highlighting start */
+.editor .comment {
+  color: #b9b9b9;
+}
+
+.editor .operator {
+  color: #ff0000;
+}
+
+.editor .keyword,
+.editor .branching {
+  color: #373ae6;
+}
+
+.editor .increment,
+.editor .decrement {
+  color: #ff7b7b;
+}
+/* syntax highlighting end */
 
 /*! TACHYONS v4.6.1 | http://tachyons.io */
 

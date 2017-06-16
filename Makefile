@@ -19,7 +19,15 @@ rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 js_files := $(call rwildcard,src/,*.js)
 js_files += $(call rwildcard,test/,*.js)
 
-all: css js docs gif
+all: clean css deps js docs gif
+
+install:
+	yarn
+	git submodule update --init
+
+clean:
+	-rm -r dist
+	-mkdir dist
 
 lint: $(js_files)
 	standard $^
@@ -27,8 +35,16 @@ lint: $(js_files)
 watch:
 	$(watch) 'date; make css js' src/vizualizer $(watch_flags)
 
+deps:
+	$(uglifyjs) vendor/bililiteRange/bililiteRange.js \
+    vendor/bililiteRange/bililiteRange.fancytext.js \
+    vendor/prism/prism.js \
+    vendor/prism/components/prism-brainfuck.js > \
+    $(dist_dir)/vendor.js
+
 js: src/vizualizer/editor.js
-	$(browserify) $(browserify_flags) $^ | $(uglifyjs) > $(dist_dir)/editor.js
+	$(browserify) $(browserify_flags) $^ | \
+    $(uglifyjs) > $(dist_dir)/editor.js
 
 css: src/vizualizer/styles.css
 	$(tachyons) $^ -m > $(dist_dir)/styles.css

@@ -47,6 +47,7 @@ body {
   text-align: center;
   width: 10%;
   position: relative;
+  transition: color .2s, background-color .2s;
 }
 
 .memcell:first-child {
@@ -58,6 +59,11 @@ body {
   position: absolute;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
+}
+
+.memcell.selected {
+  background-color: black;
+  color: white;
 }
 
 .inverted {

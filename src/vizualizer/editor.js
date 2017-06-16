@@ -8,6 +8,9 @@ const EV_UPDATE_PROG = 'updateprogram'
 const EV_UPDATE_PROG_OUT_APPEND = 'updateprogramoutappend'
 const EV_UPDATE_PROG_STATE = 'updateprogramstate'
 
+const FRAME_SIZE = 10
+const MEM_NIL_VAL = 0
+
 const brainfuck = require('../interpreter/js/brainfuck')
 const html = require('choo/html')
 const choo = require('choo')
@@ -66,18 +69,15 @@ function editorView (state, emit) {
   const write = (str) =>
     emit(EV_UPDATE_PROG_OUT_APPEND, str)
 
-  const normalizeMemory = (mem) =>
-    mem.concat(new Array(10).fill(0)).splice(0, 10)
-
   return html`
     <section class="pa3 pa5-ns cf">
       <h1 class="f3 f-headline-m tipitop">Brainfuck</h1>
 
       <div class="editor-section fl w-100 w-50-ns bg-near-white tc">
         ${editorButton('Run', { onclick: start })}
-        ${state.tick && !state.running ? editorButton('Continue', { onclick: cont }) : ''}
         ${state.running ? editorButton('Pause', { onclick: pause }) : ''}
         ${state.running ? '' : editorButton('Step', { onclick: step })}
+        ${state.tick && !state.running ? editorButton('Continue', { onclick: cont }) : ''}
 
         ${editor(state, emit)}
       </div>
@@ -88,14 +88,14 @@ function editorView (state, emit) {
         ${editorButton('.', '', 'hidden')}
         ${editorButton('.', '', 'hidden')}
 
-        <div>
-          ${normalizeMemory(state.memory).map((cell) =>
-            html`
-              <div class="memcell">
-                <span>${cell}</span>
-              </div>
-            `)}
-        </div>
+        ${chunk(fill(state.memory, Math.max(FRAME_SIZE, state.pointer + 1), MEM_NIL_VAL), FRAME_SIZE).map((row, rowNum) =>
+          html`<div class="cellrow">
+            ${fill(row, FRAME_SIZE, MEM_NIL_VAL).map((cell, i) =>
+              html`
+                <div class="memcell ${i + rowNum * FRAME_SIZE === state.pointer ? 'selected' : ''}">
+                  <span>${cell}</span>
+                </div>`)}
+          </div>`)}
 
         <div>output: ${state.output}</div>
         <div>pointer: ${state.pointer}</div>
@@ -238,4 +238,35 @@ function button (value, attrs = '', extraClasses = '') {
   return html`<button ${attrs} class="${extraClasses} f6 link dim ba ph3 pv2 mb2 dib black">
     ${value}
   </button>`
+}
+
+/**
+ * chunks an array into n arrays of a maximum size
+ * @param {array} arr
+ * @param {number} size
+ * @return {array}
+ */
+function chunk (arr, size) {
+  var tmp = []
+
+  for (var i = 0, len = arr.length; i < len; i += size) {
+    tmp.push(arr.slice(i, i + size))
+  }
+
+  return tmp
+}
+
+/**
+ * makes sure arr is at least as large as specified
+ * @param {array} arr
+ * @param {number} size
+ * @param {*} [val]
+ * @return {array}
+ */
+function fill (arr, size, val) {
+  while (arr.length < size) {
+    arr.push(val)
+  }
+
+  return arr
 }

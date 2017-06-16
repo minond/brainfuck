@@ -4,14 +4,16 @@ tachyons = node_modules/.bin/tachyons
 gifsicle = ./node_modules/.bin/gifsicle
 watch = node_modules/.bin/watch
 tap = node_modules/.bin/tap
+uglifyjs = node_modules/.bin/uglifyjs
 
 dist_dir = dist
 docs_dir = doc
 assets_dir = assets
 
-browserify_flags = -t [ stringify --extensions [.bf] ]
 docco_flags = --layout parallel --output $(docs_dir)
 watch_flags = --ignoreDotFiles
+browserify_flags = -t [ stringify --extensions [ .bf ] ] \
+                   -t [ babelify --presets [ es2015 ] ]
 
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 js_files := $(call rwildcard,src/,*.js)
@@ -26,7 +28,7 @@ watch:
 	$(watch) 'date; make css js' src/vizualizer $(watch_flags)
 
 js: src/vizualizer/editor.js
-	$(browserify) $(browserify_flags) $^ -o $(dist_dir)/editor.js
+	$(browserify) $(browserify_flags) $^ | $(uglifyjs) > $(dist_dir)/editor.js
 
 css: src/vizualizer/styles.css
 	$(tachyons) $^ -m > $(dist_dir)/styles.css

@@ -92,7 +92,7 @@ function editorView (state, emit) {
           html`<div class="cellrow">
             ${fill(row, FRAME_SIZE, MEM_NIL_VAL).map((cell, i) =>
               html`
-                <div class="memcell ${i + rowNum * FRAME_SIZE === state.pointer ? 'selected' : ''}">
+                <div class="memcell ${isCellSelected(i, rowNum, state) ? 'selected' : ''}">
                   <span>${cell}</span>
                 </div>`)}
           </div>`)}
@@ -269,4 +269,14 @@ function fill (arr, size, val) {
   }
 
   return arr
+}
+
+/**
+ * @param {number} cellNum
+ * @param {number} rowNum
+ * @param {object} state
+ * @return {boolean}
+ */
+function isCellSelected(cellNum, rowNum, state) {
+  return cellNum + rowNum * FRAME_SIZE === state.pointer
 }

@@ -277,6 +277,6 @@ function fill (arr, size, val) {
  * @param {object} state
  * @return {boolean}
  */
-function isCellSelected(cellNum, rowNum, state) {
+function isCellSelected (cellNum, rowNum, state) {
   return cellNum + rowNum * FRAME_SIZE === state.pointer
 }

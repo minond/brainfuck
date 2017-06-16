@@ -267,11 +267,19 @@ function chunk (arr, size) {
  * @return {array}
  */
 function fill (arr, size, val) {
-  while (arr.length < size) {
-    arr.push(val)
+  var tmp = arr.concat([])
+
+  for (var i = 0, len = tmp.length; i < len; i++) {
+    if (tmp[i] === undefined) {
+      tmp[i] = val
+    }
   }
 
-  return arr
+  while (tmp.length < size) {
+    tmp.push(val)
+  }
+
+  return tmp
 }
 
 /**

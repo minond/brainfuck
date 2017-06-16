@@ -83,11 +83,6 @@ function editorView (state, emit) {
       </div>
 
       <div class="editor-section fl w-100 w-50-ns bg-near-white tc">
-        <!-- these are here just for spacing... -->
-        ${editorButton('.', '', 'hidden')}
-        ${editorButton('.', '', 'hidden')}
-        ${editorButton('.', '', 'hidden')}
-
         ${chunk(fill(state.memory, Math.max(FRAME_SIZE, state.pointer + 1), MEM_NIL_VAL), FRAME_SIZE).map((row, rowNum) =>
           html`<div class="cellrow">
             ${fill(row, FRAME_SIZE, MEM_NIL_VAL).map((cell, i) =>

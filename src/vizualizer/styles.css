@@ -17,6 +17,7 @@ pre {
 }
 
 .editor {
+  white-space: pre;
   display: block;
   margin: 0;
   font-size: 1rem;
@@ -25,7 +26,6 @@ pre {
   outline: 0;
   height: 400px;
   overflow: scroll;
-  white-space: pre-wrap;
   font-family: monospace;
   padding: 1rem;
 }
@@ -38,6 +38,10 @@ pre {
 
 .editor-section {
   box-sizing: border-box;
+}
+
+.cellrow:first-of-type {
+  margin-top: .5rem;
 }
 
 .memcell {
@@ -130,6 +134,10 @@ pre {
 @media screen and (min-width: 40em) {
   .w-50-ns {
     width: 50%;
+  }
+
+  .cellrow:first-of-type {
+    margin-top: 2.5rem;
   }
 
   .editor-section:first-of-type {

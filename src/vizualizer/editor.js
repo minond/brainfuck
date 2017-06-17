@@ -11,7 +11,7 @@ const EV_UPDATE_PROG_STATE = 'updateprogramstate'
 const FRAME_SIZE = 10
 const MEM_NIL_VAL = 0
 
-const CHAR_IGNORE = /[^\[\]<>\.,\+\-]+/g
+const CHAR_IGNORE = /[^[\]<>.,+-]+/g
 
 const brainfuck = require('../interpreter/js/brainfuck')
 const html = require('choo/html')
@@ -145,11 +145,11 @@ function controls (state, emitter) {
     emitter.emit('render')
 
     process.nextTick(() =>
-      document.querySelectorAll(".editor .token.selected").forEach((elem) =>
+      document.querySelectorAll('.editor .token.selected').forEach((elem) =>
         elem.classList.remove('selected')))
 
     process.nextTick(() =>
-      [document.querySelectorAll(".editor .token:not(.comment)")[state.idx]].map((elem) =>
+      [document.querySelectorAll('.editor .token:not(.comment)')[state.idx]].map((elem) =>
         elem.classList.add('selected')))
   }
 

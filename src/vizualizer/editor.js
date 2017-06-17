@@ -11,6 +11,8 @@ const EV_UPDATE_PROG_STATE = 'updateprogramstate'
 const FRAME_SIZE = 10
 const MEM_NIL_VAL = 0
 
+const CHAR_IGNORE = /\s+/g
+
 const brainfuck = require('../interpreter/js/brainfuck')
 const html = require('choo/html')
 const choo = require('choo')
@@ -34,8 +36,11 @@ function editorView (state, emit) {
   const start = () => {
     emit(EV_SOFT_RESET)
     emit(EV_START)
-    brainfuck(state.program, { tick, write, done })
+    exec()
   }
+
+  const exec = () =>
+    brainfuck(getProg(state), { tick, write, done })
 
   const cont = () => {
     if (state.running || !state.tick) {
@@ -57,8 +62,7 @@ function editorView (state, emit) {
   }
 
   const step = () =>
-    state.tick ? state.tick()
-      : brainfuck(state.program, { tick, write, done })
+    state.tick ? state.tick() : exec()
 
   const done = () =>
     emit(EV_DONE)
@@ -296,4 +300,16 @@ function fill (arr, size, val) {
  */
 function isCellSelected (cellNum, rowNum, state) {
   return cellNum + rowNum * FRAME_SIZE === state.pointer
+}
+
+/**
+ * @param {object} state
+ * @return {string}
+ */
+function getProg (state) {
+  if (state && state.program) {
+    return state.program.replace(CHAR_IGNORE, '')
+  } else {
+    return ''
+  }
 }

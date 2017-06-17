@@ -90,15 +90,15 @@ pre {
 
 .fuckyeah {
   display: none;
+  height: 4rem;
+  position: absolute;
+  right: 3rem;
+  top: 2rem;
 }
 
 @media screen and (min-width: 40em) {
   .fuckyeah {
     display: block;
-    height: 7rem;
-    position: absolute;
-    right: 3rem;
-    bottom: 2rem;
   }
 }
 

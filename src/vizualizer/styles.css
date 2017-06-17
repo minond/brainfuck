@@ -120,6 +120,11 @@ pre {
 .editor .decrement {
   color: #ff7b7b;
 }
+
+.editor .token.selected {
+  background-color: black;
+  color: white;
+}
 /* syntax highlighting end */
 
 /*! TACHYONS v4.6.1 | http://tachyons.io */

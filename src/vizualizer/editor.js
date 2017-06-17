@@ -11,7 +11,7 @@ const EV_UPDATE_PROG_STATE = 'updateprogramstate'
 const FRAME_SIZE = 10
 const MEM_NIL_VAL = 0
 
-const CHAR_IGNORE = /\s+/g
+const CHAR_IGNORE = /[^\[\]<>\.,\+\-]+/g
 
 const brainfuck = require('../interpreter/js/brainfuck')
 const html = require('choo/html')
@@ -129,7 +129,7 @@ function setBlankState (state) {
   state.pointer = 0
   state.idx = 0
   state.steps = 0
-  state.delay = 0
+  state.delay = 100
 }
 
 /**
@@ -141,8 +141,17 @@ function setBlankState (state) {
 function controls (state, emitter) {
   setBlankState(state)
 
-  const render = () =>
+  const render = () => {
     emitter.emit('render')
+
+    process.nextTick(() =>
+      document.querySelectorAll(".editor .token.selected").forEach((elem) =>
+        elem.classList.remove('selected')))
+
+    process.nextTick(() =>
+      [document.querySelectorAll(".editor .token:not(.comment)")[state.idx]].map((elem) =>
+        elem.classList.add('selected')))
+  }
 
   emitter.on(EV_UPDATE_PROG_STATE, ({ tick, tickTimer, memory, pointer, idx, steps }) => {
     state.tick = tick

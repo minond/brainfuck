@@ -202,19 +202,25 @@ function editor (state, emit) {
   const updateProgram = (prog) =>
     emit(EV_UPDATE_PROG, prog)
 
-  const elem = html`<pre><code contenteditable="true" class="editor language-brainfuck"
-    oninput=${(e) => updateProgram(e.target.innerText)}>${state.program}</code></pre>`
+  const extract = (elem) =>
+    elem.innerText
 
   /* global bililiteRange */
   /* global Prism */
-  try {
-    bililiteRange.fancyText(
-      elem.querySelector('code'),
+  const highlight = () =>
+    bililiteRange.fancyText(elem.querySelector('code'),
       Prism.highlightElement)
-  } catch (ignore) {}
+
+  const elem = html`
+    <pre><code
+      contenteditable="true"
+      class="editor language-brainfuck"
+      onload=${(e) => highlight(e.target)}
+      oninput=${(e) => updateProgram(extract(e.target))}
+    >${state.program}</code></pre>`
 
   elem.isSameNode = (target) =>
-    state.program === target.innerText
+    state.program === extract(target)
 
   return elem
 }

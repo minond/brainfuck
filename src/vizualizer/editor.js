@@ -74,32 +74,36 @@ function editorView (state, emit) {
     emit(EV_UPDATE_PROG_OUT_APPEND, str)
 
   return html`
-    <section class="pa3 pa5-ns cf">
-      <h1 class="f3 f-headline-m tipitop">Brainfuck</h1>
+    <section class="pa3 pa4-ns cf container">
+      <h1 class="f3 tipitop">Brainfuck</h1>
 
       <div class="editor-section fl w-100 w-50-ns bg-near-white tc">
-        ${editorButton('Run', { onclick: start })}
-        ${state.running ? editorButton('Pause', { onclick: pause }) : ''}
-        ${state.running ? '' : editorButton('Step', { onclick: step })}
-        ${state.tick && !state.running ? editorButton('Continue', { onclick: cont }) : ''}
-
         ${editor(state, emit)}
       </div>
 
       <div class="editor-section fl w-100 w-50-ns bg-near-white tc">
-        ${chunk(fill(state.memory, Math.max(FRAME_SIZE, state.pointer + 1), MEM_NIL_VAL), FRAME_SIZE).map((row, rowNum) =>
-          html`<div class="cellrow">
-            ${fill(row, FRAME_SIZE, MEM_NIL_VAL).map((cell, i) =>
-              html`
-                <div class="memcell ${isCellSelected(i, rowNum, state) ? 'selected' : ''}">
-                  <span>${cell}</span>
-                </div>`)}
-          </div>`)}
+        <div>
+            ${editorButton('Run', { onclick: start })}
+            ${state.running ? editorButton('Pause', { onclick: pause }) : ''}
+            ${state.running ? '' : editorButton('Step', { onclick: step })}
+            ${state.tick && !state.running ? editorButton('Continue', { onclick: cont }) : ''}
+        </div>
 
-        <div>output: ${state.output}</div>
-        <div>pointer: ${state.pointer}</div>
-        <div>idx: ${state.idx}</div>
-        <div>steps: ${state.steps}</div>
+        <div>
+          ${chunk(fill(state.memory, Math.max(FRAME_SIZE, state.pointer + 1), MEM_NIL_VAL), FRAME_SIZE).map((row, rowNum) =>
+            html`<div class="cellrow">
+              ${fill(row, FRAME_SIZE, MEM_NIL_VAL).map((cell, i) =>
+                html`
+                  <div class="memcell ${isCellSelected(i, rowNum, state) ? 'selected' : ''}">
+                    <span>${cell}</span>
+                  </div>`)}
+            </div>`)}
+        </div>
+
+        <div class="hidden">output: ${state.output}</div>
+        <div class="hidden">pointer: ${state.pointer}</div>
+        <div class="hidden">idx: ${state.idx}</div>
+        <div class="hidden">steps: ${state.steps}</div>
       </div>
 
       <img class="fuckyeah" src="/dist/retro-pixel-computer.gif" />
@@ -125,7 +129,7 @@ function setBlankState (state) {
   state.pointer = 0
   state.idx = 0
   state.steps = 0
-  state.delay = 100
+  state.delay = 0
 }
 
 /**
@@ -248,7 +252,7 @@ function editorButton (value, attrs = '', extraClasses = '') {
  * @return {html}
  */
 function button (value, attrs = '', extraClasses = '') {
-  return html`<button ${attrs} class="${extraClasses} f6 link dim ba ph3 pv2 mb2 dib black">
+  return html`<button ${attrs} class="${extraClasses} f6 link dim ba ph3 pv2 mt3-m mt0 mb3 dib black">
     ${value}
   </button>`
 }

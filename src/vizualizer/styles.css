@@ -8,6 +8,11 @@ pre {
   margin: 0;
 }
 
+.container {
+  max-width: 75rem;
+  margin: 0 auto;
+}
+
 .hidden {
   visibility: hidden;
 }
@@ -24,10 +29,16 @@ pre {
   cursor: text;
   border: 1px solid #c0c0c0;
   outline: 0;
-  height: 400px;
+  height: 300px;
   overflow: scroll;
   font-family: monospace;
   padding: 1rem;
+}
+
+@media screen and (min-width: 40em) {
+  .editor {
+    height: 75vh;
+  }
 }
 
 .editor-ctrl {
@@ -38,10 +49,6 @@ pre {
 
 .editor-section {
   box-sizing: border-box;
-}
-
-.cellrow:first-of-type {
-  margin-top: .5rem;
 }
 
 .memcell {
@@ -82,9 +89,17 @@ pre {
 }
 
 .fuckyeah {
-  height: 150px;
-  float: right;
-  margin: 1rem 4rem 1rem 1rem;
+  display: none;
+}
+
+@media screen and (min-width: 40em) {
+  .fuckyeah {
+    display: block;
+    height: 7rem;
+    position: absolute;
+    right: 3rem;
+    bottom: 2rem;
+  }
 }
 
 /* syntax highlighting start */
@@ -131,21 +146,21 @@ pre {
   width: 100%;
 }
 
+.mt3-m {
+  margin-top: 1rem;
+}
+
 @media screen and (min-width: 40em) {
   .w-50-ns {
     width: 50%;
-  }
-
-  .cellrow:first-of-type {
-    margin-top: 2.5rem;
   }
 
   .editor-section:first-of-type {
     padding-right: 1rem;
   }
 
-  .editor-section + .editor-section {
-    padding-left: 1rem;
+  .mt0 {
+    margin-top: 0;
   }
 }
 
@@ -159,20 +174,8 @@ pre {
 }
 
 @media screen and (min-width: 30em) {
-  .pa5-ns {
-    padding: 4rem;
-  }
-}
-
-@media screen and (min-width: 30em) and (max-width: 60em) {
-  .f1-m {
-    font-size: 3rem;
-  }
-}
-
-@media screen and (min-width: 60em) {
-  .f-headline-l {
-    font-size: 6rem;
+  .pa4-ns {
+    padding: 2rem;
   }
 }
 
@@ -225,8 +228,8 @@ pre {
   padding-right: 1rem;
 }
 
-.mb2 {
-  margin-bottom: .5rem;
+.mb3 {
+  margin-bottom: 1rem;
 }
 
 .f6 {

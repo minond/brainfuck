@@ -77,11 +77,11 @@ function editorView (state, emit) {
     <section class="pa3 pa4-ns cf container">
       <h1 class="f3 tipitop">Brainfuck</h1>
 
-      <div class="editor-section fl w-100 w-50-ns bg-near-white tc">
+      <div class="editor-section fl w-100 w-50-ns tc">
         ${editor(state, emit)}
       </div>
 
-      <div class="editor-section fl w-100 w-50-ns bg-near-white tc">
+      <div class="editor-section fl w-100 w-50-ns tc">
         <div>
             ${editorButton('Run', { onclick: start })}
             ${state.running ? editorButton('Pause', { onclick: pause }) : ''}

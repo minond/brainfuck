@@ -100,7 +100,8 @@ function editorView (state, emit) {
             </div>`)}
         </div>
 
-        <div class="hidden">output: ${state.output}</div>
+        <pre class="output mt3-m">${state.output}</pre>
+
         <div class="hidden">pointer: ${state.pointer}</div>
         <div class="hidden">idx: ${state.idx}</div>
         <div class="hidden">steps: ${state.steps}</div>
@@ -129,7 +130,7 @@ function setBlankState (state) {
   state.pointer = 0
   state.idx = 0
   state.steps = 0
-  state.delay = 100
+  state.delay = 10
 }
 
 /**

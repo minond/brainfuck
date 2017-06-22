@@ -61,8 +61,14 @@ function editorView (state, emit) {
     emit(EV_UPDATE_PROG_STATE, stateUpdate)
   }
 
-  const step = () =>
-    state.tick ? state.tick() : exec()
+  const step = () => {
+    if (state.tick) {
+      state.tick()
+    } else {
+      emit(EV_SOFT_RESET)
+      exec()
+    }
+  }
 
   const done = () =>
     emit(EV_DONE)

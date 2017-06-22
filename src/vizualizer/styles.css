@@ -38,7 +38,7 @@
 @import '../../node_modules/tachyons/src/_spacing';
 /* @import '../../node_modules/tachyons/src/_negative-margins'; */
 /* @import '../../node_modules/tachyons/src/_tables'; */
-/* @import '../../node_modules/tachyons/src/_text-decoration'; */
+@import '../../node_modules/tachyons/src/_text-decoration';
 /* @import '../../node_modules/tachyons/src/_text-align'; */
 @import '../../node_modules/tachyons/src/_text-transform';
 @import '../../node_modules/tachyons/src/_type-scale';
@@ -87,6 +87,7 @@ pre {
 .editor {
   white-space: pre;
   display: block;
+  min-height: 400px;
   margin: 0;
   font-size: 1rem;
   cursor: text;
@@ -104,7 +105,7 @@ pre {
   }
 
   .editor {
-    height: 75vh;
+    height: 50vh;
   }
 
   .editor-section:first-of-type {

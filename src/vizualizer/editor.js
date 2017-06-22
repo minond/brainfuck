@@ -83,8 +83,19 @@ function editorView (state, emit) {
 
   return html`
     <section class="pa3 pa4-ns cf container">
+      <h1 class="mt0 f3 f2-m f1-l title">Brainfuck</h1>
+
       <div class="editor-section fl w-100 w-50-ns tc">
-        <h1 class="mt0 f3 f2-m f1-l title">Brainfuck</h1>
+        <p class="lh-copy sans-serif">
+          Hello, and welcome to me lil' ${link('Brainfuck',
+          'https://esolangs.org/wiki/Brainfuck')} interpreter and state/memory
+          vizualizer. Why spend time here? Well Brainfuck is a pretty cool
+          programming language and building an interpreter for it is a good way
+          to learn the basics of parsers, interpreters, and computer memory.
+          ${link('Here\'s some code',
+          'https://github.com/minond/brainfuck/blob/master/src/interpreter/js/brainfuck.js')}
+          you can check out - it's hopefully pretty well documented.
+        </p>
 
         <p class="lh-copy sans-serif">
           Here's some information about this program: It is
@@ -112,7 +123,7 @@ function editorView (state, emit) {
             ${state.tick && !state.running ? editorButton('Continue', { onclick: cont }) : ''}
         </div>
 
-        <div class="pb3 pb0-ns">
+        <div class="pb3">
           ${chunk(fill(state.memory, Math.max(FRAME_SIZE, state.pointer + 1), MEM_NIL_VAL), FRAME_SIZE).map((row, rowNum) =>
             html`<div class="cellrow">
               ${fill(row, FRAME_SIZE, MEM_NIL_VAL).map((cell, i) =>
@@ -123,6 +134,11 @@ function editorView (state, emit) {
             </div>`)}
         </div>
 
+        <p class="lh-copy sans-serif">
+          If you'd like to learn more about Brainfuck and other really
+          interesting esoteric programming languages, I recommend heading over
+          to ${link('Esolang', 'https://esolangs.org/wiki/Main_Page')}.
+        </p>
       </div>
 
       <div class="editor-section fl w-100 w-50-ns tc">
@@ -133,6 +149,50 @@ function editorView (state, emit) {
     </section>
   `
 }
+// <p class="lh-copy sans-serif">
+//   Brainfuck is a minimalist programming language created by
+//   ${link('Urban Müller',
+//   'https://esolangs.org/wiki/Urban_M%C3%BCller')}. Minimalist?
+//   Minimalist. Here are the 8 commands that make up this turing complete
+//   language:
+// </p>
+//
+// <table class="f6 w-100 mw8 center" cellspacing="0">
+//   <tbody class="lh-copy">
+//     <tr>
+//       <td class="pv1 bt bb b--black-20">${codeSnippet('>')}</td>
+//       <td class="pv1 bt bb b--black-20 sans-serif">Move the pointer to the right</td>
+//     </tr>
+//     <tr>
+//       <td class="pv1 bb b--black-20">${codeSnippet('<')}</td>
+//       <td class="pv1 bb b--black-20 sans-serif">Move the pointer to the left</td>
+//     </tr>
+//     <tr>
+//       <td class="pv1 bb b--black-20">${codeSnippet('+')}</td>
+//       <td class="pv1 bb b--black-20 sans-serif">Increment the memory cell under the pointer</td>
+//     </tr>
+//     <tr>
+//       <td class="pv1 bb b--black-20">${codeSnippet('-')}</td>
+//       <td class="pv1 bb b--black-20 sans-serif">Decrement the memory cell under the pointer</td>
+//     </tr>
+//     <tr>
+//       <td class="pv1 bb b--black-20">${codeSnippet('.')}</td>
+//       <td class="pv1 bb b--black-20 sans-serif">Output the character signified by the cell at the pointer</td>
+//     </tr>
+//     <tr>
+//       <td class="pv1 bb b--black-20">${codeSnippet(',')}</td>
+//       <td class="pv1 bb b--black-20 sans-serif">Input a character and store it in the cell at the pointer</td>
+//     </tr>
+//     <tr>
+//       <td class="pv1 bb b--black-20">${codeSnippet('[')}</td>
+//       <td class="pv1 bb b--black-20 sans-serif">Jump past the matching ${codeSnippet(']')} if the cell under the pointer is 0</td>
+//     </tr>
+//     <tr>
+//       <td class="pv1 bb b--black-20">${codeSnippet(']')}</td>
+//       <td class="pv1 bb b--black-20 sans-serif">Jump back to the matching ${codeSnippet('[')} if the cell under the pointer is nonzero</td>
+//     </tr>
+//   </tbody>
+// </table>
 
 /**
  * @param {object} & state
@@ -274,6 +334,19 @@ function editor (state, emit) {
  */
 function editorButton (value, attrs = '', extraClasses = '') {
   return button(value, attrs, `editor-ctrl ${extraClasses}`)
+}
+
+/**
+ * a link
+ * @param {string} label
+ * @param {string} href
+ * @return {html}
+ */
+function link (label, href = '#') {
+  return html`<a
+    target="_blank"
+    class="link underline blue hover-orange"
+    href="${href}">${label}</a>`
 }
 
 /**

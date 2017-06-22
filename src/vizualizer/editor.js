@@ -73,23 +73,40 @@ function editorView (state, emit) {
   const write = (str) =>
     emit(EV_UPDATE_PROG_OUT_APPEND, str)
 
+  let { program = '' } = state
+
   return html`
     <section class="pa3 pa4-ns cf container">
-      <h1 class="f3 tipitop">Brainfuck</h1>
-
       <div class="editor-section fl w-100 w-50-ns tc">
-        ${editor(state, emit)}
-      </div>
+        <h1 class="mt0 f3 f2-m f1-l title">Brainfuck</h1>
 
-      <div class="editor-section fl w-100 w-50-ns tc">
-        <div>
+        <p class="lh-copy sans-serif">
+          Here's some information about this program: It is
+          ${codeSnippet(program.length)} bytes,
+          ${codeSnippet(getProg(state).length)} of which are valid commands.
+          The interpreter is going to interpret the character at index
+          ${codeSnippet(state.idx)}, which is
+          ${codeSnippet(getProg(state).charAt(state.idx))} , and has so has a
+          total of ${codeSnippet(state.steps)} so far.
+        </p>
+
+        <p class="lh-copy sans-serif">
+          ${!state.output
+            ? html`<span>The program has had no output yet.</span>`
+            : html`<span>
+                     <span>This is the output of your program:</span>
+                     ${codeSnippet(state.output)}
+                   </span>`}
+        </p>
+
+        <div class="pt2-ns">
             ${editorButton('Run', { onclick: start })}
             ${state.running ? editorButton('Pause', { onclick: pause }) : ''}
             ${state.running ? '' : editorButton('Step', { onclick: step })}
             ${state.tick && !state.running ? editorButton('Continue', { onclick: cont }) : ''}
         </div>
 
-        <div>
+        <div class="pb3 pb0-ns">
           ${chunk(fill(state.memory, Math.max(FRAME_SIZE, state.pointer + 1), MEM_NIL_VAL), FRAME_SIZE).map((row, rowNum) =>
             html`<div class="cellrow">
               ${fill(row, FRAME_SIZE, MEM_NIL_VAL).map((cell, i) =>
@@ -100,11 +117,10 @@ function editorView (state, emit) {
             </div>`)}
         </div>
 
-        <pre class="output mt3-m">${state.output}</pre>
+      </div>
 
-        <div class="hidden">pointer: ${state.pointer}</div>
-        <div class="hidden">idx: ${state.idx}</div>
-        <div class="hidden">steps: ${state.steps}</div>
+      <div class="editor-section fl w-100 w-50-ns tc">
+        ${editor(state, emit)}
       </div>
 
       <img class="fuckyeah" src="/dist/retro-pixel-computer.gif" />
@@ -252,6 +268,15 @@ function editor (state, emit) {
  */
 function editorButton (value, attrs = '', extraClasses = '') {
   return button(value, attrs, `editor-ctrl ${extraClasses}`)
+}
+
+/**
+ * a snipped of code
+ * @param {string} value
+ * @return {html}
+ */
+function codeSnippet (value) {
+  return html`<code class="ph1 tc bg-light-gray">${value}</code>`
 }
 
 /**

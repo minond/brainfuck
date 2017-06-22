@@ -33,7 +33,7 @@ lint: $(js_files)
 	standard $^
 
 watch:
-	$(watch) 'date; make css js' src/vizualizer $(watch_flags)
+	$(watch) 'make css js; date' src/vizualizer $(watch_flags)
 
 deps:
 	$(uglifyjs) vendor/bililiteRange/bililiteRange.js \

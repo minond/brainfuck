@@ -11,3 +11,11 @@ nice [intro](http://www.hevanet.com/cristofd/brainfuck/epistle.html) and
 [sample programs](http://www.hevanet.com/cristofd/brainfuck/) and
 [Fabian](https://copy.sh/) for the great [art](https://copy.sh/brainfuck/) that
 came prior to mine.
+
+##### build
+
+```bash
+make install
+make build
+make serve
+```

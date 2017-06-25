@@ -87,7 +87,7 @@ function editorView (state, emit) {
 
       <div class="editor-section fl w-100 w-50-ns tc">
         <p class="lh-copy sans-serif">
-          Hello, and welcome to me lil' ${link('Brainfuck',
+          Hello, and welcome to my lil' ${link('Brainfuck',
           'https://esolangs.org/wiki/Brainfuck')} interpreter and state/memory
           vizualizer. Why spend time here? Well Brainfuck is a pretty cool
           programming language and building an interpreter for it is a good way
@@ -103,8 +103,8 @@ function editorView (state, emit) {
           ${codeSnippet(getProg(state).length)} of which are valid commands.
           The interpreter is going to interpret the character at index
           ${codeSnippet(state.idx)}, which is
-          ${codeSnippet(getProg(state).charAt(state.idx))} , and has so has a
-          total of ${codeSnippet(state.steps)} so far.
+          ${codeSnippet(getProg(state).charAt(state.idx))} , and has taken a
+          total of ${codeSnippet(state.steps)} steps so far.
         </p>
 
         <p class="lh-copy sans-serif">
@@ -355,7 +355,7 @@ function link (label, href = '#') {
  * @return {html}
  */
 function codeSnippet (value) {
-  return html`<code class="ph1 tc bg-light-gray">${value}</code>`
+  return html`<code class="ph1 tc bg-light-gray word-wrap">${value}</code>`
 }
 
 /**

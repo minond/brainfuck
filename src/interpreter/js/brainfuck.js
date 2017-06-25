@@ -40,7 +40,7 @@ const nodeRead = (cb) => {
 }
 
 const browserRead = (cb) =>
-  cb(window.prompt(inputPrompt))
+  cb(window.prompt(inputPrompt) || String.fromCharCode(0))
 
 const read = (cb) =>
   inBrowser ? browserRead(cb) : nodeRead(cb)

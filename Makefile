@@ -19,7 +19,9 @@ rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 js_files := $(call rwildcard,src/,*.js)
 js_files += $(call rwildcard,test/,*.js)
 
-all: clean css deps js docs gif
+PORT ?= 3000
+
+build: clean css deps js docs gif
 
 install:
 	yarn
@@ -62,3 +64,31 @@ test:
 .PHONY: testcov
 testcov:
 	$(tap) test/* --cov --coverage-report=lcov
+
+.PHONY: serve
+serve:
+	python -m SimpleHTTPServer $(PORT)
+
+.PHONY: help
+help:
+	@echo "bf"
+	@echo
+	@echo "# main"
+	@echo "build          (default) builds app"
+	@echo "install        downloads all dependencies"
+	@echo "clean          clears \`dist\` directory"
+	@echo "watch          triggers build on file updates"
+	@echo "serve          http server for serving static assets"
+	@echo
+	@echo "# automated checks"
+	@echo "lint           runs all linters"
+	@echo "test           runs all tests"
+	@echo "testcov        runs all tests and generates test coverate reports"
+	@echo
+	@echo "# misc"
+	@echo "deps           compile global dependencies"
+	@echo "js             builds app's js code"
+	@echo "css            builds app's css code"
+	@echo "gif            compresses gifs"
+	@echo "docs           generate documentation"
+	@echo "help           see this output"

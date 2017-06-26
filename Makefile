@@ -6,11 +6,11 @@ watch = node_modules/.bin/watch
 tap = node_modules/.bin/tap
 uglifyjs = node_modules/.bin/uglifyjs
 
-dist_dir = dist
-docs_dir = doc
+dist_dir = docs
+docs_dir = docs
 assets_dir = assets
 
-docco_flags = --layout parallel --output $(docs_dir)
+docco_flags = --layout parallel --output $(docs_dir)/annotated
 watch_flags = --ignoreDotFiles
 browserify_flags = -t [ stringify --extensions [ .bf ] ] \
                    -t [ babelify --presets [ es2015 ] ]
@@ -21,15 +21,15 @@ js_files += $(call rwildcard,test/,*.js)
 
 PORT ?= 3000
 
-build: clean css deps js docs gif
+build: clean css deps html js docs gif
 
 install:
 	yarn
 	git submodule update --init
 
 clean:
-	-rm -r dist
-	-mkdir dist
+	-rm -r $(dist_dir)
+	-mkdir $(dist_dir)
 
 lint: $(js_files)
 	standard $^
@@ -44,6 +44,9 @@ deps:
     vendor/prism/components/prism-brainfuck.js > \
     $(dist_dir)/vendor.js
 
+html:
+	cp src/vizualizer/index.html $(dist_dir)/index.html
+
 js: src/vizualizer/editor.js
 	$(browserify) $(browserify_flags) $^ | \
     $(uglifyjs) > $(dist_dir)/editor.js
@@ -54,6 +57,7 @@ css: src/vizualizer/styles.css
 gif:
 	$(gifsicle) $(assets_dir)/retro-pixel-computer.gif -o $(dist_dir)/retro-pixel-computer.gif
 
+.PHONY: docs
 docs: src/interpreter/js/brainfuck.js
 	$(docco) $(docco_flags) $^
 
@@ -67,6 +71,8 @@ testcov:
 
 .PHONY: serve
 serve:
+	@echo "Opening http://localhost:$(PORT)/src/vizualizer/index.html"
+	(sleep 1 && open http://localhost:$(PORT)/src/vizualizer/index.html) &
 	python -m SimpleHTTPServer $(PORT)
 
 .PHONY: help
@@ -76,7 +82,7 @@ help:
 	@echo "# main"
 	@echo "build          (default) builds app"
 	@echo "install        downloads all dependencies"
-	@echo "clean          clears \`dist\` directory"
+	@echo "clean          clears \`$(dist_dir)\` directory"
 	@echo "watch          triggers build on file updates"
 	@echo "serve          http server for serving static assets"
 	@echo
@@ -87,6 +93,7 @@ help:
 	@echo
 	@echo "# misc"
 	@echo "deps           compile global dependencies"
+	@echo "html           builds app's html files"
 	@echo "js             builds app's js code"
 	@echo "css            builds app's css code"
 	@echo "gif            compresses gifs"

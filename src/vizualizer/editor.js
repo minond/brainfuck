@@ -145,7 +145,7 @@ function editorView (state, emit) {
         ${editor(state, emit)}
       </div>
 
-      <img class="fuckyeah" src="/dist/retro-pixel-computer.gif" />
+      <img class="fuckyeah" src="retro-pixel-computer.gif" />
     </section>
   `
 }

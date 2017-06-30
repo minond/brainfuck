@@ -4,6 +4,7 @@ const EV_DONE = 'done'
 const EV_PAUSE = 'pause'
 const EV_SOFT_RESET = 'reset'
 const EV_START = 'start'
+const EV_UPDATE_DELAY = 'updatedelay'
 const EV_UPDATE_PROG = 'updateprogram'
 const EV_UPDATE_PROG_OUT_APPEND = 'updateprogramoutappend'
 const EV_UPDATE_PROG_STATE = 'updateprogramstate'
@@ -55,7 +56,8 @@ function editorView (state, emit) {
     let stateUpdate = { tick, memory, pointer, idx, steps }
 
     if (state.running) {
-      stateUpdate.tickTimer = setTimeout(tick, state.delay)
+      let delay = Math.max(state.delay * 10, 10)
+      stateUpdate.tickTimer = setTimeout(tick, delay)
     }
 
     emit(EV_UPDATE_PROG_STATE, stateUpdate)
@@ -75,6 +77,9 @@ function editorView (state, emit) {
 
   const pause = () =>
     emit(EV_PAUSE)
+
+  const updateDelay = (delay) =>
+    emit(EV_UPDATE_DELAY, delay)
 
   const write = (str) =>
     emit(EV_UPDATE_PROG_OUT_APPEND, str)
@@ -116,11 +121,12 @@ function editorView (state, emit) {
                    </span>`}
         </p>
 
-        <div class="pt2-ns">
+        <div class="relative mt2-ns mb3">
             ${editorButton('Run', { onclick: start })}
             ${state.running ? editorButton('Pause', { onclick: pause }) : ''}
             ${state.running ? '' : editorButton('Step', { onclick: step })}
             ${state.tick && !state.running ? editorButton('Continue', { onclick: cont }) : ''}
+            ${rangeInput(state.delay, updateDelay)}
         </div>
 
         <div class="pb3">
@@ -203,6 +209,10 @@ function setBlankState (state) {
     clearTimeout(state.tickTimer)
   }
 
+  if (!('delay' in state)) {
+    state.delay = 20
+  }
+
   state.program = helloworld
   state.running = false
   state.tick = null
@@ -212,7 +222,6 @@ function setBlankState (state) {
   state.pointer = 0
   state.idx = 0
   state.steps = 0
-  state.delay = 10
 }
 
 /**
@@ -279,6 +288,11 @@ function controls (state, emitter) {
     state.program = program
     render()
   })
+
+  emitter.on(EV_UPDATE_DELAY, (delay) => {
+    state.delay = delay
+    render()
+  })
 }
 
 /**
@@ -290,6 +304,22 @@ function controls (state, emitter) {
 function logger (state, emitter) {
   emitter.on('*', (...args) =>
     console.log('%cchoochoo', 'color: #346fff', ...args))
+}
+
+/**
+ * an input[range] field
+ * @param {number} value
+ * @return {html}
+ */
+function rangeInput (value, onchange) {
+  const elem = html`<input value=${value} class="delay" type="range"
+    onclick=${(ev) => onchange(+ev.target.value)}
+    onchange=${(ev) => onchange(+ev.target.value)} />`
+
+  elem.isSameNode = () =>
+    true
+
+  return elem
 }
 
 /**
@@ -366,7 +396,7 @@ function codeSnippet (value) {
  * @return {html}
  */
 function button (value, attrs = '', extraClasses = '') {
-  return html`<button ${attrs} class="${extraClasses} f6 link dim ba ph3 pv2 mt3-m mt0 mb3 dib black">
+  return html`<button ${attrs} class="${extraClasses} f6 link dim ba ph3 pv2 dib black">
     ${value}
   </button>`
 }

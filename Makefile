@@ -71,8 +71,8 @@ testcov:
 
 .PHONY: serve
 serve:
-	@echo "Opening http://localhost:$(PORT)/src/vizualizer/index.html"
-	(sleep 1 && open http://localhost:$(PORT)/src/vizualizer/index.html) &
+	@echo "Opening http://localhost:$(PORT)/docs"
+	(sleep 1 && open http://localhost:$(PORT)/docs) &
 	python -m SimpleHTTPServer $(PORT)
 
 .PHONY: help

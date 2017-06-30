@@ -30,7 +30,7 @@
 @import '../../node_modules/tachyons/src/_max-widths';
 @import '../../node_modules/tachyons/src/_widths';
 /* @import '../../node_modules/tachyons/src/_overflow'; */
-/* @import '../../node_modules/tachyons/src/_position'; */
+@import '../../node_modules/tachyons/src/_position';
 /* @import '../../node_modules/tachyons/src/_opacity'; */
 /* @import '../../node_modules/tachyons/src/_rotations'; */
 @import '../../node_modules/tachyons/src/_skins';
@@ -122,6 +122,13 @@ pre {
 
 .editor-section {
   box-sizing: border-box;
+}
+
+.editor-section .delay {
+  right: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .cellrow {

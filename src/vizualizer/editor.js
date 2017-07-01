@@ -1,5 +1,10 @@
 'use strict'
 
+const CLASS_SELECTED = 'selected'
+const CLASS_TOKEN = 'token'
+const CLASS_COMMENT = 'comment'
+const CLASS_BREAKPOINT = 'breakpoint'
+
 const EV_DONE = 'done'
 const EV_PAUSE = 'pause'
 const EV_SOFT_RESET = 'reset'
@@ -56,8 +61,12 @@ function editorView (state, emit) {
     let stateUpdate = { tick, memory, pointer, idx, steps }
 
     if (state.running) {
-      let delay = Math.max(state.delay * 10, 10)
-      stateUpdate.tickTimer = setTimeout(tick, delay)
+      if (state.breakpoints.indexOf(state.idx + 1) !== -1) {
+        emit(EV_PAUSE)
+      } else {
+        let delay = Math.max(state.delay * 10, 10)
+        stateUpdate.tickTimer = setTimeout(tick, delay)
+      }
     }
 
     emit(EV_UPDATE_PROG_STATE, stateUpdate)
@@ -217,6 +226,7 @@ function setBlankState (state) {
   state.running = false
   state.tick = null
   state.tickTimer = null
+  state.breakpoints = []
   state.memory = []
   state.output = ''
   state.pointer = 0
@@ -236,14 +246,50 @@ function controls (state, emitter) {
   const render = () => {
     emitter.emit('render')
 
-    process.nextTick(() =>
-      document.querySelectorAll('.editor .token.selected').forEach((elem) =>
-        elem.classList.remove('selected')))
+    let tokens = document
+      .querySelectorAll('.editor .token:not(.comment)')
 
     process.nextTick(() =>
-      [document.querySelectorAll('.editor .token:not(.comment)')[state.idx]].map((elem) =>
-        elem.classList.add('selected')))
+      document.querySelectorAll('.editor .token.breakpoint').forEach((elem) =>
+        elem.classList.remove(CLASS_BREAKPOINT)))
+
+    process.nextTick(() =>
+      document.querySelectorAll('.editor .token.selected').forEach((elem) =>
+        elem.classList.remove(CLASS_SELECTED)))
+
+    process.nextTick(() =>
+      [tokens[state.idx]].map((elem) =>
+        elem.classList.add(CLASS_SELECTED)))
+
+    process.nextTick(() =>
+      state.breakpoints.forEach((index) =>
+        [tokens[index]].map((elem) =>
+          elem.classList.add(CLASS_BREAKPOINT))))
   }
+
+  document.body.addEventListener('click', (ev) => {
+    let elem = ev.target
+    let isElem = elem.classList.contains(CLASS_TOKEN)
+    let isComment = elem.classList.contains(CLASS_COMMENT)
+    let isBreakpoint = elem.classList.contains(CLASS_BREAKPOINT)
+
+    if (!isElem || isComment) {
+      return
+    }
+
+    let tokens = document
+      .querySelectorAll('.editor .token:not(.comment)')
+
+    let index = [].indexOf.call(tokens, elem)
+
+    if (isBreakpoint) {
+      state.breakpoints = state.breakpoints.filter((bp) => bp !== index)
+      elem.classList.remove(CLASS_BREAKPOINT)
+    } else {
+      state.breakpoints.push(index)
+      elem.classList.add(CLASS_BREAKPOINT)
+    }
+  })
 
   emitter.on(EV_UPDATE_PROG_STATE, ({ tick, tickTimer, memory, pointer, idx, steps }) => {
     state.tick = tick
@@ -273,8 +319,13 @@ function controls (state, emitter) {
 
   emitter.on(EV_SOFT_RESET, () => {
     let currProg = state.program
+    let currBreakpoints = state.breakpoints
+
     setBlankState(state)
+
     state.program = currProg
+    state.breakpoints = currBreakpoints
+
     render()
   })
 

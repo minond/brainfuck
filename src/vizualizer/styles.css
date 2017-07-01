@@ -203,6 +203,16 @@ pre {
   color: #ff7b7b;
 }
 
+.editor .token:not(.comment) {
+  cursor: pointer;
+}
+
+.editor .token.breakpoint,
+.editor .token:not(.comment):hover {
+  background-color: #ffa3a3;
+  color: black;
+}
+
 .editor .token.selected {
   background-color: black;
   color: white;

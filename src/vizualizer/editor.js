@@ -135,7 +135,7 @@ function editorView (state, emit) {
             ${state.running ? editorButton('Pause', { onclick: pause }) : ''}
             ${state.running ? '' : editorButton('Step', { onclick: step })}
             ${state.tick && !state.running ? editorButton('Continue', { onclick: cont }) : ''}
-            ${rangeInput(state.delay, updateDelay)}
+            ${rangeInput(state, 'delay', updateDelay)}
         </div>
 
         <div class="pb3">
@@ -359,16 +359,17 @@ function logger (state, emitter) {
 
 /**
  * an input[range] field
- * @param {number} value
+ * @param {object} state
+ * @param {string} prop
  * @return {html}
  */
-function rangeInput (value, onchange) {
-  const elem = html`<input value=${value} class="delay" type="range"
+function rangeInput (state, prop, onchange) {
+  const elem = html`<input value=${state[prop]} class="delay" type="range"
     onclick=${(ev) => onchange(+ev.target.value)}
     onchange=${(ev) => onchange(+ev.target.value)} />`
 
-  elem.isSameNode = () =>
-    true
+  elem.isSameNode = (target) =>
+    +state[prop] !== +target.value
 
   return elem
 }

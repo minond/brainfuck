@@ -26,7 +26,10 @@ const choo = require('choo')
 const helloworld = require('../bf/helloworld.bf')
 const app = choo()
 
-app.use(logger)
+if (process.env.NODE_ENV === 'development') {
+  app.use(logger)
+}
+
 app.use(controls)
 
 app.route('*', editorView)

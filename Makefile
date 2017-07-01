@@ -10,10 +10,13 @@ dist_dir = docs
 docs_dir = docs
 assets_dir = assets
 
+NODE_ENV ?= production
+
 docco_flags = --layout parallel --output $(docs_dir)/annotated
 watch_flags = --ignoreDotFiles
 browserify_flags = -t [ stringify --extensions [ .bf ] ] \
-                   -t [ babelify --presets [ es2015 ] ]
+                   -t [ babelify --presets [ es2015 ] ] \
+                   -t [ envify --NODE_ENV $(NODE_ENV) ]
 
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 js_files := $(call rwildcard,src/,*.js)

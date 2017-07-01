@@ -31,11 +31,12 @@
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
     "docco": "^0.7.0",
+    "envify": "^4.0.0",
     "gifsicle": "^3.0.4",
     "stringify": "^5.1.0",
     "tachyons-cli": "^1.0.11",
     "tap": "^10.3.3",
-    "uglify-js": "^3.0.17",
+    "uglify-js": "^3.0.22",
     "watch": "^1.0.2"
   }
 }

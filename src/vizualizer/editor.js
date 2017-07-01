@@ -225,11 +225,14 @@ function setBlankState (state) {
     state.delay = 20
   }
 
+  if (!('breakpoints' in state)) {
+    state.breakpoints = []
+  }
+
   state.program = helloworld
   state.running = false
   state.tick = null
   state.tickTimer = null
-  state.breakpoints = []
   state.memory = []
   state.output = ''
   state.pointer = 0
@@ -262,12 +265,12 @@ function controls (state, emitter) {
 
     process.nextTick(() =>
       [tokens[state.idx]].map((elem) =>
-        elem.classList.add(CLASS_SELECTED)))
+        elem && elem.classList.add(CLASS_SELECTED)))
 
     process.nextTick(() =>
       state.breakpoints.forEach((index) =>
         [tokens[index]].map((elem) =>
-          elem.classList.add(CLASS_BREAKPOINT))))
+          elem && elem.classList.add(CLASS_BREAKPOINT))))
   }
 
   document.body.addEventListener('click', (ev) => {
@@ -322,13 +325,8 @@ function controls (state, emitter) {
 
   emitter.on(EV_SOFT_RESET, () => {
     let currProg = state.program
-    let currBreakpoints = state.breakpoints
-
     setBlankState(state)
-
     state.program = currProg
-    state.breakpoints = currBreakpoints
-
     render()
   })
 
@@ -340,7 +338,12 @@ function controls (state, emitter) {
   emitter.on(EV_UPDATE_PROG, (program) => {
     setBlankState(state)
     state.program = program
-    render()
+
+    if (!program || !program.trim()) {
+      state.breakpoints = []
+    }
+
+    process.nextTick(render)
   })
 
   emitter.on(EV_UPDATE_DELAY, (delay) => {

@@ -224,50 +224,6 @@ function editorView (state, emit) {
     </section>
   `
 }
-// <p class="lh-copy sans-serif">
-//   Brainfuck is a minimalist programming language created by
-//   ${link('Urban Müller',
-//   'https://esolangs.org/wiki/Urban_M%C3%BCller')}. Minimalist?
-//   Minimalist. Here are the 8 commands that make up this turing complete
-//   language:
-// </p>
-//
-// <table class="f6 w-100 mw8 center" cellspacing="0">
-//   <tbody class="lh-copy">
-//     <tr>
-//       <td class="pv1 bt bb b--black-20">${codeSnippet('>')}</td>
-//       <td class="pv1 bt bb b--black-20 sans-serif">Move the pointer to the right</td>
-//     </tr>
-//     <tr>
-//       <td class="pv1 bb b--black-20">${codeSnippet('<')}</td>
-//       <td class="pv1 bb b--black-20 sans-serif">Move the pointer to the left</td>
-//     </tr>
-//     <tr>
-//       <td class="pv1 bb b--black-20">${codeSnippet('+')}</td>
-//       <td class="pv1 bb b--black-20 sans-serif">Increment the memory cell under the pointer</td>
-//     </tr>
-//     <tr>
-//       <td class="pv1 bb b--black-20">${codeSnippet('-')}</td>
-//       <td class="pv1 bb b--black-20 sans-serif">Decrement the memory cell under the pointer</td>
-//     </tr>
-//     <tr>
-//       <td class="pv1 bb b--black-20">${codeSnippet('.')}</td>
-//       <td class="pv1 bb b--black-20 sans-serif">Output the character signified by the cell at the pointer</td>
-//     </tr>
-//     <tr>
-//       <td class="pv1 bb b--black-20">${codeSnippet(',')}</td>
-//       <td class="pv1 bb b--black-20 sans-serif">Input a character and store it in the cell at the pointer</td>
-//     </tr>
-//     <tr>
-//       <td class="pv1 bb b--black-20">${codeSnippet('[')}</td>
-//       <td class="pv1 bb b--black-20 sans-serif">Jump past the matching ${codeSnippet(']')} if the cell under the pointer is 0</td>
-//     </tr>
-//     <tr>
-//       <td class="pv1 bb b--black-20">${codeSnippet(']')}</td>
-//       <td class="pv1 bb b--black-20 sans-serif">Jump back to the matching ${codeSnippet('[')} if the cell under the pointer is nonzero</td>
-//     </tr>
-//   </tbody>
-// </table>
 
 /**
  * @param {object} & state

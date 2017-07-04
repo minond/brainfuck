@@ -100,48 +100,113 @@ function editorView (state, emit) {
 
   return html`
     <section class="pa3 pa4-ns cf container">
-      <h1 class="mt0 f3 f2-m f1-l title">Brainfuck</h1>
+      <h1 class="mt0 f3 f2-m f1-l title fw1 baskerville">Brainfuck</h1>
 
       <div class="editor-section fl w-100 w-50-ns tc">
-        <p class="lh-copy sans-serif">
-          Hello, and welcome to my lil' ${link('Brainfuck',
-          'https://esolangs.org/wiki/Brainfuck')} interpreter and state/memory
-          vizualizer. Why spend time here? Well Brainfuck is a pretty cool
-          programming language and building an interpreter for it is a good way
-          to learn the basics of parsers, interpreters, and computer memory.
-          ${link('Here\'s some code',
-          'https://github.com/minond/brainfuck/blob/master/src/interpreter/js/brainfuck.js')}
-          you can check out - it's hopefully pretty well documented.
-        </p>
+        <div class="lh-copy helvetica">
+          <p class="mt0">
+            ${link('Brainfuck', 'https://esolangs.org/wiki/Brainfuck')}, one of
+            the ${link('esoteric programming languages',
+            'https://esolangs.org/wiki/Esoteric_programming_language')} you've
+            probably heard of. Partly because of its minimal instruction set
+            but most likely because it has the word <span class="i">fuck</span>
+            in its name. That said this language doesn't have to leave you
+            thinking <span class="i">"wtf?"</span>. This very tool will help
+            you learn and understand this language and how with just 8 commands
+            you can really have a turing complete language.
+          </p>
 
-        <p class="lh-copy sans-serif">
-          Here's some information about this program: It is
-          ${codeSnippet(program.length)} bytes,
-          ${codeSnippet(getProg(state).length)} of which are valid commands.
-          The interpreter is going to interpret the character at index
-          ${codeSnippet(state.idx)}, which is
-          ${codeSnippet(getProg(state).charAt(state.idx))} , and has taken a
-          total of ${codeSnippet(state.steps)} steps so far.
-        </p>
+          <p>
+            Besides this text you'll see buttons you can use to execute your
+            program. This can be done in continuation or one command at a time
+            and as your program is running you can slide the range input field
+            to alter the speed at which the code runs.  Below your controls
+            you'll notice a table (with ten 0's at the start) which is the
+            internal memory.  And finally your code editor, where you can set
+            breakpoints by clicking on commands that will halt your program's
+            execution. Now for a quick introduction to the language:
+          </p>
 
-        <p class="lh-copy sans-serif">
-          ${!state.output
-            ? html`<span>The program has had no output yet.</span>`
-            : html`<span>
-                     <span>This is the output of your program:</span>
-                     ${codeSnippet(state.output)}
-                   </span>`}
-        </p>
+          <ul class="pl4">
+            <li>
+              ${codeSnippet('<')} and ${codeSnippet('>')} move the pointer to
+              the left and to the right. Keep an on the memory cells to the
+              right -- the cell that has a black background color is the active
+              cell and the one where increment, decrement, and loops will act
+              on or check.
+            </li>
+
+            <li class="pt2">
+              ${codeSnippet('+')} and ${codeSnippet('-')} increment and
+              decrement the active cell. Note that incrementing above 255 will
+              "wrap" the value back around to 0, and decrementing below 0 will
+              take you to 255.
+            </li>
+
+            <li class="pt2">
+              ${codeSnippet('[')} and ${codeSnippet(']')} are the language's
+              only control flow operators. The code inside of the loop is ran
+              as long as that value of the active cell is not zero. This of it
+              as a ${codeSnippet('while (ptr != 0) {}')} loop.
+            </li>
+
+            <li class="pt2">
+              ${codeSnippet('.')} and ${codeSnippet(',')} are the io functions.
+              A period will output the character associated with the
+              ${link('ASCII', 'https://en.wikipedia.org/wiki/ASCII')} in the
+              active cell (so if the active cell has a value of 97 and you
+              output its value, you should get an "a".)
+            </li>
+          </ul>
+
+          <p>
+            So play around with this tool. Start by running the sample code or
+            creating basic programs on your own and see for yourself how with
+            even the most basic control flow and altering commands you can
+            technically accomplish any task. If you're curious about the code
+            and the interpreter that are running on this page,
+            ${link('go here', 'https://github.com/minond/brainfuck')}, and if you'd like
+            to learn more about Brainfuck and other really interesting esoteric
+            programming languages then I recommend heading over to
+            ${link('Esolang', 'https://esolangs.org/wiki/Main_Page')}.
+          </p>
+        </div>
+      </div>
+
+      <div class="editor-section fl w-100 w-50-ns tc pb4 pb2-ns">
+        <div class="lh-copy helvetica">
+          <p class="mt0">
+            Here's some information about your program: it is
+            ${codeSnippet(program.length)} bytes,
+            ${codeSnippet(getProg(state).length)} of which are valid commands.
+            The interpreter is going to interpret the character at index
+            ${codeSnippet(state.idx)}, which is
+            ${codeSnippet(getProg(state).charAt(state.idx))} , and has taken a
+            total of ${codeSnippet(state.steps)} steps so far.
+
+            ${!state.output
+              ? html`<span>The program has had no output yet.</span>`
+              : html`<span>
+                       <span>This is the output of your program:</span>
+                       ${codeSnippet(state.output)}
+                     </span>`}
+          </p>
+        </div>
 
         <div class="relative mt2-ns mb3">
+          <span>
             ${editorButton('Run', { onclick: start })}
             ${state.running ? editorButton('Pause', { onclick: pause }) : ''}
             ${state.running ? '' : editorButton('Step', { onclick: step })}
             ${state.tick && !state.running ? editorButton('Continue', { onclick: cont }) : ''}
+          </span>
+
+          <span>
             ${rangeInput(state, 'delay', updateDelay)}
+          </span>
         </div>
 
-        <div class="pb3">
+        <div title="Memory Cells" class="pb3">
           ${chunk(fill(state.memory, Math.max(FRAME_SIZE, state.pointer + 1), MEM_NIL_VAL), FRAME_SIZE).map((row, rowNum) =>
             html`<div class="cellrow">
               ${fill(row, FRAME_SIZE, MEM_NIL_VAL).map((cell, i) =>
@@ -152,14 +217,6 @@ function editorView (state, emit) {
             </div>`)}
         </div>
 
-        <p class="lh-copy sans-serif">
-          If you'd like to learn more about Brainfuck and other really
-          interesting esoteric programming languages, I recommend heading over
-          to ${link('Esolang', 'https://esolangs.org/wiki/Main_Page')}.
-        </p>
-      </div>
-
-      <div class="editor-section fl w-100 w-50-ns tc">
         ${editor(state, emit)}
       </div>
 
@@ -443,7 +500,7 @@ function link (label, href = '#') {
  * @return {html}
  */
 function codeSnippet (value) {
-  return html`<code class="ph1 tc bg-light-gray word-wrap">${value}</code>`
+  return html`<code class="f6 ph1 tc bg-light-gray word-wrap">${value}</code>`
 }
 
 /**

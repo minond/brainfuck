@@ -49,6 +49,7 @@ deps:
 
 html:
 	cp src/vizualizer/index.html $(dist_dir)/index.html
+	cp src/vizualizer/index.html index.html
 
 js: src/vizualizer/editor.js
 	$(browserify) $(browserify_flags) $^ | \

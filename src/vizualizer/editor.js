@@ -171,6 +171,8 @@ function editorView (state, emit) {
             ${link('Esolang', 'https://esolangs.org/wiki/Main_Page')}.
           </p>
         </div>
+
+        <img class="fuckyeah" src="retro-pixel-computer.gif" />
       </div>
 
       <div class="editor-section fl w-100 w-50-ns tc pb4 pb2-ns">
@@ -219,8 +221,6 @@ function editorView (state, emit) {
 
         ${editor(state, emit)}
       </div>
-
-      <img class="fuckyeah" src="retro-pixel-computer.gif" />
     </section>
   `
 }

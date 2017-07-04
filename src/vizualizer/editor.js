@@ -172,7 +172,7 @@ function editorView (state, emit) {
           </p>
         </div>
 
-        <img class="fuckyeah" src="retro-pixel-computer.gif" />
+        <img class="fuckyeah" src="docs/retro-pixel-computer.gif" />
       </div>
 
       <div class="editor-section fl w-100 w-50-ns tc pb4 pb2-ns">

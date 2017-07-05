@@ -209,21 +209,21 @@ pre {
 
 /* syntax highlighting start */
 .editor .comment {
-  color: #b9b9b9;
+  color: #b5bac8;
 }
 
 .editor .operator {
-  color: #ff0000;
+  color: #6a3bfb;
 }
 
 .editor .keyword,
 .editor .branching {
-  color: #373ae6;
+  color: #229efc;
 }
 
 .editor .increment,
 .editor .decrement {
-  color: #ff7b7b;
+  color: #fd8f34;
 }
 
 .editor .token:not(.comment) {
@@ -232,8 +232,8 @@ pre {
 
 .editor .token.breakpoint,
 .editor .token:not(.comment):hover {
-  background-color: #ffa3a3;
-  color: black;
+  background-color: #ff5252;
+  color: #fff;
 }
 
 .editor .token.selected {

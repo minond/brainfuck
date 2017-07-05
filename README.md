@@ -1,5 +1,7 @@
 #### brainfuck
 
+[![Build Status](https://travis-ci.org/minond/brainfuck.svg?branch=master)](https://travis-ci.org/minond/brainfuck)
+
 an interpreter written in javascript and a memory visualizer and editor for
 your browser. pass your programs to the interpreter to execute them. you can
 also declare a `DEBUG` environment variable to get a dump of the inner state

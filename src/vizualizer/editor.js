@@ -111,20 +111,24 @@ function editorView (state, emit) {
             probably heard of. Partly because of its minimal instruction set
             but most likely because it has the word <span class="i">fuck</span>
             in its name. That said this language doesn't have to leave you
-            thinking <span class="i">"wtf?"</span>. This very tool will help
-            you learn and understand this language and how with just 8 commands
-            you can really have a turing complete language.
+            thinking <span class="i">"wtf?"</span>.  My intention for building
+            this Brainfuck debugger is to have a tool for learning this
+            language and do it in a visual way, where you can see what your
+            program is doing step by step.
           </p>
 
           <p>
-            Besides this text you'll see buttons you can use to execute your
-            program. This can be done in continuation or one command at a time
-            and as your program is running you can slide the range input field
-            to alter the speed at which the code runs.  Below your controls
-            you'll notice a table (with ten 0's at the start) which is the
-            internal memory.  And finally your code editor, where you can set
-            breakpoints by clicking on commands that will halt your program's
-            execution. Now for a quick introduction to the language:
+            <span class="dn di-ns">Besides</span>
+            <span class="di dn-m dn-l">Below</span>
+            this text you'll see buttons you can use to execute your program,
+            which can be done in continuation or one command at a time, and as
+            your program is running you can slide the range input field to
+            alter the speed at which the code runs.  Below those controls
+            you'll notice a table filled with 0's (at least before you run a
+            program), this is the internal memory.  And finally your code
+            editor, where you can set breakpoints by clicking on commands that
+            will halt your program's execution. Now for a quick introduction to
+            the language:
           </p>
 
           <ul class="pl4">

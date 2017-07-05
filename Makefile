@@ -53,6 +53,8 @@ html:
 js: src/vizualizer/editor.js
 	$(browserify) $(browserify_flags) $^ | \
     $(uglifyjs) > $(dist_dir)/editor.js
+	# fixing use strict bug in safari
+	perl -p -i -e 's/use strict//g' docs/editor.js
 
 css: src/vizualizer/styles.css
 	$(tachyons) $^ -m > $(dist_dir)/styles.css

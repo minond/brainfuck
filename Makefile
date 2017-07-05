@@ -5,6 +5,7 @@ gifsicle = ./node_modules/.bin/gifsicle
 watch = node_modules/.bin/watch
 tap = node_modules/.bin/tap
 uglifyjs = node_modules/.bin/uglifyjs
+standard = node_modules/.bin/standard
 
 dist_dir = docs
 docs_dir = docs
@@ -35,7 +36,7 @@ clean:
 	-mkdir $(dist_dir)
 
 lint: $(js_files)
-	standard $^
+	$(standard) $^
 
 watch:
 	$(watch) 'make css js; date' src/vizualizer $(watch_flags)

@@ -150,7 +150,7 @@ function editorView (state, emit) {
             <li class="pt2">
               ${codeSnippet('[')} and ${codeSnippet(']')} are the language's
               only control flow operators. The code inside of the loop is ran
-              as long as that value of the active cell is not zero. This of it
+              as long as that value of the active cell is not zero. Think of it
               as a ${codeSnippet('while (ptr != 0) {}')} loop.
             </li>
 

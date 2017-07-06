@@ -7,7 +7,7 @@ tap = node_modules/.bin/tap
 uglifyjs = node_modules/.bin/uglifyjs
 standard = node_modules/.bin/standard
 
-dist_dir = docs
+dist_dir = build
 docs_dir = docs
 assets_dir = assets
 
@@ -25,7 +25,7 @@ js_files += $(call rwildcard,test/,*.js)
 
 PORT ?= 3000
 
-build: clean css deps html js docs gif
+build: clean css deps html js gif
 
 install:
 	yarn
@@ -55,7 +55,7 @@ js: src/vizualizer/editor.js
 	$(browserify) $(browserify_flags) $^ | \
     $(uglifyjs) > $(dist_dir)/editor.js
 	# fixing use strict bug in safari
-	perl -p -i -e 's/use strict//g' docs/editor.js
+	perl -p -i -e 's/use strict//g' $(dist_dir)/editor.js
 
 css: src/vizualizer/styles.css
 	$(tachyons) $^ -m > $(dist_dir)/styles.css
@@ -77,8 +77,8 @@ testcov:
 
 .PHONY: serve
 serve:
-	@echo "Opening http://localhost:$(PORT)/docs"
-	(sleep 1 && open http://localhost:$(PORT)/docs) &
+	@echo "Opening http://localhost:$(PORT)"
+	(sleep 1 && open http://localhost:$(PORT)) &
 	python -m SimpleHTTPServer $(PORT)
 
 .PHONY: help

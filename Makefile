@@ -9,7 +9,6 @@ standard = node_modules/.bin/standard
 
 dist_dir = build
 docs_dir = docs
-assets_dir = assets
 
 NODE_ENV ?= production
 
@@ -59,9 +58,6 @@ js: src/vizualizer/editor.js
 
 css: src/vizualizer/styles.css
 	$(tachyons) $^ -m > $(dist_dir)/styles.css
-
-gif:
-	$(gifsicle) $(assets_dir)/retro-pixel-computer.gif -o $(dist_dir)/retro-pixel-computer.gif
 
 .PHONY: docs
 docs: src/interpreter/js/brainfuck.js

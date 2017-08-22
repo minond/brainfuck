@@ -103,10 +103,6 @@ pre {
 }
 
 @media (--breakpoint-not-small) {
-  .fuckyeah {
-    display: block;
-  }
-
   .editor {
     height: 50vh;
   }
@@ -196,15 +192,6 @@ pre {
 .inverted {
   background-color: black;
   color: white;
-}
-
-.fuckyeah {
-  display: none;
-  height: 6rem;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 4rem;
-  margin-bottom: 5rem;
 }
 
 /* syntax highlighting start */

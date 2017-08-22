@@ -32,7 +32,6 @@
     "browserify": "^14.4.0",
     "docco": "^0.7.0",
     "envify": "^4.0.0",
-    "gifsicle": "^3.0.4",
     "standard": "^10.0.2",
     "stringify": "^5.1.0",
     "tachyons-cli": "^1.0.11",

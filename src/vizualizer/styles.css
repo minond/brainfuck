@@ -97,7 +97,7 @@ pre {
   border: 1px solid #c0c0c0;
   outline: 0;
   height: 300px;
-  overflow: scroll;
+  overflow: auto;
   font-family: monospace;
   padding: 1rem;
 }

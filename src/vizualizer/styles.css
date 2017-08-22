@@ -39,7 +39,7 @@
 /* @import '../../node_modules/tachyons/src/_negative-margins'; */
 /* @import '../../node_modules/tachyons/src/_tables'; */
 @import '../../node_modules/tachyons/src/_text-decoration';
-/* @import '../../node_modules/tachyons/src/_text-align'; */
+@import '../../node_modules/tachyons/src/_text-align';
 @import '../../node_modules/tachyons/src/_text-transform';
 @import '../../node_modules/tachyons/src/_type-scale';
 @import '../../node_modules/tachyons/src/_typography';
@@ -61,6 +61,11 @@
 @custom-media --breakpoint-medium screen and (min-width: 45em) and (max-width: 60em);
 @custom-media --breakpoint-large screen and (min-width: 60em);
 @custom-media --breakpoint-not-small screen and (min-width: 45em);
+
+.cf:before,
+.cf:after   { content: " "; display: table; }
+.cf:after   { clear: both; }
+.cf         { *zoom: 1; }
 
 body {
   cursor: default;

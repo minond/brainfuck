@@ -1,7 +1,6 @@
 browserify = node_modules/.bin/browserify
 docco = node_modules/.bin/docco
 tachyons = node_modules/.bin/tachyons
-gifsicle = ./node_modules/.bin/gifsicle
 watch = node_modules/.bin/watch
 tap = node_modules/.bin/tap
 uglifyjs = node_modules/.bin/uglifyjs
@@ -24,7 +23,7 @@ js_files += $(call rwildcard,test/,*.js)
 
 PORT ?= 3000
 
-build: clean css deps html js gif
+build: clean css deps html js
 
 install:
 	yarn
@@ -98,6 +97,5 @@ help:
 	@echo "html           builds app's html files"
 	@echo "js             builds app's js code"
 	@echo "css            builds app's css code"
-	@echo "gif            compresses gifs"
 	@echo "docs           generate documentation"
 	@echo "help           see this output"

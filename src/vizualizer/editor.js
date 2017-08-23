@@ -24,7 +24,7 @@ const html = require('choo/html')
 const choo = require('choo')
 
 const helloworld = require('../bf/helloworld.bf')
-const app = choo()
+const app = choo({ history: false })
 
 if (process.env.NODE_ENV === 'development') {
   app.use(logger)

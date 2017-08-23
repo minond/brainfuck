@@ -226,6 +226,19 @@ function editorView (state, emit) {
           ${editor(state, emit)}
         </div>
       </div>
+
+      <footer class="bt b--light-gray spectral pa3 pa4-ns mt5">
+        <div class="container">
+          <p class="lh-copy w-50-ns">
+            My name is ${link('Marcos Minond', '/', '_self')}, and I'm a
+            freelance programmer living in Provo, Utah. Checkout my
+            ${link('resume', '/resume', '_self')} and ${link('GitHub',
+            'https://github.com/minond')}, and if you'd like to contact me just
+            ${link('send me an email', 'mailto:minond.marcos+site@gmail.com',
+            '_self')}.
+          </p>
+        </div>
+      </footer>
     </section>
   `
 }
@@ -448,10 +461,10 @@ function editorButton (value, attrs = '', extraClasses = '') {
  * @param {string} href
  * @return {html}
  */
-function link (label, href = '#') {
+function link (label, href = '#', target = '_blank') {
   return html`<a
-    target="_blank"
-    class="link underline blue hover-orange"
+    target="${target}"
+    class="link blue dim"
     href="${href}">${label}</a>`
 }
 

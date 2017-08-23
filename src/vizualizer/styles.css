@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Spectral');
+
 /*! TACHYONS v4.6.1 | http://tachyons.io */
 @import '../../node_modules/tachyons/src/_normalize.css';
 /* @import '../../node_modules/tachyons/src/_box-sizing'; */
@@ -9,7 +11,7 @@
 @import '../../node_modules/tachyons/src/_borders';
 @import '../../node_modules/tachyons/src/_border-colors';
 /* @import '../../node_modules/tachyons/src/_border-radius'; */
-/* @import '../../node_modules/tachyons/src/_border-style'; */
+@import '../../node_modules/tachyons/src/_border-style';
 @import '../../node_modules/tachyons/src/_border-widths';
 /* @import '../../node_modules/tachyons/src/_box-shadow'; */
 /* @import '../../node_modules/tachyons/src/_code'; */
@@ -67,8 +69,13 @@
 .cf:after   { clear: both; }
 .cf         { *zoom: 1; }
 
+.spectral {
+  font-family: 'Spectral', serif;
+}
+
 body {
   cursor: default;
+  margin: 0;
 }
 
 pre {

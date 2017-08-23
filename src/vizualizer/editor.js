@@ -230,12 +230,12 @@ function editorView (state, emit) {
       <footer class="bt b--light-gray spectral pa3 pa4-ns mt5">
         <div class="container">
           <p class="lh-copy w-50-ns">
-            My name is ${ilink('Marcos Minond', '/')}, and I'm a
+            My name is ${ilink('Marcos Minond', '/', 'red')}, and I'm a
             freelance programmer living in Provo, Utah. Checkout my
-            ${ilink('resume', '/resume')} and ${link('GitHub',
-            'https://github.com/minond')}, and if you'd like to contact me just
-            ${link('send me an email', 'mailto:minond.marcos+site@gmail.com',
-            '_self')}.
+            ${ilink('resume', '/resume', 'red')} and ${link('GitHub',
+            'https://github.com/minond', '_blank', 'red')}, and if you'd like
+            to contact me just ${link('send me an email',
+            'mailto:minond.marcos+site@gmail.com', '_self', 'red')}.
           </p>
         </div>
       </footer>
@@ -461,9 +461,9 @@ function editorButton (value, attrs = '', extraClasses = '') {
  * @param {string} href
  * @return {html}
  */
-function ilink (label, href = '#') {
+function ilink (label, href = '#', color = 'blue') {
   return html`<a
-    class="link blue dim"
+    class="link ${color} dim"
     onclick="window.location.href = '${href}'"
     href="${href}">${label}</a>`
 }
@@ -475,10 +475,10 @@ function ilink (label, href = '#') {
  * @param {string} target (default: _blank)
  * @return {html}
  */
-function link (label, href = '#', target = '_blank') {
+function link (label, href = '#', target = '_blank', color = 'blue') {
   return html`<a
     target="${target}"
-    class="link blue dim"
+    class="link ${color} dim"
     href="${href}">${label}</a>`
 }
 

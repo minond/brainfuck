@@ -227,7 +227,7 @@ function editorView (state, emit) {
         </div>
       </div>
 
-      <footer class="bt b--light-gray spectral pa3 pa4-ns mt5">
+      <footer class="bt b--light-gray spectral pa3 pa4-ns mt4-ns mt1">
         <div class="container">
           <p class="lh-copy w-50-ns">
             My name is ${ilink('Marcos Minond', '/', 'red')}, and I'm a

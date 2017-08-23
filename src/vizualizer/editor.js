@@ -231,8 +231,8 @@ function editorView (state, emit) {
         <div class="container">
           <p class="lh-copy w-50-ns">
             My name is ${ilink('Marcos Minond', '/', 'red')}, and I'm a
-            programmer living in Provo, Utah. Checkout my ${ilink('resume',
-            '/resume', 'red')} and ${link('GitHub',
+            computer programmer living in Provo, Utah. Checkout my
+            ${ilink('resume', '/resume', 'red')} and ${link('GitHub',
             'https://github.com/minond', '_blank', 'red')}, and if you'd like
             to contact me just ${link('send me an email',
             'mailto:minond.marcos+site@gmail.com', '_self', 'red')}.

@@ -230,9 +230,9 @@ function editorView (state, emit) {
       <footer class="bt b--light-gray spectral pa3 pa4-ns mt5">
         <div class="container">
           <p class="lh-copy w-50-ns">
-            My name is ${link('Marcos Minond', '/', '_self')}, and I'm a
+            My name is ${ilink('Marcos Minond', '/')}, and I'm a
             freelance programmer living in Provo, Utah. Checkout my
-            ${link('resume', '/resume', '_self')} and ${link('GitHub',
+            ${ilink('resume', '/resume')} and ${link('GitHub',
             'https://github.com/minond')}, and if you'd like to contact me just
             ${link('send me an email', 'mailto:minond.marcos+site@gmail.com',
             '_self')}.
@@ -456,9 +456,23 @@ function editorButton (value, attrs = '', extraClasses = '') {
 }
 
 /**
- * a link
+ * an internal link
  * @param {string} label
  * @param {string} href
+ * @return {html}
+ */
+function ilink (label, href = '#') {
+  return html`<a
+    class="link blue dim"
+    onclick="window.location.href = '${href}'"
+    href="${href}">${label}</a>`
+}
+
+/**
+ * a link
+ * @param {string} label
+ * @param {string} href (default: #)
+ * @param {string} target (default: _blank)
  * @return {html}
  */
 function link (label, href = '#', target = '_blank') {

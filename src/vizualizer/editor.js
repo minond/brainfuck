@@ -19,7 +19,7 @@ const MEM_NIL_VAL = 0
 
 const CHAR_IGNORE = /[^[\]<>.,+-]+/g
 
-const brainfuck = require('../interpreter/js/brainfuck')
+const brainfuck = require('../interpreter/brainfuck')
 const html = require('choo/html')
 const choo = require('choo')
 
@@ -253,7 +253,7 @@ function setBlankState (state) {
   }
 
   if (!('delay' in state)) {
-    state.delay = 20
+    state.delay = 10
   }
 
   if (!('breakpoints' in state)) {

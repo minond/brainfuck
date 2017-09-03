@@ -59,7 +59,7 @@ css: src/vizualizer/styles.css
 	$(tachyons) $^ -m > $(dist_dir)/styles.css
 
 .PHONY: docs
-docs: src/interpreter/js/brainfuck.js
+docs: src/interpreter/brainfuck.js
 	$(docco) $(docco_flags) $^
 
 .PHONY: test

@@ -116,7 +116,7 @@ pre {
 
 @media (--breakpoint-not-small) {
   .editor {
-    height: 50vh;
+    height: 60vh;
   }
 
   .editor-section:first-of-type {

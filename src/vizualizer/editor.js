@@ -253,7 +253,7 @@ function setBlankState (state) {
   }
 
   if (!('delay' in state)) {
-    state.delay = 10
+    state.delay = 5
   }
 
   if (!('breakpoints' in state)) {

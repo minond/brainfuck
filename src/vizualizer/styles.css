@@ -73,6 +73,11 @@
   font-family: 'Spectral', serif;
 }
 
+.helvetica {
+  font-weight: 300;
+  letter-spacing: .8px;
+}
+
 body {
   cursor: default;
   margin: 0;

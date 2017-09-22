@@ -71,6 +71,7 @@
 
 select {
   height: 30px;
+  border-color: silver;
 }
 
 .spectral {

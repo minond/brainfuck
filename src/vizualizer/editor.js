@@ -112,6 +112,18 @@ function editorView (state, emit) {
     if (program in programs) {
       emit(EV_UPDATE_PROG_NAME, program)
       emit(EV_UPDATE_PROG, programs[program])
+
+      // XXX boooooo
+      process.nextTick(() => {
+        let ev = document.createEvent('HTMLEvents')
+        let code = document.querySelector('code.editor')
+
+        if (ev && code) {
+          ev.initEvent('input', false, true)
+          code.innerText = programs[program]
+          code.dispatchEvent(ev)
+        }
+      })
     }
   }
 

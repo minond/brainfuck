@@ -11,6 +11,7 @@ const EV_SOFT_RESET = 'reset'
 const EV_START = 'start'
 const EV_UPDATE_DELAY = 'updatedelay'
 const EV_UPDATE_PROG = 'updateprogram'
+const EV_UPDATE_PROG_NAME = 'updateprogramname'
 const EV_UPDATE_PROG_OUT_APPEND = 'updateprogramoutappend'
 const EV_UPDATE_PROG_STATE = 'updateprogramstate'
 
@@ -23,7 +24,11 @@ const brainfuck = require('../interpreter/brainfuck')
 const html = require('choo/html')
 const choo = require('choo')
 
-const helloworld = require('../bf/helloworld.bf')
+const helloworldProg = require('../bf/helloworld.bf')
+const squaresProg = require('../bf/squares.bf')
+const fibProg = require('../bf/fib.bf')
+const randomProg = require('../bf/random.bf')
+
 const app = choo({ history: false })
 
 if (process.env.NODE_ENV === 'development') {
@@ -95,6 +100,20 @@ function editorView (state, emit) {
 
   const write = (str) =>
     emit(EV_UPDATE_PROG_OUT_APPEND, str)
+
+  const load = (program) => {
+    let programs = {
+      helloworld: helloworldProg,
+      squares: squaresProg,
+      fib: fibProg,
+      random: randomProg
+    }
+
+    if (program in programs) {
+      emit(EV_UPDATE_PROG_NAME, program)
+      emit(EV_UPDATE_PROG, programs[program])
+    }
+  }
 
   let { program = '' } = state
 
@@ -199,16 +218,7 @@ function editorView (state, emit) {
             </p>
           </div>
 
-          <select
-            class="w-100 mb2 editor-ctrl f6 link dim ba ph3 pv2 dib black"
-            onchange=${(ev) => console.log(ev.target.value)}
-          >
-            <option value="helloworld">helloworld.bf</option>
-            <option value="squared">squared.bf</option>
-            <option value="fib">fib.bf</option>
-            <option value="random">random.bf</option>
-          </select>
-
+          ${programsSelect(load)}
 
           <div class="relative mt2-ns mb3">
             <span>
@@ -271,7 +281,11 @@ function setBlankState (state) {
     state.breakpoints = []
   }
 
-  state.program = helloworld
+  if (!state.programName) {
+    state.programName = 'helloworld'
+  }
+
+  state.program = helloworldProg
   state.running = false
   state.tick = null
   state.tickTimer = null
@@ -377,6 +391,11 @@ function controls (state, emitter) {
     render()
   })
 
+  emitter.on(EV_UPDATE_PROG_NAME, (name) => {
+    state.programName = name
+    render()
+  })
+
   emitter.on(EV_UPDATE_PROG, (program) => {
     setBlankState(state)
     state.program = program
@@ -403,6 +422,26 @@ function controls (state, emitter) {
 function logger (state, emitter) {
   emitter.on('*', (...args) =>
     console.log('%cchoochoo', 'color: #346fff', ...args))
+}
+
+function programsSelect (onchange) {
+  const elem = html`
+    <select
+      class="w-100 mb2 editor-ctrl f6 link dim ba ph3 pv2 dib black"
+      onchange=${(ev) => onchange(ev.target.value)}
+    >
+      <option disabled>-- select a program --</option>
+      <option value="helloworld">helloworld.bf</option>
+      <option value="squares">squares.bf</option>
+      <option value="fib">fib.bf</option>
+      <option value="random">random.bf</option>
+    </select>
+  `
+
+  elem.isSameNode = () =>
+    true
+
+  return elem
 }
 
 /**

@@ -199,6 +199,17 @@ function editorView (state, emit) {
             </p>
           </div>
 
+          <select
+            class="w-100 mb2 editor-ctrl f6 link dim ba ph3 pv2 dib black"
+            onchange=${(ev) => console.log(ev.target.value)}
+          >
+            <option value="helloworld">helloworld.bf</option>
+            <option value="squared">squared.bf</option>
+            <option value="fib">fib.bf</option>
+            <option value="random">random.bf</option>
+          </select>
+
+
           <div class="relative mt2-ns mb3">
             <span>
               ${editorButton('Run', { onclick: start })}

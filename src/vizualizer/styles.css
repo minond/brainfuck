@@ -69,6 +69,10 @@
 .cf:after   { clear: both; }
 .cf         { *zoom: 1; }
 
+select {
+  height: 30px;
+}
+
 .spectral {
   font-family: 'Spectral', serif;
 }

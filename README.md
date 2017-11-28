@@ -1,7 +1,6 @@
 [![Build Status](https://travis-ci.org/minond/brainfuck.svg?branch=master)](https://travis-ci.org/minond/brainfuck)
 
-A Brainfuck debugger and memory visualizer in your browser. Also a standalone
-interpreter: `DEBUG=1 node src/interpreter/brainfuck.js src/bf/squares.bf`.
+A Brainfuck debugger and memory visualizer in your browser.
 
 Many thanks to [Daniel B Cristofani](http://www.hevanet.com/cristofd/) for a
 nice [intro](http://www.hevanet.com/cristofd/brainfuck/epistle.html) and
@@ -10,4 +9,4 @@ nice [intro](http://www.hevanet.com/cristofd/brainfuck/epistle.html) and
 came prior to mine.
 
 To play around with the debugger, go to [my site](http://minond.xyz/brainfuck/)
-or run locally by downloading this repo and running `make install build serve`.
+or run locally by downloading this repo and running `make install run`.

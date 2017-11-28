@@ -12301,23 +12301,161 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 };
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
+var _minond$brainfuck$Main$link = F2(
+	function (title, shref) {
+		return A2(
+			_elm_lang$html$Html$a,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$href(shref),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('link blue'),
+					_1: {ctor: '[]'}
+				}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(title),
+				_1: {ctor: '[]'}
+			});
+	});
 var _minond$brainfuck$Main$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$classList(
-				{
-					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'hi', _1: true},
-					_1: {ctor: '[]'}
-				}),
+			_0: _elm_lang$html$Html_Attributes$class('cf pa3 pa4-ns container lh-copy helvetica'),
 			_1: {ctor: '[]'}
 		},
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html$text('hihi'),
-			_1: {ctor: '[]'}
+			_0: A2(
+				_elm_lang$html$Html$h1,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('mt0 f3 f2-m f1-l title fw1 baskerville'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Brainfuck'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('fl w-100 w-50-ns editor-section'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$p,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('mt0'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(_minond$brainfuck$Main$link, 'Brainfuck', 'https://esolangs.org/wiki/Brainfuck'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(', one of the '),
+									_1: {
+										ctor: '::',
+										_0: A2(_minond$brainfuck$Main$link, 'esoteric programming languages', 'https://esolangs.org/wiki/Esoteric_programming_language'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(' you\'ve probably heard of. Partly because of its minimal instruction set but most likely because it has the word '),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$span,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$class('i'),
+														_1: {ctor: '[]'}
+													},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('fuck'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html$text(' in its name. That said this language doesn\'t have to leave you thinking '),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$span,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$class('i'),
+																_1: {ctor: '[]'}
+															},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('\"wtf?\"'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('. My intention for building this Brainfuck debugger is to have a tool for learning this language and do it in a visual way, where you can see what your program is doing step by step.'),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$p,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Besides this text you\'ll see buttons you can use to execute your program, which can be done in continuation or one command at a time, and as your program is running you can slide the range input field to alter the speed at which the code runs. Below those controls you\'ll notice a table filled with 0\'s (at least before you run a program), this is the internal memory. And finally your code editor, where you can set breakpoints by clicking on commands that will halt your program\'s execution. Now for a quick introduction to the language: '),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('fl w-100 w-50-ns editor-section'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$p,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('mt0'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('hi'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}
 		});
 };
 var _minond$brainfuck$Main$update = F2(

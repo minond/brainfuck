@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css?family=Spectral');
+
+body {
+  cursor: default;
+  margin: 0;
+}
+
+pre {
+  margin: 0;
+}
+
+.spectral {
+  font-family: 'Spectral', serif;
+}
+
+.helvetica {
+  letter-spacing: .7px;
+}
+
+.container {
+  max-width: 75rem;
+  margin: 0 auto;
+}
+
+.editor-section {
+  box-sizing: border-box;
+}
+
+/* small */
+@media screen and (min-width: 45em) {
+}
+
+/* medium */
+@media screen and (min-width: 45em) and (max-width: 60em) {
+  .editor-section:first-of-type {
+    padding-right: 1rem;
+  }
+}
+
+/* large */
+@media screen and (min-width: 60em) {
+  .editor-section:first-of-type {
+    padding-right: 1.5rem;
+  }
+
+  .editor-section + .editor-section {
+    padding-left: 1.5rem;
+  }
+}

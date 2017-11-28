@@ -1,6 +1,0 @@
-[submodule "vendor/bililiteRange"]
-	path = vendor/bililiteRange
-	url = https://github.com/dwachss/bililiteRange.git
-[submodule "vendor/prism"]
-	path = vendor/prism
-	url = https://github.com/PrismJS/prism.git

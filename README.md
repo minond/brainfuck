@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/minond/brainfuck.svg?branch=master)](https://travis-ci.org/minond/brainfuck)
-
 A Brainfuck debugger and memory visualizer in your browser.
 
 Many thanks to [Daniel B Cristofani](http://www.hevanet.com/cristofd/) for a

@@ -85,7 +85,8 @@ editorTitle =
 
 editorInformation : Html Msg
 editorInformation =
-    p [ class "mt0" ]
+    p
+        [ class "mt0" ]
         [ text "Here's some information about your program: it is "
         , mono "793"
         , text " bytes, "

@@ -20,6 +20,7 @@ pre {
 .container {
   max-width: 75rem;
   margin: 0 auto;
+  box-sizing: content-box;
 }
 
 .editor-section {

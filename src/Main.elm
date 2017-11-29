@@ -1,13 +1,20 @@
-module Main exposing (main)
+port module Main exposing (main)
 
+import Debug
 import Html exposing (Html, a, code, div, h1, li, p, pre, span, text, ul)
 import Html.Attributes exposing (class, contenteditable, href, spellcheck)
+import Html.Events exposing (on)
+import Json.Decode as Json
 import List
 import String
 
 
+port initializeEditor : Bool -> Cmd msg
+
+
 type Msg
     = NoOp
+    | EditorInput String
 
 
 type alias Model =
@@ -17,7 +24,7 @@ type alias Model =
 
 main =
     Html.program
-        { init = ( initialModel, Cmd.none )
+        { init = ( initialModel, initializeEditor True )
         , view = view
         , update = update
         , subscriptions = subscriptions
@@ -58,9 +65,12 @@ subscriptions model =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update message model =
-    case message of
-        NoOp ->
+    case ( message, model ) of
+        ( NoOp, _ ) ->
             ( model, Cmd.none )
+
+        ( EditorInput str, { program } ) ->
+            ( { model | program = str }, Cmd.none )
 
 
 view : Model -> Html Msg
@@ -104,55 +114,19 @@ link title shref =
 editorProgram : Model -> Html Msg
 editorProgram { program } =
     let
-        tokens =
-            String.split "" program
-
-        identifier =
-            \tok ->
-                case tok of
-                    "+" ->
-                        "editor-token editor-token-plus"
-
-                    "-" ->
-                        "editor-token editor-token-minus"
-
-                    "." ->
-                        "editor-token editor-token-period"
-
-                    "," ->
-                        "editor-token editor-token-comma"
-
-                    "[" ->
-                        "editor-token editor-token-open"
-
-                    "]" ->
-                        "editor-token editor-token-close"
-
-                    ">" ->
-                        "editor-token editor-token-gt"
-
-                    "<" ->
-                        "editor-token editor-token-lt"
-
-                    _ ->
-                        "editor-invalid-token"
-
-        nodes =
-            List.map
-                (\tok ->
-                    span
-                        [ class (identifier tok) ]
-                        [ text tok ]
-                )
-                tokens
+        getProgram =
+            Json.map
+                (\s -> EditorInput s)
+                (Json.at [ "target", "innerText" ] Json.string)
     in
     pre []
         [ code
             [ contenteditable True
             , spellcheck False
             , class "editor"
+            , on "keyup" getProgram
             ]
-            nodes
+            [ text program ]
         ]
 
 

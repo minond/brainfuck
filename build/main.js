@@ -12301,6 +12301,121 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 };
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
+var _elm_lang$html$Html_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
+var _elm_lang$html$Html_Events$targetChecked = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'checked',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$bool);
+var _elm_lang$html$Html_Events$targetValue = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'value',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$string);
+var _elm_lang$html$Html_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
+var _elm_lang$html$Html_Events$onWithOptions = _elm_lang$virtual_dom$VirtualDom$onWithOptions;
+var _elm_lang$html$Html_Events$on = _elm_lang$virtual_dom$VirtualDom$on;
+var _elm_lang$html$Html_Events$onFocus = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'focus',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onBlur = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'blur',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
+	_elm_lang$html$Html_Events$defaultOptions,
+	{preventDefault: true});
+var _elm_lang$html$Html_Events$onSubmit = function (msg) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'submit',
+		_elm_lang$html$Html_Events$onSubmitOptions,
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onCheck = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'change',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetChecked));
+};
+var _elm_lang$html$Html_Events$onInput = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'input',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetValue));
+};
+var _elm_lang$html$Html_Events$onMouseOut = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseout',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseOver = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseover',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseLeave = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseleave',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseEnter = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseenter',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseUp = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseup',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseDown = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mousedown',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onDoubleClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'dblclick',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'click',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$Options = F2(
+	function (a, b) {
+		return {stopPropagation: a, preventDefault: b};
+	});
+
 var _minond$brainfuck$Main$editorTitle = A2(
 	_elm_lang$html$Html$h1,
 	{
@@ -12313,74 +12428,6 @@ var _minond$brainfuck$Main$editorTitle = A2(
 		_0: _elm_lang$html$Html$text('Brainfuck'),
 		_1: {ctor: '[]'}
 	});
-var _minond$brainfuck$Main$editorProgram = function (_p0) {
-	var _p1 = _p0;
-	var identifier = function (tok) {
-		var _p2 = tok;
-		switch (_p2) {
-			case '+':
-				return 'editor-token editor-token-plus';
-			case '-':
-				return 'editor-token editor-token-minus';
-			case '.':
-				return 'editor-token editor-token-period';
-			case ',':
-				return 'editor-token editor-token-comma';
-			case '[':
-				return 'editor-token editor-token-open';
-			case ']':
-				return 'editor-token editor-token-close';
-			case '>':
-				return 'editor-token editor-token-gt';
-			case '<':
-				return 'editor-token editor-token-lt';
-			default:
-				return 'editor-invalid-token';
-		}
-	};
-	var tokens = A2(_elm_lang$core$String$split, '', _p1.program);
-	var nodes = A2(
-		_elm_lang$core$List$map,
-		function (tok) {
-			return A2(
-				_elm_lang$html$Html$span,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class(
-						identifier(tok)),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text(tok),
-					_1: {ctor: '[]'}
-				});
-		},
-		tokens);
-	return A2(
-		_elm_lang$html$Html$pre,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$code,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$contenteditable(true),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$spellcheck(false),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('editor'),
-							_1: {ctor: '[]'}
-						}
-					}
-				},
-				nodes),
-			_1: {ctor: '[]'}
-		});
-};
 var _minond$brainfuck$Main$link = F2(
 	function (title, shref) {
 		return A2(
@@ -12709,6 +12756,87 @@ var _minond$brainfuck$Main$editorIntroduction = {
 		}
 	}
 };
+var _minond$brainfuck$Main$update = F2(
+	function (message, model) {
+		var _p0 = {ctor: '_Tuple2', _0: message, _1: model};
+		if (_p0._0.ctor === 'NoOp') {
+			return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		} else {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{program: _p0._0._0}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		}
+	});
+var _minond$brainfuck$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _minond$brainfuck$Main$initialModel = {program: '+++++ +++++             initialize counter (cell #0) to 10\n[                       use loop to set 70/100/30/10\n    > +++++ ++              add  7 to cell #1\n    > +++++ +++++           add 10 to cell #2\n    > +++                   add  3 to cell #3\n    > +                     add  1 to cell #4\n<<<< -                  decrement counter (cell #0)\n]\n> ++ .                  print \'H\'\n> + .                   print \'e\'\n+++++ ++ .              print \'l\'\n.                       print \'l\'\n+++ .                   print \'o\'\n> ++ .                  print \' \'\n<< +++++ +++++ +++++ .  print \'W\'\n> .                     print \'o\'\n+++ .                   print \'r\'\n----- - .               print \'l\'\n----- --- .             print \'d\'\n> + .                   print \'!\'\n> .                     print \'eol\'\n'};
+var _minond$brainfuck$Main$initializeEditor = _elm_lang$core$Native_Platform.outgoingPort(
+	'initializeEditor',
+	function (v) {
+		return v;
+	});
+var _minond$brainfuck$Main$Model = function (a) {
+	return {program: a};
+};
+var _minond$brainfuck$Main$EditorInput = function (a) {
+	return {ctor: 'EditorInput', _0: a};
+};
+var _minond$brainfuck$Main$editorProgram = function (_p1) {
+	var _p2 = _p1;
+	var getProgram = A2(
+		_elm_lang$core$Json_Decode$map,
+		function (s) {
+			return _minond$brainfuck$Main$EditorInput(s);
+		},
+		A2(
+			_elm_lang$core$Json_Decode$at,
+			{
+				ctor: '::',
+				_0: 'target',
+				_1: {
+					ctor: '::',
+					_0: 'innerText',
+					_1: {ctor: '[]'}
+				}
+			},
+			_elm_lang$core$Json_Decode$string));
+	return A2(
+		_elm_lang$html$Html$pre,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$code,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$contenteditable(true),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$spellcheck(false),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('editor'),
+							_1: {
+								ctor: '::',
+								_0: A2(_elm_lang$html$Html_Events$on, 'keyup', getProgram),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(_p2.program),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
 var _minond$brainfuck$Main$view = function (model) {
 	var sectionClass = 'fl w-100 w-50-ns editor-section';
 	var containerClass = 'cf pa3 pa4-ns container helvetica';
@@ -12755,31 +12883,23 @@ var _minond$brainfuck$Main$view = function (model) {
 			}
 		});
 };
-var _minond$brainfuck$Main$update = F2(
-	function (message, model) {
-		var _p3 = message;
-		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-	});
-var _minond$brainfuck$Main$subscriptions = function (model) {
-	return _elm_lang$core$Platform_Sub$none;
-};
-var _minond$brainfuck$Main$initialModel = {program: '+++++ +++++             initialize counter (cell #0) to 10\n[                       use loop to set 70/100/30/10\n    > +++++ ++              add  7 to cell #1\n    > +++++ +++++           add 10 to cell #2\n    > +++                   add  3 to cell #3\n    > +                     add  1 to cell #4\n<<<< -                  decrement counter (cell #0)\n]\n> ++ .                  print \'H\'\n> + .                   print \'e\'\n+++++ ++ .              print \'l\'\n.                       print \'l\'\n+++ .                   print \'o\'\n> ++ .                  print \' \'\n<< +++++ +++++ +++++ .  print \'W\'\n> .                     print \'o\'\n+++ .                   print \'r\'\n----- - .               print \'l\'\n----- --- .             print \'d\'\n> + .                   print \'!\'\n> .                     print \'eol\'\n'};
 var _minond$brainfuck$Main$main = _elm_lang$html$Html$program(
 	{
-		init: {ctor: '_Tuple2', _0: _minond$brainfuck$Main$initialModel, _1: _elm_lang$core$Platform_Cmd$none},
+		init: {
+			ctor: '_Tuple2',
+			_0: _minond$brainfuck$Main$initialModel,
+			_1: _minond$brainfuck$Main$initializeEditor(true)
+		},
 		view: _minond$brainfuck$Main$view,
 		update: _minond$brainfuck$Main$update,
 		subscriptions: _minond$brainfuck$Main$subscriptions
 	})();
-var _minond$brainfuck$Main$Model = function (a) {
-	return {program: a};
-};
 var _minond$brainfuck$Main$NoOp = {ctor: 'NoOp'};
 
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _minond$brainfuck$Main$main !== 'undefined') {
-    _minond$brainfuck$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Main.Msg":{"args":[],"tags":{"NoOp":[]}}},"aliases":{},"message":"Main.Msg"},"versions":{"elm":"0.18.0"}});
+    _minond$brainfuck$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Main.Msg":{"args":[],"tags":{"EditorInput":["String"],"NoOp":[]}}},"aliases":{},"message":"Main.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

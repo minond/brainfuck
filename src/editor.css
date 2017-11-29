@@ -50,6 +50,20 @@ pre {
   color: #b5bac8;
 }
 
+.CodeMirror {
+  display: block;
+  min-height: 400px;
+  margin: 0;
+  font-size: 1rem;
+  cursor: text;
+  border: 1px solid #c0c0c0;
+  outline: 0;
+  height: 300px;
+  overflow: auto;
+  font-family: monospace;
+  padding: .75rem;
+}
+
 /* .editor .editor-token:hover { */
 /*   cursor: pointer; */
 /* } */

@@ -12301,6 +12301,18 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 };
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
+var _minond$brainfuck$Main$editorTitle = A2(
+	_elm_lang$html$Html$h1,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('mt0 f3 f2-m f1-l title fw1 baskerville'),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html$text('Brainfuck'),
+		_1: {ctor: '[]'}
+	});
 var _minond$brainfuck$Main$link = F2(
 	function (title, shref) {
 		return A2(
@@ -12334,97 +12346,185 @@ var _minond$brainfuck$Main$mono = function (str) {
 			_1: {ctor: '[]'}
 		});
 };
-var _minond$brainfuck$Main$view = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
+var _minond$brainfuck$Main$editorInformation = A2(
+	_elm_lang$html$Html$p,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('mt0'),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html$text('Here\'s some information about your program: it is '),
+		_1: {
+			ctor: '::',
+			_0: _minond$brainfuck$Main$mono('793'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(' bytes, '),
+				_1: {
+					ctor: '::',
+					_0: _minond$brainfuck$Main$mono('111'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(' of which are valid commands. The interpreter is going to interpret the character at index '),
+						_1: {
+							ctor: '::',
+							_0: _minond$brainfuck$Main$mono('0'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(', which is '),
+								_1: {
+									ctor: '::',
+									_0: _minond$brainfuck$Main$mono('+'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(', and has taken a total of '),
+										_1: {
+											ctor: '::',
+											_0: _minond$brainfuck$Main$mono('0'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html$text(' steps so far. The program has had no output yet.'),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	});
+var _minond$brainfuck$Main$editorIntroduction = {
+	ctor: '::',
+	_0: A2(
+		_elm_lang$html$Html$p,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('cf pa3 pa4-ns container lh-copy helvetica'),
+			_0: _elm_lang$html$Html_Attributes$class('mt0'),
 			_1: {ctor: '[]'}
 		},
 		{
 			ctor: '::',
+			_0: A2(_minond$brainfuck$Main$link, 'Brainfuck', 'https://esolangs.org/wiki/Brainfuck'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(', one of the '),
+				_1: {
+					ctor: '::',
+					_0: A2(_minond$brainfuck$Main$link, 'esoteric programming languages', 'https://esolangs.org/wiki/Esoteric_programming_language'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(' you\'ve probably heard of. Partly because of its minimal instruction set but most likely because it has the word '),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$span,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('i'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('fuck'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(' in its name. That said this language doesn\'t have to leave you thinking '),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$span,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('i'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('\"wtf?\"'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('. My intention for building this Brainfuck debugger is to have a tool for learning this language and do it in a visual way, where you can see what your program is doing step by step.'),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}),
+	_1: {
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$p,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('Besides this text you\'ll see buttons you can use to execute your program, which can be done in continuation or one command at a time, and as your program is running you can slide the range input field to alter the speed at which the code runs. Below those controls you\'ll notice a table filled with 0\'s (at least before you run a program), this is the internal memory. And finally your code editor, where you can set breakpoints by clicking on commands that will halt your program\'s execution. Now for a quick introduction to the language: '),
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$h1,
+				_elm_lang$html$Html$ul,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('mt0 f3 f2-m f1-l title fw1 baskerville'),
+					_0: _elm_lang$html$Html_Attributes$class('pl4'),
 					_1: {ctor: '[]'}
 				},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text('Brainfuck'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('fl w-100 w-50-ns editor-section'),
-						_1: {ctor: '[]'}
-					},
-					{
+					_0: A2(
+						_elm_lang$html$Html$li,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _minond$brainfuck$Main$mono('<'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(' and '),
+								_1: {
+									ctor: '::',
+									_0: _minond$brainfuck$Main$mono('>'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(' move the pointer to the left and to the right. Keep an on the memory cells to the right -- the cell that has a black background color is the active cell and the one where increment, decrement, and loops will act on or check.'),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}),
+					_1: {
 						ctor: '::',
 						_0: A2(
-							_elm_lang$html$Html$p,
+							_elm_lang$html$Html$li,
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('mt0'),
+								_0: _elm_lang$html$Html_Attributes$class('pt2'),
 								_1: {ctor: '[]'}
 							},
 							{
 								ctor: '::',
-								_0: A2(_minond$brainfuck$Main$link, 'Brainfuck', 'https://esolangs.org/wiki/Brainfuck'),
+								_0: _minond$brainfuck$Main$mono('+'),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html$text(', one of the '),
+									_0: _elm_lang$html$Html$text(' and '),
 									_1: {
 										ctor: '::',
-										_0: A2(_minond$brainfuck$Main$link, 'esoteric programming languages', 'https://esolangs.org/wiki/Esoteric_programming_language'),
+										_0: _minond$brainfuck$Main$mono('-'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html$text(' you\'ve probably heard of. Partly because of its minimal instruction set but most likely because it has the word '),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$span,
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$class('i'),
-														_1: {ctor: '[]'}
-													},
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html$text('fuck'),
-														_1: {ctor: '[]'}
-													}),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html$text(' in its name. That said this language doesn\'t have to leave you thinking '),
-													_1: {
-														ctor: '::',
-														_0: A2(
-															_elm_lang$html$Html$span,
-															{
-																ctor: '::',
-																_0: _elm_lang$html$Html_Attributes$class('i'),
-																_1: {ctor: '[]'}
-															},
-															{
-																ctor: '::',
-																_0: _elm_lang$html$Html$text('\"wtf?\"'),
-																_1: {ctor: '[]'}
-															}),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('. My intention for building this Brainfuck debugger is to have a tool for learning this language and do it in a visual way, where you can see what your program is doing step by step.'),
-															_1: {ctor: '[]'}
-														}
-													}
-												}
-											}
+											_0: _elm_lang$html$Html$text(' increment and decrement the active cell. Note that incrementing above 255 will \"wrap\" the value back around to 0, and decrementing below 0 will take you to 255.'),
+											_1: {ctor: '[]'}
 										}
 									}
 								}
@@ -12432,237 +12532,142 @@ var _minond$brainfuck$Main$view = function (model) {
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$p,
-								{ctor: '[]'},
+								_elm_lang$html$Html$li,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('Besides this text you\'ll see buttons you can use to execute your program, which can be done in continuation or one command at a time, and as your program is running you can slide the range input field to alter the speed at which the code runs. Below those controls you\'ll notice a table filled with 0\'s (at least before you run a program), this is the internal memory. And finally your code editor, where you can set breakpoints by clicking on commands that will halt your program\'s execution. Now for a quick introduction to the language: '),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$ul,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('pl4'),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$li,
-											{ctor: '[]'},
-											{
-												ctor: '::',
-												_0: _minond$brainfuck$Main$mono('<'),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html$text(' and '),
-													_1: {
-														ctor: '::',
-														_0: _minond$brainfuck$Main$mono('>'),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$html$Html$text(' move the pointer to the left and to the right. Keep an on the memory cells to the right -- the cell that has a black background color is the active cell and the one where increment, decrement, and loops will act on or check.'),
-															_1: {ctor: '[]'}
-														}
-													}
-												}
-											}),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$li,
-												{
-													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$class('pt2'),
-													_1: {ctor: '[]'}
-												},
-												{
-													ctor: '::',
-													_0: _minond$brainfuck$Main$mono('+'),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$html$Html$text(' and '),
-														_1: {
-															ctor: '::',
-															_0: _minond$brainfuck$Main$mono('-'),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$html$Html$text(' increment and decrement the active cell. Note that incrementing above 255 will \"wrap\" the value back around to 0, and decrementing below 0 will take you to 255.'),
-																_1: {ctor: '[]'}
-															}
-														}
-													}
-												}),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_elm_lang$html$Html$li,
-													{
-														ctor: '::',
-														_0: _elm_lang$html$Html_Attributes$class('pt2'),
-														_1: {ctor: '[]'}
-													},
-													{
-														ctor: '::',
-														_0: _minond$brainfuck$Main$mono('['),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$html$Html$text(' and '),
-															_1: {
-																ctor: '::',
-																_0: _minond$brainfuck$Main$mono(']'),
-																_1: {
-																	ctor: '::',
-																	_0: _elm_lang$html$Html$text(' are the language\'s only control flow operators. The code inside of the loop is ran as long as that value of the active cell is not zero. Think of it as a '),
-																	_1: {
-																		ctor: '::',
-																		_0: _minond$brainfuck$Main$mono('while (ptr != 0) {}'),
-																		_1: {
-																			ctor: '::',
-																			_0: _elm_lang$html$Html$text(' loop.'),
-																			_1: {ctor: '[]'}
-																		}
-																	}
-																}
-															}
-														}
-													}),
-												_1: {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$li,
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('pt2'),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: _minond$brainfuck$Main$mono('.'),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$html$Html$text(' and '),
-																_1: {
-																	ctor: '::',
-																	_0: _minond$brainfuck$Main$mono(','),
-																	_1: {
-																		ctor: '::',
-																		_0: _elm_lang$html$Html$text(' are the io functions. A period will output the character associated with the '),
-																		_1: {
-																			ctor: '::',
-																			_0: A2(_minond$brainfuck$Main$link, 'ASCII', 'https://en.wikipedia.org/wiki/ASCII'),
-																			_1: {
-																				ctor: '::',
-																				_0: _elm_lang$html$Html$text(' in the active cell (so if the active cell has a value of 97 and you output its value, you should get an \"a\".) '),
-																				_1: {ctor: '[]'}
-																			}
-																		}
-																	}
-																}
-															}
-														}),
-													_1: {ctor: '[]'}
-												}
-											}
-										}
-									}),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$p,
-										{ctor: '[]'},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('So play around with this tool. Start by running the sample code or creating basic programs on your own and see for yourself how with even the most basic control flow and altering commands you can technically accomplish any task. If you\'re curious about the code and the interpreter that are running on this page, '),
-											_1: {
-												ctor: '::',
-												_0: A2(_minond$brainfuck$Main$link, 'go here', 'https://github.com/minond/brainfuck'),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$html$Html$text(', and if you\'d like to learn more about Brainfuck and other really interesting esoteric programming languages then I recommend heading over to '),
-													_1: {
-														ctor: '::',
-														_0: A2(_minond$brainfuck$Main$link, 'Esolang', 'https://esolangs.org/wiki/Main_Page'),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('.'),
-															_1: {ctor: '[]'}
-														}
-													}
-												}
-											}
-										}),
-									_1: {ctor: '[]'}
-								}
-							}
-						}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$div,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('fl w-100 w-50-ns editor-section'),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$p,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('mt0'),
+									_0: _elm_lang$html$Html_Attributes$class('pt2'),
 									_1: {ctor: '[]'}
 								},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('Here\'s some information about your program: it is '),
+									_0: _minond$brainfuck$Main$mono('['),
 									_1: {
 										ctor: '::',
-										_0: _minond$brainfuck$Main$mono('793'),
+										_0: _elm_lang$html$Html$text(' and '),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('bytes, '),
+											_0: _minond$brainfuck$Main$mono(']'),
 											_1: {
 												ctor: '::',
-												_0: _minond$brainfuck$Main$mono('111'),
+												_0: _elm_lang$html$Html$text(' are the language\'s only control flow operators. The code inside of the loop is ran as long as that value of the active cell is not zero. Think of it as a '),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html$text(' of which are valid commands. The interpreter is going to interpret the character at index '),
+													_0: _minond$brainfuck$Main$mono('while (ptr != 0) {}'),
 													_1: {
 														ctor: '::',
-														_0: _minond$brainfuck$Main$mono('0'),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$html$Html$text(', which is '),
-															_1: {
-																ctor: '::',
-																_0: _minond$brainfuck$Main$mono('+'),
-																_1: {
-																	ctor: '::',
-																	_0: _elm_lang$html$Html$text(', and has taken a total of '),
-																	_1: {
-																		ctor: '::',
-																		_0: _minond$brainfuck$Main$mono('0'),
-																		_1: {
-																			ctor: '::',
-																			_0: _elm_lang$html$Html$text('steps so far. The program has had no output yet.'),
-																			_1: {ctor: '[]'}
-																		}
-																	}
-																}
-															}
-														}
+														_0: _elm_lang$html$Html$text(' loop.'),
+														_1: {ctor: '[]'}
 													}
 												}
 											}
 										}
 									}
 								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$li,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('pt2'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _minond$brainfuck$Main$mono('.'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(' and '),
+											_1: {
+												ctor: '::',
+												_0: _minond$brainfuck$Main$mono(','),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html$text(' are the io functions. A period will output the character associated with the '),
+													_1: {
+														ctor: '::',
+														_0: A2(_minond$brainfuck$Main$link, 'ASCII', 'https://en.wikipedia.org/wiki/ASCII'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html$text(' in the active cell (so if the active cell has a value of 97 and you output its value, you should get an \"a\".) '),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$p,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('So play around with this tool. Start by running the sample code or creating basic programs on your own and see for yourself how with even the most basic control flow and altering commands you can technically accomplish any task. If you\'re curious about the code and the interpreter that are running on this page, '),
+						_1: {
+							ctor: '::',
+							_0: A2(_minond$brainfuck$Main$link, 'go here', 'https://github.com/minond/brainfuck'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(', and if you\'d like to learn more about Brainfuck and other really interesting esoteric programming languages then I recommend heading over to '),
+								_1: {
+									ctor: '::',
+									_0: A2(_minond$brainfuck$Main$link, 'Esolang', 'https://esolangs.org/wiki/Main_Page'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('.'),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
+		}
+	}
+};
+var _minond$brainfuck$Main$view = function (model) {
+	var sectionClass = 'fl w-100 w-50-ns editor-section';
+	var containerClass = 'cf pa3 pa4-ns container lh-copy helvetica';
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class(containerClass),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _minond$brainfuck$Main$editorTitle,
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class(sectionClass),
+						_1: {ctor: '[]'}
+					},
+					_minond$brainfuck$Main$editorIntroduction),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class(sectionClass),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _minond$brainfuck$Main$editorInformation,
 							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}

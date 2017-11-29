@@ -1,8 +1,8 @@
 port module Main exposing (main)
 
 import Debug
-import Html exposing (Html, a, code, div, h1, li, p, pre, span, text, ul)
-import Html.Attributes exposing (class, contenteditable, href, spellcheck)
+import Html exposing (Html, a, code, div, h1, li, p, span, text, ul, textarea)
+import Html.Attributes exposing (class, href, spellcheck)
 import Html.Events exposing (on)
 import Json.Decode as Json
 import List
@@ -119,15 +119,12 @@ editorProgram { program } =
                 (\s -> EditorInput s)
                 (Json.at [ "target", "innerText" ] Json.string)
     in
-    pre []
-        [ code
-            [ contenteditable True
-            , spellcheck False
-            , class "editor"
-            , on "keyup" getProgram
-            ]
-            [ text program ]
+    textarea
+        [ spellcheck False
+        , class "editor"
+        , on "keyup" getProgram
         ]
+        [ text program ]
 
 
 editorTitle : Html Msg

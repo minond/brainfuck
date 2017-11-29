@@ -27,51 +27,38 @@ pre {
   box-sizing: border-box;
 }
 
-.editor {
-  white-space: pre;
-  display: block;
-  min-height: 400px;
-  margin: 0;
-  font-size: 1rem;
-  cursor: text;
-  border: 1px solid #c0c0c0;
-  outline: 0;
-  height: 300px;
-  overflow: auto;
-  font-family: monospace;
-  padding: 1rem;
-}
-
-.editor .editor-token-gt,
-.editor .editor-token-lt,
-.editor .editor-token-open,
-.editor .editor-token-close {
+/* gt/lt/open/close */
+.cm-s-custom span.cm-atom,
+.cm-s-custom span.cm-bracket {
   color: #229efc;
 }
 
-.editor .editor-token-comma,
-.editor .editor-token-period {
+/* period/comma */
+.cm-s-custom span.cm-def {
   color: #6a3bfb;
 }
 
-.editor .editor-token-plus,
-.editor .editor-token-minus {
+/* plus/minus */
+.cm-s-custom span.cm-keyword {
+  line-height: 1em;
+  font-weight: bold;
   color: #fd8f34;
 }
 
-.editor .editor-invalid-token {
+/* comment */
+.cm-s-custom span.cm-comment {
   color: #b5bac8;
 }
 
-.editor .editor-token:hover {
-  cursor: pointer;
-}
-
-.editor .editor-token.editor-breakpoint,
-.editor .editor-token:hover {
-  background-color: #ff5252;
-  color: #fff;
-}
+/* .editor .editor-token:hover { */
+/*   cursor: pointer; */
+/* } */
+/*  */
+/* .editor .editor-token.editor-breakpoint, */
+/* .editor .editor-token:hover { */
+/*   background-color: #ff5252; */
+/*   color: #fff; */
+/* } */
 
 /* small */
 @media screen and (min-width: 45em) {
@@ -79,9 +66,6 @@ pre {
 
 /* not small?? */
 @media screen and (min-width: 45em) {
-  .editor {
-    height: 60vh;
-  }
 }
 
 /* medium */

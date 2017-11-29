@@ -12806,34 +12806,23 @@ var _minond$brainfuck$Main$editorProgram = function (_p1) {
 			},
 			_elm_lang$core$Json_Decode$string));
 	return A2(
-		_elm_lang$html$Html$pre,
-		{ctor: '[]'},
+		_elm_lang$html$Html$textarea,
 		{
 			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$code,
-				{
+			_0: _elm_lang$html$Html_Attributes$spellcheck(false),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('editor'),
+				_1: {
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$contenteditable(true),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$spellcheck(false),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('editor'),
-							_1: {
-								ctor: '::',
-								_0: A2(_elm_lang$html$Html_Events$on, 'keyup', getProgram),
-								_1: {ctor: '[]'}
-							}
-						}
-					}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text(_p2.program),
+					_0: A2(_elm_lang$html$Html_Events$on, 'keyup', getProgram),
 					_1: {ctor: '[]'}
-				}),
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(_p2.program),
 			_1: {ctor: '[]'}
 		});
 };

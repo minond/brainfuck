@@ -27,8 +27,61 @@ pre {
   box-sizing: border-box;
 }
 
+.editor {
+  white-space: pre;
+  display: block;
+  min-height: 400px;
+  margin: 0;
+  font-size: 1rem;
+  cursor: text;
+  border: 1px solid #c0c0c0;
+  outline: 0;
+  height: 300px;
+  overflow: auto;
+  font-family: monospace;
+  padding: 1rem;
+}
+
+.editor .editor-token-gt,
+.editor .editor-token-lt,
+.editor .editor-token-open,
+.editor .editor-token-close {
+  color: #229efc;
+}
+
+.editor .editor-token-comma,
+.editor .editor-token-period {
+  color: #6a3bfb;
+}
+
+.editor .editor-token-plus,
+.editor .editor-token-minus {
+  color: #fd8f34;
+}
+
+.editor .editor-invalid-token {
+  color: #b5bac8;
+}
+
+.editor .editor-token:hover {
+  cursor: pointer;
+}
+
+.editor .editor-token.editor-breakpoint,
+.editor .editor-token:hover {
+  background-color: #ff5252;
+  color: #fff;
+}
+
 /* small */
 @media screen and (min-width: 45em) {
+}
+
+/* not small?? */
+@media screen and (min-width: 45em) {
+  .editor {
+    height: 60vh;
+  }
 }
 
 /* medium */

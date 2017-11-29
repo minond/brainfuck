@@ -12313,6 +12313,74 @@ var _minond$brainfuck$Main$editorTitle = A2(
 		_0: _elm_lang$html$Html$text('Brainfuck'),
 		_1: {ctor: '[]'}
 	});
+var _minond$brainfuck$Main$editorProgram = function (_p0) {
+	var _p1 = _p0;
+	var identifier = function (tok) {
+		var _p2 = tok;
+		switch (_p2) {
+			case '+':
+				return 'editor-token editor-token-plus';
+			case '-':
+				return 'editor-token editor-token-minus';
+			case '.':
+				return 'editor-token editor-token-period';
+			case ',':
+				return 'editor-token editor-token-comma';
+			case '[':
+				return 'editor-token editor-token-open';
+			case ']':
+				return 'editor-token editor-token-close';
+			case '>':
+				return 'editor-token editor-token-gt';
+			case '<':
+				return 'editor-token editor-token-lt';
+			default:
+				return 'editor-invalid-token';
+		}
+	};
+	var tokens = A2(_elm_lang$core$String$split, '', _p1.program);
+	var nodes = A2(
+		_elm_lang$core$List$map,
+		function (tok) {
+			return A2(
+				_elm_lang$html$Html$span,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class(
+						identifier(tok)),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(tok),
+					_1: {ctor: '[]'}
+				});
+		},
+		tokens);
+	return A2(
+		_elm_lang$html$Html$pre,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$code,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$contenteditable(true),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$spellcheck(false),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('editor'),
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				nodes),
+			_1: {ctor: '[]'}
+		});
+};
 var _minond$brainfuck$Main$link = F2(
 	function (title, shref) {
 		return A2(
@@ -12668,7 +12736,11 @@ var _minond$brainfuck$Main$view = function (model) {
 						{
 							ctor: '::',
 							_0: _minond$brainfuck$Main$editorInformation,
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: _minond$brainfuck$Main$editorProgram(model),
+								_1: {ctor: '[]'}
+							}
 						}),
 					_1: {ctor: '[]'}
 				}
@@ -12677,13 +12749,13 @@ var _minond$brainfuck$Main$view = function (model) {
 };
 var _minond$brainfuck$Main$update = F2(
 	function (message, model) {
-		var _p0 = message;
+		var _p3 = message;
 		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 	});
 var _minond$brainfuck$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
-var _minond$brainfuck$Main$initialModel = {program: '+++'};
+var _minond$brainfuck$Main$initialModel = {program: '+++++ +++++             initialize counter (cell #0) to 10\n[                       use loop to set 70/100/30/10\n    > +++++ ++              add  7 to cell #1\n    > +++++ +++++           add 10 to cell #2\n    > +++                   add  3 to cell #3\n    > +                     add  1 to cell #4\n<<<< -                  decrement counter (cell #0)\n]\n> ++ .                  print \'H\'\n> + .                   print \'e\'\n+++++ ++ .              print \'l\'\n.                       print \'l\'\n+++ .                   print \'o\'\n> ++ .                  print \' \'\n<< +++++ +++++ +++++ .  print \'W\'\n> .                     print \'o\'\n+++ .                   print \'r\'\n----- - .               print \'l\'\n----- --- .             print \'d\'\n> + .                   print \'!\'\n> .                     print \'eol\'\n'};
 var _minond$brainfuck$Main$main = _elm_lang$html$Html$program(
 	{
 		init: {ctor: '_Tuple2', _0: _minond$brainfuck$Main$initialModel, _1: _elm_lang$core$Platform_Cmd$none},

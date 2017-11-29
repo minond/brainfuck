@@ -1,7 +1,9 @@
 module Main exposing (main)
 
-import Html exposing (Html, a, code, div, h1, li, p, span, text, ul)
-import Html.Attributes exposing (class, href)
+import Html exposing (Html, a, code, div, h1, li, p, pre, span, text, ul)
+import Html.Attributes exposing (class, contenteditable, href, spellcheck)
+import List
+import String
 
 
 type Msg
@@ -24,7 +26,28 @@ main =
 
 initialModel : Model
 initialModel =
-    { program = "+++"
+    { program = """+++++ +++++             initialize counter (cell #0) to 10
+[                       use loop to set 70/100/30/10
+    > +++++ ++              add  7 to cell #1
+    > +++++ +++++           add 10 to cell #2
+    > +++                   add  3 to cell #3
+    > +                     add  1 to cell #4
+<<<< -                  decrement counter (cell #0)
+]
+> ++ .                  print 'H'
+> + .                   print 'e'
++++++ ++ .              print 'l'
+.                       print 'l'
++++ .                   print 'o'
+> ++ .                  print ' '
+<< +++++ +++++ +++++ .  print 'W'
+> .                     print 'o'
++++ .                   print 'r'
+----- - .               print 'l'
+----- --- .             print 'd'
+> + .                   print '!'
+> .                     print 'eol'
+"""
     }
 
 
@@ -56,7 +79,9 @@ view model =
             editorIntroduction
         , div
             [ class sectionClass ]
-            [ editorInformation ]
+            [ editorInformation
+            , editorProgram model
+            ]
         ]
 
 
@@ -74,6 +99,61 @@ link title shref =
         , class "link blue"
         ]
         [ text title ]
+
+
+editorProgram : Model -> Html Msg
+editorProgram { program } =
+    let
+        tokens =
+            String.split "" program
+
+        identifier =
+            \tok ->
+                case tok of
+                    "+" ->
+                        "editor-token editor-token-plus"
+
+                    "-" ->
+                        "editor-token editor-token-minus"
+
+                    "." ->
+                        "editor-token editor-token-period"
+
+                    "," ->
+                        "editor-token editor-token-comma"
+
+                    "[" ->
+                        "editor-token editor-token-open"
+
+                    "]" ->
+                        "editor-token editor-token-close"
+
+                    ">" ->
+                        "editor-token editor-token-gt"
+
+                    "<" ->
+                        "editor-token editor-token-lt"
+
+                    _ ->
+                        "editor-invalid-token"
+
+        nodes =
+            List.map
+                (\tok ->
+                    span
+                        [ class (identifier tok) ]
+                        [ text tok ]
+                )
+                tokens
+    in
+    pre []
+        [ code
+            [ contenteditable True
+            , spellcheck False
+            , class "editor"
+            ]
+            nodes
+        ]
 
 
 editorTitle : Html Msg

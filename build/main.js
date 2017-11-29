@@ -12418,7 +12418,7 @@ var _minond$brainfuck$Main$editorInformation = A2(
 	_elm_lang$html$Html$p,
 	{
 		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$class('mt0'),
+		_0: _elm_lang$html$Html_Attributes$class('mt0 lh-copy'),
 		_1: {ctor: '[]'}
 	},
 	{
@@ -12472,7 +12472,7 @@ var _minond$brainfuck$Main$editorIntroduction = {
 		_elm_lang$html$Html$p,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('mt0'),
+			_0: _elm_lang$html$Html_Attributes$class('mt0 lh-copy'),
 			_1: {ctor: '[]'}
 		},
 		{
@@ -12534,7 +12534,11 @@ var _minond$brainfuck$Main$editorIntroduction = {
 		ctor: '::',
 		_0: A2(
 			_elm_lang$html$Html$p,
-			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('lh-copy'),
+				_1: {ctor: '[]'}
+			},
 			{
 				ctor: '::',
 				_0: _elm_lang$html$Html$text('Besides this text you\'ll see buttons you can use to execute your program, which can be done in continuation or one command at a time, and as your program is running you can slide the range input field to alter the speed at which the code runs. Below those controls you\'ll notice a table filled with 0\'s (at least before you run a program), this is the internal memory. And finally your code editor, where you can set breakpoints by clicking on commands that will halt your program\'s execution. Now for a quick introduction to the language: '),
@@ -12546,7 +12550,7 @@ var _minond$brainfuck$Main$editorIntroduction = {
 				_elm_lang$html$Html$ul,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('pl4'),
+					_0: _elm_lang$html$Html_Attributes$class('pl4 lh-copy'),
 					_1: {ctor: '[]'}
 				},
 				{
@@ -12674,7 +12678,11 @@ var _minond$brainfuck$Main$editorIntroduction = {
 				ctor: '::',
 				_0: A2(
 					_elm_lang$html$Html$p,
-					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('lh-copy'),
+						_1: {ctor: '[]'}
+					},
 					{
 						ctor: '::',
 						_0: _elm_lang$html$Html$text('So play around with this tool. Start by running the sample code or creating basic programs on your own and see for yourself how with even the most basic control flow and altering commands you can technically accomplish any task. If you\'re curious about the code and the interpreter that are running on this page, '),
@@ -12703,7 +12711,7 @@ var _minond$brainfuck$Main$editorIntroduction = {
 };
 var _minond$brainfuck$Main$view = function (model) {
 	var sectionClass = 'fl w-100 w-50-ns editor-section';
-	var containerClass = 'cf pa3 pa4-ns container lh-copy helvetica';
+	var containerClass = 'cf pa3 pa4-ns container helvetica';
 	return A2(
 		_elm_lang$html$Html$div,
 		{

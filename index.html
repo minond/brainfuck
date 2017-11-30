@@ -24,20 +24,23 @@
     <script src="build/main.js"></script>
     <script src="vendor/codemirror/codemirror.js"></script>
     <script src="vendor/codemirror/brainfuck.js"></script>
+    <script src="vendor/requirejs/require.js"></script>
     <script>
-    var app = Elm.Main.embed(document.getElementById('view'));
-    var editor;
+    requirejs(['vendor/embeddable-interpreters/brainfuck.js'], function (bf) {
+      var app = Elm.Main.embed(document.getElementById('view'));
+      var editor;
 
-    app.ports.initializeEditor.subscribe(function () {
-      editor = CodeMirror.fromTextArea(document.querySelector('textarea'), {
-        flattenSpans: false,
-        mode:  'brainfuck',
-        theme: 'custom',
+      app.ports.initializeEditor.subscribe(function () {
+        editor = CodeMirror.fromTextArea(document.querySelector('textarea'), {
+          flattenSpans: false,
+          mode: 'brainfuck',
+          theme: 'custom',
+        });
       });
-    });
 
-    app.ports.setProgram.subscribe(function (prog) {
-      editor.setValue(prog);
+      app.ports.setProgram.subscribe(function (prog) {
+        editor.setValue(prog);
+      });
     });
     </script>
     <footer class="bt pa3 pa4-ns mt1 mt4-ns b--light-gray spectral pv3 pv4-ns">

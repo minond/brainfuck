@@ -13,8 +13,12 @@ import String
 port initializeEditor : Bool -> Cmd msg
 
 
+port setProgram : String -> Cmd msg
+
+
 type Msg
     = NoOp
+    | SetProgram String
     | EditorInput String
 
 
@@ -48,6 +52,13 @@ update message model =
     case ( message, model ) of
         ( NoOp, _ ) ->
             ( model, Cmd.none )
+
+        ( SetProgram str, _ ) ->
+            let
+                program =
+                    programLoad str
+            in
+            ( { model | program = program }, setProgram program )
 
         ( EditorInput str, { program } ) ->
             ( { model | program = str }, Cmd.none )
@@ -108,9 +119,16 @@ lbl txt =
 
 editorControls : Model -> List (Html Msg)
 editorControls _ =
+    let
+        setProgram =
+            Json.map (\s -> SetProgram s) <|
+                Json.at [ "target", "value" ] Json.string
+    in
     [ lbl "Load a program"
     , select
-        [ class "w-50 mb3" ]
+        [ class "w-50 mb3"
+        , on "change" setProgram
+        ]
         [ option
             []
             [ text "helloworld.bf" ]
@@ -145,9 +163,8 @@ editorProgram : Model -> List (Html Msg)
 editorProgram { program } =
     let
         getProgram =
-            Json.map
-                (\s -> EditorInput s)
-                (Json.at [ "target", "innerText" ] Json.string)
+            Json.map (\s -> EditorInput s) <|
+                Json.at [ "target", "innerText" ] Json.string
     in
     [ textarea
         [ spellcheck False

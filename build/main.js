@@ -12418,8 +12418,23 @@ var _elm_lang$html$Html_Events$Options = F2(
 
 var _minond$brainfuck$Programs$programRandom = '>>>++[\n    <++++++++[\n        <[<++>-]>>[>>]+>>+[\n            -[->>+<<<[<[<<]<+>]>[>[>>]]]\n            <[>>[-]]>[>[-<<]>[<+<]]+<<\n        ]<[>+<-]>>-\n    ]<.[-]>>\n]\n\"Random\" byte generator using the Rule 30 automaton.\nDoesn\'t terminate; you will have to kill it.\nTo get x bytes you need 32x+4 cells.\nTurn off any newline translation!\nDaniel B Cristofani (cristofdathevanetdotcom)\nhttp://www.hevanet.com/cristofd/brainfuck/';
 var _minond$brainfuck$Programs$programFib = '>++++++++++>+>+[\n    [+++++[>++++++++<-]>.<++++++[>--------<-]+<<<]>.>>[\n        [-]<[>+<-]>>[<<+>+>-]<[>+<-[>+<-[>+<-[>+<-[>+<-[>+<-\n            [>+<-[>+<-[>+<-[>[-]>+>+<<<-[>+<-]]]]]]]]]]]+>>>\n    ]<<<\n]\nThis program doesn\'t terminate; you will have to kill it.\nDaniel B Cristofani (cristofdathevanetdotcom)\nhttp://www.hevanet.com/cristofd/brainfuck/';
-var _minond$brainfuck$Programs$programSquared = '++++[>+++++<-]>[<+++++>-]+<+[\n    >[>+>+<<-]++>>[<<+>>-]>>>[-]++>[-]+\n    >>>+[[-]++++++>>>]<<<[[<++++++++<++>>-]+<.<[>----<-]<]\n    <<[>>>>>[>>>[-]+++++++++<[>-<-]+++++++++>[-[<->-]+[<<<]]<[>+<-]>]<<-]<<-\n]\n[Outputs square numbers from 0 to 10000.\nDaniel B Cristofani (cristofdathevanetdotcom)\nhttp://www.hevanet.com/cristofd/brainfuck/]';
+var _minond$brainfuck$Programs$programSquares = '++++[>+++++<-]>[<+++++>-]+<+[\n    >[>+>+<<-]++>>[<<+>>-]>>>[-]++>[-]+\n    >>>+[[-]++++++>>>]<<<[[<++++++++<++>>-]+<.<[>----<-]<]\n    <<[>>>>>[>>>[-]+++++++++<[>-<-]+++++++++>[-[<->-]+[<<<]]<[>+<-]>]<<-]<<-\n]\n[Outputs square numbers from 0 to 10000.\nDaniel B Cristofani (cristofdathevanetdotcom)\nhttp://www.hevanet.com/cristofd/brainfuck/]';
 var _minond$brainfuck$Programs$programHelloWorld = '+++++ +++++             initialize counter (cell #0) to 10\n[                       use loop to set 70/100/30/10\n    > +++++ ++              add  7 to cell #1\n    > +++++ +++++           add 10 to cell #2\n    > +++                   add  3 to cell #3\n    > +                     add  1 to cell #4\n<<<< -                  decrement counter (cell #0)\n]\n> ++ .                  print \'H\'\n> + .                   print \'e\'\n+++++ ++ .              print \'l\'\n.                       print \'l\'\n+++ .                   print \'o\'\n> ++ .                  print \' \'\n<< +++++ +++++ +++++ .  print \'W\'\n> .                     print \'o\'\n+++ .                   print \'r\'\n----- - .               print \'l\'\n----- --- .             print \'d\'\n> + .                   print \'!\'\n> .                     print \'eol\'';
+var _minond$brainfuck$Programs$programLoad = function (name) {
+	var _p0 = name;
+	switch (_p0) {
+		case 'squares.bf':
+			return _minond$brainfuck$Programs$programSquares;
+		case 'fib.bf':
+			return _minond$brainfuck$Programs$programFib;
+		case 'random.bf':
+			return _minond$brainfuck$Programs$programRandom;
+		case 'helloworld.bf':
+			return _minond$brainfuck$Programs$programHelloWorld;
+		default:
+			return '';
+	}
+};
 
 var _minond$brainfuck$Main$editorTitle = A2(
 	_elm_lang$html$Html$h1,
@@ -12465,130 +12480,6 @@ var _minond$brainfuck$Main$btn = F2(
 				_1: {ctor: '[]'}
 			});
 	});
-var _minond$brainfuck$Main$editorControls = function (_p0) {
-	return {
-		ctor: '::',
-		_0: _minond$brainfuck$Main$lbl('Load a program'),
-		_1: {
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$select,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('w-50 mb3'),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$option,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('helloworld.bf'),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$option,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('squares.bf'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$option,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('fib.bf'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$option,
-									{ctor: '[]'},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('random.bf'),
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							}
-						}
-					}
-				}),
-			_1: {
-				ctor: '::',
-				_0: _minond$brainfuck$Main$lbl('Change evaluation speed'),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$input,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('w-50 mb3'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$type_('range'),
-								_1: {ctor: '[]'}
-							}
-						},
-						{ctor: '[]'}),
-					_1: {
-						ctor: '::',
-						_0: _minond$brainfuck$Main$lbl('Program controls'),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$div,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('mb2'),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_minond$brainfuck$Main$btn,
-										{ctor: '[]'},
-										'Run'),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_minond$brainfuck$Main$btn,
-											{ctor: '[]'},
-											'Pause'),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_minond$brainfuck$Main$btn,
-												{ctor: '[]'},
-												'Step'),
-											_1: {
-												ctor: '::',
-												_0: A2(
-													_minond$brainfuck$Main$btn,
-													{ctor: '[]'},
-													'Continue'),
-												_1: {ctor: '[]'}
-											}
-										}
-									}
-								}),
-							_1: {ctor: '[]'}
-						}
-					}
-				}
-			}
-		}
-	};
-};
 var _minond$brainfuck$Main$link = F2(
 	function (title, shref) {
 		return A2(
@@ -12622,7 +12513,7 @@ var _minond$brainfuck$Main$mono = function (str) {
 			_1: {ctor: '[]'}
 		});
 };
-var _minond$brainfuck$Main$editorInformation = function (_p1) {
+var _minond$brainfuck$Main$editorInformation = function (_p0) {
 	return {
 		ctor: '::',
 		_0: A2(
@@ -12923,21 +12814,6 @@ var _minond$brainfuck$Main$editorIntroduction = {
 		}
 	}
 };
-var _minond$brainfuck$Main$update = F2(
-	function (message, model) {
-		var _p2 = {ctor: '_Tuple2', _0: message, _1: model};
-		if (_p2._0.ctor === 'NoOp') {
-			return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-		} else {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{program: _p2._0._0}),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
-		}
-	});
 var _minond$brainfuck$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
@@ -12947,14 +12823,44 @@ var _minond$brainfuck$Main$initializeEditor = _elm_lang$core$Native_Platform.out
 	function (v) {
 		return v;
 	});
+var _minond$brainfuck$Main$setProgram = _elm_lang$core$Native_Platform.outgoingPort(
+	'setProgram',
+	function (v) {
+		return v;
+	});
+var _minond$brainfuck$Main$update = F2(
+	function (message, model) {
+		var _p1 = {ctor: '_Tuple2', _0: message, _1: model};
+		switch (_p1._0.ctor) {
+			case 'NoOp':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'SetProgram':
+				var program = _minond$brainfuck$Programs$programLoad(_p1._0._0);
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{program: program}),
+					_1: _minond$brainfuck$Main$setProgram(program)
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{program: _p1._0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
 var _minond$brainfuck$Main$Model = function (a) {
 	return {program: a};
 };
 var _minond$brainfuck$Main$EditorInput = function (a) {
 	return {ctor: 'EditorInput', _0: a};
 };
-var _minond$brainfuck$Main$editorProgram = function (_p3) {
-	var _p4 = _p3;
+var _minond$brainfuck$Main$editorProgram = function (_p2) {
+	var _p3 = _p2;
 	var getProgram = A2(
 		_elm_lang$core$Json_Decode$map,
 		function (s) {
@@ -12991,10 +12897,158 @@ var _minond$brainfuck$Main$editorProgram = function (_p3) {
 			},
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html$text(_p4.program),
+				_0: _elm_lang$html$Html$text(_p3.program),
 				_1: {ctor: '[]'}
 			}),
 		_1: {ctor: '[]'}
+	};
+};
+var _minond$brainfuck$Main$SetProgram = function (a) {
+	return {ctor: 'SetProgram', _0: a};
+};
+var _minond$brainfuck$Main$editorControls = function (_p4) {
+	var setProgram = A2(
+		_elm_lang$core$Json_Decode$map,
+		function (s) {
+			return _minond$brainfuck$Main$SetProgram(s);
+		},
+		A2(
+			_elm_lang$core$Json_Decode$at,
+			{
+				ctor: '::',
+				_0: 'target',
+				_1: {
+					ctor: '::',
+					_0: 'value',
+					_1: {ctor: '[]'}
+				}
+			},
+			_elm_lang$core$Json_Decode$string));
+	return {
+		ctor: '::',
+		_0: _minond$brainfuck$Main$lbl('Load a program'),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$select,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('w-50 mb3'),
+					_1: {
+						ctor: '::',
+						_0: A2(_elm_lang$html$Html_Events$on, 'change', setProgram),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$option,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('helloworld.bf'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$option,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('squares.bf'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$option,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('fib.bf'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$option,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('random.bf'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _minond$brainfuck$Main$lbl('Change evaluation speed'),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$input,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('w-50 mb3'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$type_('range'),
+								_1: {ctor: '[]'}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: _minond$brainfuck$Main$lbl('Program controls'),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('mb2'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_minond$brainfuck$Main$btn,
+										{ctor: '[]'},
+										'Run'),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_minond$brainfuck$Main$btn,
+											{ctor: '[]'},
+											'Pause'),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_minond$brainfuck$Main$btn,
+												{ctor: '[]'},
+												'Step'),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_minond$brainfuck$Main$btn,
+													{ctor: '[]'},
+													'Continue'),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		}
 	};
 };
 var _minond$brainfuck$Main$view = function (model) {
@@ -13058,7 +13112,7 @@ var _minond$brainfuck$Main$NoOp = {ctor: 'NoOp'};
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _minond$brainfuck$Main$main !== 'undefined') {
-    _minond$brainfuck$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Main.Msg":{"args":[],"tags":{"EditorInput":["String"],"NoOp":[]}}},"aliases":{},"message":"Main.Msg"},"versions":{"elm":"0.18.0"}});
+    _minond$brainfuck$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Main.Msg":{"args":[],"tags":{"SetProgram":["String"],"EditorInput":["String"],"NoOp":[]}}},"aliases":{},"message":"Main.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

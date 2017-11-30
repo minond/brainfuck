@@ -1,6 +1,25 @@
 module Programs exposing (..)
 
 
+programLoad : String -> String
+programLoad name =
+    case name of
+        "squares.bf" ->
+            programSquares
+
+        "fib.bf" ->
+            programFib
+
+        "random.bf" ->
+            programRandom
+
+        "helloworld.bf" ->
+            programHelloWorld
+
+        _ ->
+            ""
+
+
 programHelloWorld : String
 programHelloWorld =
     """+++++ +++++             initialize counter (cell #0) to 10
@@ -26,8 +45,8 @@ programHelloWorld =
 > .                     print 'eol'"""
 
 
-programSquared : String
-programSquared =
+programSquares : String
+programSquares =
     """++++[>+++++<-]>[<+++++>-]+<+[
     >[>+>+<<-]++>>[<<+>>-]>>>[-]++>[-]+
     >>>+[[-]++++++>>>]<<<[[<++++++++<++>>-]+<.<[>----<-]<]

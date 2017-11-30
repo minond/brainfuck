@@ -78,10 +78,11 @@ view model =
 
         editor =
             List.concat
-                [ editorInformation model
-                , editorControls model
+                [ editorControls model
                 , editorMemory model
                 , editorProgram model
+                , editorOutput model
+                , editorInformation model
                 ]
     in
     div [ class containerClass ]
@@ -167,6 +168,18 @@ editorControls _ =
     ]
 
 
+editorOutput : Model -> List (Html Msg)
+editorOutput _ =
+    [ div
+        [ class "mt3" ]
+        []
+    , lbl "Output"
+    , div
+        [ class "pb2 mb3" ]
+        [ mono "none" ]
+    ]
+
+
 editorProgram : Model -> List (Html Msg)
 editorProgram { program } =
     let
@@ -174,7 +187,8 @@ editorProgram { program } =
             Json.map (\s -> EditorInput s) <|
                 Json.at [ "target", "innerText" ] Json.string
     in
-    [ textarea
+    [ lbl "Editor"
+    , textarea
         [ spellcheck False
         , class "editor"
         , on "keyup" getProgram

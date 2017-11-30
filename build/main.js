@@ -12416,6 +12416,11 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
+var _minond$brainfuck$Programs$programRandom = '>>>++[\n    <++++++++[\n        <[<++>-]>>[>>]+>>+[\n            -[->>+<<<[<[<<]<+>]>[>[>>]]]\n            <[>>[-]]>[>[-<<]>[<+<]]+<<\n        ]<[>+<-]>>-\n    ]<.[-]>>\n]\n\"Random\" byte generator using the Rule 30 automaton.\nDoesn\'t terminate; you will have to kill it.\nTo get x bytes you need 32x+4 cells.\nTurn off any newline translation!\nDaniel B Cristofani (cristofdathevanetdotcom)\nhttp://www.hevanet.com/cristofd/brainfuck/';
+var _minond$brainfuck$Programs$programFib = '>++++++++++>+>+[\n    [+++++[>++++++++<-]>.<++++++[>--------<-]+<<<]>.>>[\n        [-]<[>+<-]>>[<<+>+>-]<[>+<-[>+<-[>+<-[>+<-[>+<-[>+<-\n            [>+<-[>+<-[>+<-[>[-]>+>+<<<-[>+<-]]]]]]]]]]]+>>>\n    ]<<<\n]\nThis program doesn\'t terminate; you will have to kill it.\nDaniel B Cristofani (cristofdathevanetdotcom)\nhttp://www.hevanet.com/cristofd/brainfuck/';
+var _minond$brainfuck$Programs$programSquared = '++++[>+++++<-]>[<+++++>-]+<+[\n    >[>+>+<<-]++>>[<<+>>-]>>>[-]++>[-]+\n    >>>+[[-]++++++>>>]<<<[[<++++++++<++>>-]+<.<[>----<-]<]\n    <<[>>>>>[>>>[-]+++++++++<[>-<-]+++++++++>[-[<->-]+[<<<]]<[>+<-]>]<<-]<<-\n]\n[Outputs square numbers from 0 to 10000.\nDaniel B Cristofani (cristofdathevanetdotcom)\nhttp://www.hevanet.com/cristofd/brainfuck/]';
+var _minond$brainfuck$Programs$programHelloWorld = '+++++ +++++             initialize counter (cell #0) to 10\n[                       use loop to set 70/100/30/10\n    > +++++ ++              add  7 to cell #1\n    > +++++ +++++           add 10 to cell #2\n    > +++                   add  3 to cell #3\n    > +                     add  1 to cell #4\n<<<< -                  decrement counter (cell #0)\n]\n> ++ .                  print \'H\'\n> + .                   print \'e\'\n+++++ ++ .              print \'l\'\n.                       print \'l\'\n+++ .                   print \'o\'\n> ++ .                  print \' \'\n<< +++++ +++++ +++++ .  print \'W\'\n> .                     print \'o\'\n+++ .                   print \'r\'\n----- - .               print \'l\'\n----- --- .             print \'d\'\n> + .                   print \'!\'\n> .                     print \'eol\'';
+
 var _minond$brainfuck$Main$editorTitle = A2(
 	_elm_lang$html$Html$h1,
 	{
@@ -12936,7 +12941,7 @@ var _minond$brainfuck$Main$update = F2(
 var _minond$brainfuck$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
-var _minond$brainfuck$Main$initialModel = {program: '+++++ +++++             initialize counter (cell #0) to 10\n[                       use loop to set 70/100/30/10\n    > +++++ ++              add  7 to cell #1\n    > +++++ +++++           add 10 to cell #2\n    > +++                   add  3 to cell #3\n    > +                     add  1 to cell #4\n<<<< -                  decrement counter (cell #0)\n]\n> ++ .                  print \'H\'\n> + .                   print \'e\'\n+++++ ++ .              print \'l\'\n.                       print \'l\'\n+++ .                   print \'o\'\n> ++ .                  print \' \'\n<< +++++ +++++ +++++ .  print \'W\'\n> .                     print \'o\'\n+++ .                   print \'r\'\n----- - .               print \'l\'\n----- --- .             print \'d\'\n> + .                   print \'!\'\n> .                     print \'eol\'\n'};
+var _minond$brainfuck$Main$initialModel = {program: _minond$brainfuck$Programs$programHelloWorld};
 var _minond$brainfuck$Main$initializeEditor = _elm_lang$core$Native_Platform.outgoingPort(
 	'initializeEditor',
 	function (v) {

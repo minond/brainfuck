@@ -27,6 +27,47 @@ pre {
   box-sizing: border-box;
 }
 
+.cellrow {
+  font-size: 0;
+  max-width: 30rem;
+}
+
+.cellrow:not(:first-child) .memcell {
+  border-top: 0;
+}
+
+.memcell {
+  font-size: 1rem;
+  border-bottom: 1px solid #c0c0c0;
+  border-right: 1px solid #c0c0c0;
+  border-top: 1px solid #c0c0c0;
+  box-sizing: border-box;
+  display: inline-block;
+  font-family: monospace;
+  height: 0;
+  padding-bottom: 10%;
+  text-align: center;
+  width: 10%;
+  position: relative;
+  transition: color .2s, background-color .2s;
+}
+
+.memcell:first-child {
+  border-left: 1px solid #c0c0c0;
+}
+
+.memcell span {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.memcell.selected {
+  background-color: black;
+  color: white;
+}
+
 /* gt/lt/open/close */
 .cm-s-custom span.cm-atom,
 .cm-s-custom span.cm-bracket {
@@ -63,16 +104,6 @@ pre {
   font-family: monospace;
   padding: .75rem;
 }
-
-/* .editor .editor-token:hover { */
-/*   cursor: pointer; */
-/* } */
-/*  */
-/* .editor .editor-token.editor-breakpoint, */
-/* .editor .editor-token:hover { */
-/*   background-color: #ff5252; */
-/*   color: #fff; */
-/* } */
 
 /* small */
 @media screen and (min-width: 45em) {

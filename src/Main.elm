@@ -6,6 +6,7 @@ import Html.Attributes exposing (class, href, spellcheck, type_)
 import Html.Events exposing (on)
 import Json.Decode as Json
 import List
+import List.Extra exposing (greedyGroupsOf)
 import Programs exposing (..)
 import String
 
@@ -24,6 +25,7 @@ type Msg
 
 type alias Model =
     { program : String
+    , memory : List Int
     }
 
 
@@ -39,6 +41,7 @@ main =
 initialModel : Model
 initialModel =
     { program = programHelloWorld
+    , memory = []
     }
 
 
@@ -74,7 +77,12 @@ view model =
             "fl w-100 w-50-ns editor-section"
 
         editor =
-            editorInformation model ++ editorControls model ++ editorProgram model
+            List.concat
+                [ editorInformation model
+                , editorControls model
+                , editorMemory model
+                , editorProgram model
+                ]
     in
     div [ class containerClass ]
         [ editorTitle
@@ -180,6 +188,41 @@ editorTitle =
     h1
         [ class "mt0 f3 f2-m f1-l title fw1 baskerville" ]
         [ text "Brainfuck" ]
+
+
+editorMemory : Model -> List (Html Msg)
+editorMemory { memory } =
+    let
+        pageSize =
+            10
+
+        memSize =
+            List.length memory
+
+        padded =
+            if memSize < pageSize then
+                memory ++ List.repeat (pageSize - memSize) 0
+            else
+                memory
+
+        asCell =
+            \val ->
+                div [ class "memcell" ]
+                    [ span
+                        []
+                        [ text (toString val) ]
+                    ]
+
+        asRow =
+            \vals ->
+                div [ class "cellrow" ]
+                    (List.map asCell vals)
+    in
+    [ lbl "Program memory"
+    , div [ class "mb3" ] <|
+        List.map asRow <|
+            greedyGroupsOf pageSize padded
+    ]
 
 
 editorInformation : Model -> List (Html Msg)

@@ -1,8 +1,8 @@
 port module Main exposing (main)
 
 import Debug
-import Html exposing (Html, a, code, div, h1, li, p, span, text, ul, textarea)
-import Html.Attributes exposing (class, href, spellcheck)
+import Html exposing (Attribute, Html, a, button, code, div, h1, input, li, option, p, select, span, text, textarea, ul)
+import Html.Attributes exposing (class, href, spellcheck, type_)
 import Html.Events exposing (on)
 import Json.Decode as Json
 import List
@@ -81,6 +81,9 @@ view model =
 
         sectionClass =
             "fl w-100 w-50-ns editor-section"
+
+        editor =
+            editorInformation model ++ editorControls model ++ editorProgram model
     in
     div [ class containerClass ]
         [ editorTitle
@@ -89,9 +92,7 @@ view model =
             editorIntroduction
         , div
             [ class sectionClass ]
-            [ editorInformation
-            , editorProgram model
-            ]
+            editor
         ]
 
 
@@ -111,7 +112,56 @@ link title shref =
         [ text title ]
 
 
-editorProgram : Model -> Html Msg
+btn : List (Attribute msg) -> String -> Html msg
+btn attrs val =
+    button
+        ([ class "mr2 mb2 pointer" ] ++ attrs)
+        [ text val ]
+
+
+lbl : String -> Html Msg
+lbl txt =
+    div
+        [ class "f6 mb2 gray i" ]
+        [ text txt ]
+
+
+editorControls : Model -> List (Html Msg)
+editorControls _ =
+    [ lbl "Load a program"
+    , select
+        [ class "w-50 mb3" ]
+        [ option
+            []
+            [ text "helloworld.bf" ]
+        , option
+            []
+            [ text "squares.bf" ]
+        , option
+            []
+            [ text "fib.bf" ]
+        , option
+            []
+            [ text "random.bf" ]
+        ]
+    , lbl "Change evaluation speed"
+    , input
+        [ class "w-50 mb3"
+        , type_ "range"
+        ]
+        []
+    , lbl "Program controls"
+    , div
+        [ class "mb2" ]
+        [ btn [] "Run"
+        , btn [] "Pause"
+        , btn [] "Step"
+        , btn [] "Continue"
+        ]
+    ]
+
+
+editorProgram : Model -> List (Html Msg)
 editorProgram { program } =
     let
         getProgram =
@@ -119,12 +169,13 @@ editorProgram { program } =
                 (\s -> EditorInput s)
                 (Json.at [ "target", "innerText" ] Json.string)
     in
-    textarea
+    [ textarea
         [ spellcheck False
         , class "editor"
         , on "keyup" getProgram
         ]
         [ text program ]
+    ]
 
 
 editorTitle : Html Msg
@@ -134,9 +185,9 @@ editorTitle =
         [ text "Brainfuck" ]
 
 
-editorInformation : Html Msg
-editorInformation =
-    p
+editorInformation : Model -> List (Html Msg)
+editorInformation _ =
+    [ p
         [ class "mt0 lh-copy" ]
         [ text "Here's some information about your program: it is "
         , mono "793"
@@ -150,6 +201,7 @@ editorInformation =
         , mono "0"
         , text " steps so far. The program has had no output yet."
         ]
+    ]
 
 
 editorIntroduction : List (Html Msg)

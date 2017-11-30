@@ -12428,6 +12428,162 @@ var _minond$brainfuck$Main$editorTitle = A2(
 		_0: _elm_lang$html$Html$text('Brainfuck'),
 		_1: {ctor: '[]'}
 	});
+var _minond$brainfuck$Main$lbl = function (txt) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('f6 mb2 gray i'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(txt),
+			_1: {ctor: '[]'}
+		});
+};
+var _minond$brainfuck$Main$btn = F2(
+	function (attrs, val) {
+		return A2(
+			_elm_lang$html$Html$button,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('mr2 mb2 pointer'),
+					_1: {ctor: '[]'}
+				},
+				attrs),
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(val),
+				_1: {ctor: '[]'}
+			});
+	});
+var _minond$brainfuck$Main$editorControls = function (_p0) {
+	return {
+		ctor: '::',
+		_0: _minond$brainfuck$Main$lbl('Load a program'),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$select,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('w-50 mb3'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$option,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('helloworld.bf'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$option,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('squares.bf'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$option,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('fib.bf'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$option,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('random.bf'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _minond$brainfuck$Main$lbl('Change evaluation speed'),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$input,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('w-50 mb3'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$type_('range'),
+								_1: {ctor: '[]'}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: _minond$brainfuck$Main$lbl('Program controls'),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('mb2'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_minond$brainfuck$Main$btn,
+										{ctor: '[]'},
+										'Run'),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_minond$brainfuck$Main$btn,
+											{ctor: '[]'},
+											'Pause'),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_minond$brainfuck$Main$btn,
+												{ctor: '[]'},
+												'Step'),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_minond$brainfuck$Main$btn,
+													{ctor: '[]'},
+													'Continue'),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		}
+	};
+};
 var _minond$brainfuck$Main$link = F2(
 	function (title, shref) {
 		return A2(
@@ -12461,47 +12617,52 @@ var _minond$brainfuck$Main$mono = function (str) {
 			_1: {ctor: '[]'}
 		});
 };
-var _minond$brainfuck$Main$editorInformation = A2(
-	_elm_lang$html$Html$p,
-	{
+var _minond$brainfuck$Main$editorInformation = function (_p1) {
+	return {
 		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$class('mt0 lh-copy'),
-		_1: {ctor: '[]'}
-	},
-	{
-		ctor: '::',
-		_0: _elm_lang$html$Html$text('Here\'s some information about your program: it is '),
-		_1: {
-			ctor: '::',
-			_0: _minond$brainfuck$Main$mono('793'),
-			_1: {
+		_0: A2(
+			_elm_lang$html$Html$p,
+			{
 				ctor: '::',
-				_0: _elm_lang$html$Html$text(' bytes, '),
+				_0: _elm_lang$html$Html_Attributes$class('mt0 lh-copy'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('Here\'s some information about your program: it is '),
 				_1: {
 					ctor: '::',
-					_0: _minond$brainfuck$Main$mono('111'),
+					_0: _minond$brainfuck$Main$mono('793'),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html$text(' of which are valid commands. The interpreter is going to interpret the character at index '),
+						_0: _elm_lang$html$Html$text(' bytes, '),
 						_1: {
 							ctor: '::',
-							_0: _minond$brainfuck$Main$mono('0'),
+							_0: _minond$brainfuck$Main$mono('111'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html$text(', which is '),
+								_0: _elm_lang$html$Html$text(' of which are valid commands. The interpreter is going to interpret the character at index '),
 								_1: {
 									ctor: '::',
-									_0: _minond$brainfuck$Main$mono('+'),
+									_0: _minond$brainfuck$Main$mono('0'),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$html$Html$text(', and has taken a total of '),
+										_0: _elm_lang$html$Html$text(', which is '),
 										_1: {
 											ctor: '::',
-											_0: _minond$brainfuck$Main$mono('0'),
+											_0: _minond$brainfuck$Main$mono('+'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html$text(' steps so far. The program has had no output yet.'),
-												_1: {ctor: '[]'}
+												_0: _elm_lang$html$Html$text(', and has taken a total of '),
+												_1: {
+													ctor: '::',
+													_0: _minond$brainfuck$Main$mono('0'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html$text(' steps so far. The program has had no output yet.'),
+														_1: {ctor: '[]'}
+													}
+												}
 											}
 										}
 									}
@@ -12510,9 +12671,10 @@ var _minond$brainfuck$Main$editorInformation = A2(
 						}
 					}
 				}
-			}
-		}
-	});
+			}),
+		_1: {ctor: '[]'}
+	};
+};
 var _minond$brainfuck$Main$editorIntroduction = {
 	ctor: '::',
 	_0: A2(
@@ -12758,15 +12920,15 @@ var _minond$brainfuck$Main$editorIntroduction = {
 };
 var _minond$brainfuck$Main$update = F2(
 	function (message, model) {
-		var _p0 = {ctor: '_Tuple2', _0: message, _1: model};
-		if (_p0._0.ctor === 'NoOp') {
+		var _p2 = {ctor: '_Tuple2', _0: message, _1: model};
+		if (_p2._0.ctor === 'NoOp') {
 			return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 		} else {
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Native_Utils.update(
 					model,
-					{program: _p0._0._0}),
+					{program: _p2._0._0}),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		}
@@ -12786,8 +12948,8 @@ var _minond$brainfuck$Main$Model = function (a) {
 var _minond$brainfuck$Main$EditorInput = function (a) {
 	return {ctor: 'EditorInput', _0: a};
 };
-var _minond$brainfuck$Main$editorProgram = function (_p1) {
-	var _p2 = _p1;
+var _minond$brainfuck$Main$editorProgram = function (_p3) {
+	var _p4 = _p3;
 	var getProgram = A2(
 		_elm_lang$core$Json_Decode$map,
 		function (s) {
@@ -12805,28 +12967,39 @@ var _minond$brainfuck$Main$editorProgram = function (_p1) {
 				}
 			},
 			_elm_lang$core$Json_Decode$string));
-	return A2(
-		_elm_lang$html$Html$textarea,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$spellcheck(false),
-			_1: {
+	return {
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$textarea,
+			{
 				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('editor'),
+				_0: _elm_lang$html$Html_Attributes$spellcheck(false),
 				_1: {
 					ctor: '::',
-					_0: A2(_elm_lang$html$Html_Events$on, 'keyup', getProgram),
-					_1: {ctor: '[]'}
+					_0: _elm_lang$html$Html_Attributes$class('editor'),
+					_1: {
+						ctor: '::',
+						_0: A2(_elm_lang$html$Html_Events$on, 'keyup', getProgram),
+						_1: {ctor: '[]'}
+					}
 				}
-			}
-		},
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html$text(_p2.program),
-			_1: {ctor: '[]'}
-		});
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(_p4.program),
+				_1: {ctor: '[]'}
+			}),
+		_1: {ctor: '[]'}
+	};
 };
 var _minond$brainfuck$Main$view = function (model) {
+	var editor = A2(
+		_elm_lang$core$Basics_ops['++'],
+		_minond$brainfuck$Main$editorInformation(model),
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_minond$brainfuck$Main$editorControls(model),
+			_minond$brainfuck$Main$editorProgram(model)));
 	var sectionClass = 'fl w-100 w-50-ns editor-section';
 	var containerClass = 'cf pa3 pa4-ns container helvetica';
 	return A2(
@@ -12858,15 +13031,7 @@ var _minond$brainfuck$Main$view = function (model) {
 							_0: _elm_lang$html$Html_Attributes$class(sectionClass),
 							_1: {ctor: '[]'}
 						},
-						{
-							ctor: '::',
-							_0: _minond$brainfuck$Main$editorInformation,
-							_1: {
-								ctor: '::',
-								_0: _minond$brainfuck$Main$editorProgram(model),
-								_1: {ctor: '[]'}
-							}
-						}),
+						editor),
 					_1: {ctor: '[]'}
 				}
 			}

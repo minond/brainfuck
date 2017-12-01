@@ -13802,7 +13802,7 @@ var _minond$brainfuck$Main$mergeRuntime = F2(
 	});
 var _minond$brainfuck$Main$toRuntime = function (_p2) {
 	var _p3 = _p2;
-	return {program: _p3.program, memory: _p3.memory, idx: _p3.idx, pointer: _p3.pointer, steps: _p3.steps};
+	return {program: _p3.program, memory: _p3.memory, idx: _p3.idx, pointer: _p3.pointer, steps: _p3.steps, speed: ((1000 * _p3.delay) / 100) | 0};
 };
 var _minond$brainfuck$Main$cleanState = function (program) {
 	return {
@@ -13811,7 +13811,8 @@ var _minond$brainfuck$Main$cleanState = function (program) {
 		memory: {ctor: '[]'},
 		idx: 0,
 		pointer: 0,
-		steps: 0
+		steps: 0,
+		delay: 10
 	};
 };
 var _minond$brainfuck$Main$lbl = function (txt) {
@@ -14339,7 +14340,8 @@ var _minond$brainfuck$Main$cmd = _elm_lang$core$Native_Platform.outgoingPort(
 				}),
 			idx: v._1._0.idx,
 			pointer: v._1._0.pointer,
-			steps: v._1._0.steps
+			steps: v._1._0.steps,
+			speed: v._1._0.speed
 		}
 		];
 	});
@@ -14348,7 +14350,11 @@ var _minond$brainfuck$Main$update = F2(
 		var _p12 = message;
 		switch (_p12.ctor) {
 			case 'Run':
-				var reset = _minond$brainfuck$Main$cleanState(model.program);
+				var clean = _minond$brainfuck$Main$cleanState(model.program);
+				var reset = _elm_lang$core$Native_Utils.update(
+					clean,
+					{delay: model.delay});
+				var delay = model.delay;
 				return {
 					ctor: '_Tuple2',
 					_0: reset,
@@ -14416,6 +14422,29 @@ var _minond$brainfuck$Main$update = F2(
 					_0: A2(_minond$brainfuck$Main$mergeRuntime, _p12._0, model),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
+			case 'SetDelay':
+				var delay = function () {
+					var _p13 = _elm_lang$core$String$toInt(_p12._0);
+					if (_p13.ctor === 'Err') {
+						return 50;
+					} else {
+						return _p13._0;
+					}
+				}();
+				var update = _elm_lang$core$Native_Utils.update(
+					model,
+					{delay: delay});
+				return {
+					ctor: '_Tuple2',
+					_0: update,
+					_1: _minond$brainfuck$Main$cmd(
+						{
+							ctor: '_Tuple2',
+							_0: 'speed',
+							_1: _elm_lang$core$Maybe$Just(
+								_minond$brainfuck$Main$toRuntime(update))
+						})
+				};
 			case 'SetProgram':
 				var program = _minond$brainfuck$Programs$programLoad(_p12._0);
 				var runtime = _minond$brainfuck$Main$toRuntime(
@@ -14456,8 +14485,13 @@ var _minond$brainfuck$Main$tick = _elm_lang$core$Native_Platform.incomingPort(
 									return A2(
 										_elm_lang$core$Json_Decode$andThen,
 										function (steps) {
-											return _elm_lang$core$Json_Decode$succeed(
-												{program: program, memory: memory, idx: idx, pointer: pointer, steps: steps});
+											return A2(
+												_elm_lang$core$Json_Decode$andThen,
+												function (speed) {
+													return _elm_lang$core$Json_Decode$succeed(
+														{program: program, memory: memory, idx: idx, pointer: pointer, steps: steps, speed: speed});
+												},
+												A2(_elm_lang$core$Json_Decode$field, 'speed', _elm_lang$core$Json_Decode$int));
 										},
 										A2(_elm_lang$core$Json_Decode$field, 'steps', _elm_lang$core$Json_Decode$int));
 								},
@@ -14472,19 +14506,19 @@ var _minond$brainfuck$Main$tick = _elm_lang$core$Native_Platform.incomingPort(
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'program', _elm_lang$core$Json_Decode$string)));
 var _minond$brainfuck$Main$output = _elm_lang$core$Native_Platform.incomingPort('output', _elm_lang$core$Json_Decode$string);
-var _minond$brainfuck$Main$Model = F6(
-	function (a, b, c, d, e, f) {
-		return {program: a, output: b, memory: c, idx: d, pointer: e, steps: f};
+var _minond$brainfuck$Main$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {program: a, output: b, memory: c, idx: d, pointer: e, steps: f, delay: g};
 	});
-var _minond$brainfuck$Main$Runtime = F5(
-	function (a, b, c, d, e) {
-		return {program: a, memory: b, idx: c, pointer: d, steps: e};
+var _minond$brainfuck$Main$Runtime = F6(
+	function (a, b, c, d, e, f) {
+		return {program: a, memory: b, idx: c, pointer: d, steps: e, speed: f};
 	});
 var _minond$brainfuck$Main$EditorInput = function (a) {
 	return {ctor: 'EditorInput', _0: a};
 };
-var _minond$brainfuck$Main$editorProgram = function (_p13) {
-	var _p14 = _p13;
+var _minond$brainfuck$Main$editorProgram = function (_p14) {
+	var _p15 = _p14;
 	var getProgram = A2(
 		_elm_lang$core$Json_Decode$map,
 		function (s) {
@@ -14524,7 +14558,7 @@ var _minond$brainfuck$Main$editorProgram = function (_p13) {
 				},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text(_p14.program),
+					_0: _elm_lang$html$Html$text(_p15.program),
 					_1: {ctor: '[]'}
 				}),
 			_1: {ctor: '[]'}
@@ -14533,6 +14567,9 @@ var _minond$brainfuck$Main$editorProgram = function (_p13) {
 };
 var _minond$brainfuck$Main$SetProgram = function (a) {
 	return {ctor: 'SetProgram', _0: a};
+};
+var _minond$brainfuck$Main$SetDelay = function (a) {
+	return {ctor: 'SetDelay', _0: a};
 };
 var _minond$brainfuck$Main$Output = function (a) {
 	return {ctor: 'Output', _0: a};
@@ -14560,7 +14597,9 @@ var _minond$brainfuck$Main$Pause = {ctor: 'Pause'};
 var _minond$brainfuck$Main$Continue = {ctor: 'Continue'};
 var _minond$brainfuck$Main$Step = {ctor: 'Step'};
 var _minond$brainfuck$Main$Run = {ctor: 'Run'};
-var _minond$brainfuck$Main$editorControls = function (_p15) {
+var _minond$brainfuck$Main$editorControls = function (_p16) {
+	var _p17 = _p16;
+	var _p18 = _p17.delay;
 	var setProgram = A2(
 		_elm_lang$core$Json_Decode$map,
 		function (s) {
@@ -14663,7 +14702,14 @@ var _minond$brainfuck$Main$editorControls = function (_p15) {
 				}),
 			_1: {
 				ctor: '::',
-				_0: _minond$brainfuck$Main$lbl('Change evaluation speed'),
+				_0: _minond$brainfuck$Main$lbl(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'Change evaluation delay (',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(_p18),
+							')'))),
 				_1: {
 					ctor: '::',
 					_0: A2(
@@ -14674,7 +14720,16 @@ var _minond$brainfuck$Main$editorControls = function (_p15) {
 							_1: {
 								ctor: '::',
 								_0: _elm_lang$html$Html_Attributes$type_('range'),
-								_1: {ctor: '[]'}
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onInput(_minond$brainfuck$Main$SetDelay),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$value(
+											_elm_lang$core$Basics$toString(_p18)),
+										_1: {ctor: '[]'}
+									}
+								}
 							}
 						},
 						{ctor: '[]'}),
@@ -14814,23 +14869,31 @@ var _minond$brainfuck$Main$view = function (model) {
 			}
 		});
 };
-var _minond$brainfuck$Main$main = _elm_lang$html$Html$program(
-	{
-		init: {
-			ctor: '_Tuple2',
-			_0: _minond$brainfuck$Main$initialModel,
-			_1: _minond$brainfuck$Main$cmd(
-				{ctor: '_Tuple2', _0: 'init', _1: _elm_lang$core$Maybe$Nothing})
-		},
-		view: _minond$brainfuck$Main$view,
-		update: _minond$brainfuck$Main$update,
-		subscriptions: _minond$brainfuck$Main$subscriptions
-	})();
+var _minond$brainfuck$Main$main = function () {
+	var model = _minond$brainfuck$Main$initialModel;
+	return _elm_lang$html$Html$program(
+		{
+			init: {
+				ctor: '_Tuple2',
+				_0: model,
+				_1: _minond$brainfuck$Main$cmd(
+					{
+						ctor: '_Tuple2',
+						_0: 'init',
+						_1: _elm_lang$core$Maybe$Just(
+							_minond$brainfuck$Main$toRuntime(model))
+					})
+			},
+			view: _minond$brainfuck$Main$view,
+			update: _minond$brainfuck$Main$update,
+			subscriptions: _minond$brainfuck$Main$subscriptions
+		});
+}()();
 
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _minond$brainfuck$Main$main !== 'undefined') {
-    _minond$brainfuck$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Main.Msg":{"args":[],"tags":{"Tick":["Main.Runtime"],"SetProgram":["String"],"Run":[],"Output":["String"],"EditorInput":["String"],"Step":[],"Pause":[],"Continue":[]}}},"aliases":{"Main.Runtime":{"args":[],"type":"{ program : String , memory : List Int , idx : Int , pointer : Int , steps : Int }"}},"message":"Main.Msg"},"versions":{"elm":"0.18.0"}});
+    _minond$brainfuck$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Main.Msg":{"args":[],"tags":{"Tick":["Main.Runtime"],"SetProgram":["String"],"Run":[],"Output":["String"],"SetDelay":["String"],"EditorInput":["String"],"Step":[],"Pause":[],"Continue":[]}}},"aliases":{"Main.Runtime":{"args":[],"type":"{ program : String , memory : List Int , idx : Int , pointer : Int , steps : Int , speed : Int }"}},"message":"Main.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

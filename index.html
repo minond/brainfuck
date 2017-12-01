@@ -28,9 +28,9 @@
     <script src="vendor/requirejs/require.js"></script>
     <script>
     requirejs(['vendor/embeddable-interpreters/brainfuck.js'], function (bf) {
-      var app, tick, cont, timer, delay, editor;
+      var app, tick, cont, timer, speed, editor;
 
-      delay = 50;
+      speed = 1;
       app = Elm.Main.embed(document.getElementById('view'));
 
       app.ports.cmd.subscribe(function (args) {
@@ -38,9 +38,17 @@
           runtime = args[1];
 
         switch (cmd) {
+        case "speed":
+          speed = runtime.speed || 1;
+          break;
+
         case "init":
           if (editor) {
             return;
+          }
+
+          if (runtime) {
+            speed = runtime.speed || 1;
           }
 
           editor = CodeMirror.fromTextArea(document.querySelector('textarea'), {
@@ -102,7 +110,7 @@
           tick();
 
           if (cont) {
-            timer = setTimeout(onTimer, delay);
+            timer = setTimeout(onTimer, speed);
           }
         }
       }
@@ -123,6 +131,7 @@
               pointer: state.pointer,
               idx: state.idx,
               steps: state.steps,
+              speed: speed,
               memory: memory,
             });
 

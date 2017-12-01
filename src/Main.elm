@@ -3,8 +3,8 @@ port module Main exposing (main)
 import Array
 import Debug
 import Html exposing (Attribute, Html, a, button, code, div, h1, input, li, option, p, section, select, span, text, textarea, ul)
-import Html.Attributes exposing (class, href, spellcheck, type_)
-import Html.Events exposing (on, onClick)
+import Html.Attributes exposing (class, href, spellcheck, type_, value)
+import Html.Events exposing (on, onClick, onInput)
 import Json.Decode as Json
 import List
 import List.Extra exposing (greedyGroupsOf)
@@ -31,6 +31,7 @@ type Msg
     | Pause
     | Tick Runtime
     | Output String
+    | SetDelay String
     | SetProgram String
     | EditorInput String
 
@@ -42,6 +43,7 @@ type alias Model =
     , idx : Int
     , pointer : Int
     , steps : Int
+    , delay : Int
     }
 
 
@@ -51,12 +53,17 @@ type alias Runtime =
     , idx : Int
     , pointer : Int
     , steps : Int
+    , speed : Int
     }
 
 
 main =
+    let
+        model =
+            initialModel
+    in
     Html.program
-        { init = ( initialModel, cmd ( "init", Nothing ) )
+        { init = ( model, cmd ( "init", Just (toRuntime model) ) )
         , view = view
         , update = update
         , subscriptions = subscriptions
@@ -82,8 +89,14 @@ update message model =
     case message of
         Run ->
             let
-                reset =
+                delay =
+                    model.delay
+
+                clean =
                     cleanState model.program
+
+                reset =
+                    { clean | delay = model.delay }
             in
             ( reset, cmd ( "start", Just (toRuntime reset) ) )
 
@@ -105,6 +118,21 @@ update message model =
 
         Tick runtime ->
             ( mergeRuntime runtime model, Cmd.none )
+
+        SetDelay raw ->
+            let
+                delay =
+                    case String.toInt raw of
+                        Err _ ->
+                            50
+
+                        Ok delay ->
+                            delay
+
+                update =
+                    { model | delay = delay }
+            in
+            ( update, cmd ( "speed", Just (toRuntime update) ) )
 
         SetProgram name ->
             let
@@ -176,16 +204,18 @@ cleanState program =
     , idx = 0
     , pointer = 0
     , steps = 0
+    , delay = 10
     }
 
 
 toRuntime : Model -> Runtime
-toRuntime { program, memory, idx, pointer, steps } =
+toRuntime { program, memory, idx, pointer, steps, delay } =
     { program = program
     , memory = memory
     , idx = idx
     , pointer = pointer
     , steps = steps
+    , speed = 1000 * delay // 100
     }
 
 
@@ -200,7 +230,7 @@ mergeRuntime { memory, idx, pointer, steps } model =
 
 
 editorControls : Model -> List (Html Msg)
-editorControls _ =
+editorControls { delay } =
     let
         setProgram =
             Json.map (\s -> SetProgram s) <|
@@ -230,10 +260,12 @@ editorControls _ =
             []
             [ text "random.bf" ]
         ]
-    , lbl "Change evaluation speed"
+    , lbl ("Change evaluation delay (" ++ toString delay ++ ")")
     , input
         [ class "w-50 mb3"
         , type_ "range"
+        , onInput SetDelay
+        , value (toString delay)
         ]
         []
     , lbl "Program controls"

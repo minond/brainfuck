@@ -212,7 +212,7 @@
           });
 
           editor.on('change', function () {
-            tick = null;
+            stop();
             app.ports.unload.send(editor.getValue());
           });
 
@@ -239,7 +239,7 @@
           break;
 
         case "load":
-          tick = null;
+          stop();
 
           if (runtime) {
             editor.setValue(runtime.program);
@@ -292,6 +292,14 @@
             timer = setTimeout(onTimer, speed);
           }
         }
+      }
+
+      function stop() {
+        if (timer) {
+          clearTimeout(timer);
+        }
+
+        tick = null;
       }
 
       function run(runtime) {

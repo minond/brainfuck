@@ -121,9 +121,14 @@
             tick = null;
 
             var memory = [];
+            var breakpoints = [];
 
             for (var i = 0, len = state.memory.length; i < len; i++) {
               memory[i] = state.memory[i] || 0;
+            }
+
+            for (var i = 0, len = runtime.breakpoints.length; i < len; i++) {
+              breakpoints[i] = runtime.breakpoints[i] || 0;
             }
 
             app.ports.tick.send({
@@ -133,6 +138,7 @@
               steps: state.steps,
               speed: speed,
               memory: memory,
+              breakpoints: breakpoints,
             });
 
             tick = _tick;

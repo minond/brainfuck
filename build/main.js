@@ -13798,17 +13798,18 @@ var _minond$brainfuck$Main$mergeRuntime = F2(
 		var _p1 = _p0;
 		return _elm_lang$core$Native_Utils.update(
 			model,
-			{memory: _p1.memory, idx: _p1.idx, pointer: _p1.pointer, steps: _p1.steps});
+			{memory: _p1.memory, breakpoints: _p1.breakpoints, idx: _p1.idx, pointer: _p1.pointer, steps: _p1.steps});
 	});
 var _minond$brainfuck$Main$toRuntime = function (_p2) {
 	var _p3 = _p2;
-	return {program: _p3.program, memory: _p3.memory, idx: _p3.idx, pointer: _p3.pointer, steps: _p3.steps, speed: ((1000 * _p3.delay) / 100) | 0};
+	return {program: _p3.program, memory: _p3.memory, breakpoints: _p3.breakpoints, idx: _p3.idx, pointer: _p3.pointer, steps: _p3.steps, speed: ((1000 * _p3.delay) / 100) | 0};
 };
 var _minond$brainfuck$Main$cleanState = function (program) {
 	return {
 		program: program,
 		output: _elm_lang$core$Maybe$Nothing,
 		memory: {ctor: '[]'},
+		breakpoints: {ctor: '[]'},
 		idx: 0,
 		pointer: 0,
 		steps: 0,
@@ -14338,6 +14339,10 @@ var _minond$brainfuck$Main$cmd = _elm_lang$core$Native_Platform.outgoingPort(
 				function (v) {
 					return v;
 				}),
+			breakpoints: _elm_lang$core$Native_List.toArray(v._1._0.breakpoints).map(
+				function (v) {
+					return v;
+				}),
 			idx: v._1._0.idx,
 			pointer: v._1._0.pointer,
 			steps: v._1._0.steps,
@@ -14351,9 +14356,10 @@ var _minond$brainfuck$Main$update = F2(
 		switch (_p12.ctor) {
 			case 'Run':
 				var clean = _minond$brainfuck$Main$cleanState(model.program);
+				var breakpoints = model.breakpoints;
 				var reset = _elm_lang$core$Native_Utils.update(
 					clean,
-					{delay: model.delay});
+					{delay: model.delay, breakpoints: breakpoints});
 				var delay = model.delay;
 				return {
 					ctor: '_Tuple2',
@@ -14478,26 +14484,34 @@ var _minond$brainfuck$Main$tick = _elm_lang$core$Native_Platform.incomingPort(
 				function (memory) {
 					return A2(
 						_elm_lang$core$Json_Decode$andThen,
-						function (idx) {
+						function (breakpoints) {
 							return A2(
 								_elm_lang$core$Json_Decode$andThen,
-								function (pointer) {
+								function (idx) {
 									return A2(
 										_elm_lang$core$Json_Decode$andThen,
-										function (steps) {
+										function (pointer) {
 											return A2(
 												_elm_lang$core$Json_Decode$andThen,
-												function (speed) {
-													return _elm_lang$core$Json_Decode$succeed(
-														{program: program, memory: memory, idx: idx, pointer: pointer, steps: steps, speed: speed});
+												function (steps) {
+													return A2(
+														_elm_lang$core$Json_Decode$andThen,
+														function (speed) {
+															return _elm_lang$core$Json_Decode$succeed(
+																{program: program, memory: memory, breakpoints: breakpoints, idx: idx, pointer: pointer, steps: steps, speed: speed});
+														},
+														A2(_elm_lang$core$Json_Decode$field, 'speed', _elm_lang$core$Json_Decode$int));
 												},
-												A2(_elm_lang$core$Json_Decode$field, 'speed', _elm_lang$core$Json_Decode$int));
+												A2(_elm_lang$core$Json_Decode$field, 'steps', _elm_lang$core$Json_Decode$int));
 										},
-										A2(_elm_lang$core$Json_Decode$field, 'steps', _elm_lang$core$Json_Decode$int));
+										A2(_elm_lang$core$Json_Decode$field, 'pointer', _elm_lang$core$Json_Decode$int));
 								},
-								A2(_elm_lang$core$Json_Decode$field, 'pointer', _elm_lang$core$Json_Decode$int));
+								A2(_elm_lang$core$Json_Decode$field, 'idx', _elm_lang$core$Json_Decode$int));
 						},
-						A2(_elm_lang$core$Json_Decode$field, 'idx', _elm_lang$core$Json_Decode$int));
+						A2(
+							_elm_lang$core$Json_Decode$field,
+							'breakpoints',
+							_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$int)));
 				},
 				A2(
 					_elm_lang$core$Json_Decode$field,
@@ -14506,13 +14520,13 @@ var _minond$brainfuck$Main$tick = _elm_lang$core$Native_Platform.incomingPort(
 		},
 		A2(_elm_lang$core$Json_Decode$field, 'program', _elm_lang$core$Json_Decode$string)));
 var _minond$brainfuck$Main$output = _elm_lang$core$Native_Platform.incomingPort('output', _elm_lang$core$Json_Decode$string);
-var _minond$brainfuck$Main$Model = F7(
-	function (a, b, c, d, e, f, g) {
-		return {program: a, output: b, memory: c, idx: d, pointer: e, steps: f, delay: g};
+var _minond$brainfuck$Main$Model = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {program: a, output: b, memory: c, breakpoints: d, idx: e, pointer: f, steps: g, delay: h};
 	});
-var _minond$brainfuck$Main$Runtime = F6(
-	function (a, b, c, d, e, f) {
-		return {program: a, memory: b, idx: c, pointer: d, steps: e, speed: f};
+var _minond$brainfuck$Main$Runtime = F7(
+	function (a, b, c, d, e, f, g) {
+		return {program: a, memory: b, breakpoints: c, idx: d, pointer: e, steps: f, speed: g};
 	});
 var _minond$brainfuck$Main$EditorInput = function (a) {
 	return {ctor: 'EditorInput', _0: a};
@@ -14893,7 +14907,7 @@ var _minond$brainfuck$Main$main = function () {
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _minond$brainfuck$Main$main !== 'undefined') {
-    _minond$brainfuck$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Main.Msg":{"args":[],"tags":{"Tick":["Main.Runtime"],"SetProgram":["String"],"Run":[],"Output":["String"],"SetDelay":["String"],"EditorInput":["String"],"Step":[],"Pause":[],"Continue":[]}}},"aliases":{"Main.Runtime":{"args":[],"type":"{ program : String , memory : List Int , idx : Int , pointer : Int , steps : Int , speed : Int }"}},"message":"Main.Msg"},"versions":{"elm":"0.18.0"}});
+    _minond$brainfuck$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Main.Msg":{"args":[],"tags":{"Tick":["Main.Runtime"],"SetProgram":["String"],"Run":[],"Output":["String"],"SetDelay":["String"],"EditorInput":["String"],"Step":[],"Pause":[],"Continue":[]}}},"aliases":{"Main.Runtime":{"args":[],"type":"{ program : String , memory : List Int , breakpoints : List Int , idx : Int , pointer : Int , steps : Int , speed : Int }"}},"message":"Main.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

@@ -1,7 +1,6 @@
 port module Main exposing (main)
 
 import Array
-import Debug
 import Html exposing (Attribute, Html, a, button, code, div, h1, input, li, option, p, section, select, span, text, textarea, ul)
 import Html.Attributes exposing (class, href, spellcheck, type_, value)
 import Html.Events exposing (on, onClick, onInput)
@@ -40,6 +39,7 @@ type alias Model =
     { program : String
     , output : Maybe String
     , memory : List Int
+    , breakpoints : List Int
     , idx : Int
     , pointer : Int
     , steps : Int
@@ -50,6 +50,7 @@ type alias Model =
 type alias Runtime =
     { program : String
     , memory : List Int
+    , breakpoints : List Int
     , idx : Int
     , pointer : Int
     , steps : Int
@@ -92,11 +93,17 @@ update message model =
                 delay =
                     model.delay
 
+                breakpoints =
+                    model.breakpoints
+
                 clean =
                     cleanState model.program
 
                 reset =
-                    { clean | delay = model.delay }
+                    { clean
+                        | delay = model.delay
+                        , breakpoints = breakpoints
+                    }
             in
             ( reset, cmd ( "start", Just (toRuntime reset) ) )
 
@@ -201,6 +208,7 @@ cleanState program =
     { program = program
     , output = Nothing
     , memory = []
+    , breakpoints = []
     , idx = 0
     , pointer = 0
     , steps = 0
@@ -209,9 +217,10 @@ cleanState program =
 
 
 toRuntime : Model -> Runtime
-toRuntime { program, memory, idx, pointer, steps, delay } =
+toRuntime { program, memory, breakpoints, idx, pointer, steps, delay } =
     { program = program
     , memory = memory
+    , breakpoints = breakpoints
     , idx = idx
     , pointer = pointer
     , steps = steps
@@ -220,9 +229,10 @@ toRuntime { program, memory, idx, pointer, steps, delay } =
 
 
 mergeRuntime : Runtime -> Model -> Model
-mergeRuntime { memory, idx, pointer, steps } model =
+mergeRuntime { memory, breakpoints, idx, pointer, steps } model =
     { model
         | memory = memory
+        , breakpoints = breakpoints
         , idx = idx
         , pointer = pointer
         , steps = steps

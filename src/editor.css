@@ -9,10 +9,6 @@ pre {
   margin: 0;
 }
 
-code {
-  white-space: pre-wrap;
-}
-
 .spectral {
   font-family: 'Spectral', serif;
 }
@@ -95,6 +91,7 @@ code {
   color: #b5bac8;
 }
 
+.CodeMirror span.breakpoint.active,
 .CodeMirror span.active {
   background-color: black;
   color: white;

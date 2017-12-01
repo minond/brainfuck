@@ -18,7 +18,7 @@ port cmd : ( String, Maybe Runtime ) -> Cmd msg
 port unload : (String -> msg) -> Sub msg
 
 
-port tick : (Runtime -> msg) -> Sub msg
+port tick : (ProgramState -> msg) -> Sub msg
 
 
 port output : (String -> msg) -> Sub msg
@@ -32,7 +32,7 @@ type Msg
     | Step
     | Continue
     | Pause
-    | Tick Runtime
+    | Tick ProgramState
     | Output String
     | SetDelay String
     | SetProgram String
@@ -49,6 +49,14 @@ type alias Model =
     , pointer : Int
     , steps : Int
     , delay : Int
+    }
+
+
+type alias ProgramState =
+    { memory : List Int
+    , idx : Int
+    , pointer : Int
+    , steps : Int
     }
 
 
@@ -129,12 +137,8 @@ update message model =
             in
             ( { model | output = Just output }, Cmd.none )
 
-        Tick runtime ->
-            let
-                x =
-                    Debug.log (toString runtime.idx) True
-            in
-            ( mergeRuntime runtime model, Cmd.none )
+        Tick state ->
+            ( mergeState state model, Cmd.none )
 
         SetDelay raw ->
             let
@@ -248,11 +252,10 @@ toRuntime { program, memory, breakpoints, idx, pointer, steps, delay } =
     }
 
 
-mergeRuntime : Runtime -> Model -> Model
-mergeRuntime { memory, breakpoints, idx, pointer, steps } model =
+mergeState : ProgramState -> Model -> Model
+mergeState { memory, idx, pointer, steps } model =
     { model
         | memory = memory
-        , breakpoints = breakpoints
         , idx = idx
         , pointer = pointer
         , steps = steps

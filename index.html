@@ -30,12 +30,14 @@
     requirejs(['vendor/embeddable-interpreters/brainfuck.js'], function (bf) {
       var EDITOR_TOKENS = '.cm-keyword, .cm-bracket, .cm-def, .cm-atom';
 
-      var app, tick, cont, timer, speed, editor;
+      var app, tick, cont, timer, speed, breakpoints, editor;
 
       speed = 1;
+      breakpoints = [];
       app = Elm.Main.embed(document.getElementById('view'));
+      app.ports.cmd.subscribe(cmd);
 
-      app.ports.cmd.subscribe(function (args) {
+      function cmd(args) {
         var cmd = args[0],
           runtime = args[1];
 
@@ -74,8 +76,12 @@
 
                 if (ev.target.classList.contains('breakpoint')) {
                   ev.target.classList.remove('breakpoint');
+                  breakpoints = breakpoints.filter(function (pos) {
+                    return pos !== index;
+                  });
                 } else {
                   ev.target.classList.add('breakpoint');
+                  breakpoints.push(index);
                 }
               }
             }
@@ -122,7 +128,7 @@
           onTimer()
           break;
         }
-      })
+      }
 
       function onTimer() {
         if (tick) {
@@ -135,32 +141,28 @@
       }
 
       function run(runtime) {
+        breakpoints = runtime.breakpoints;
+
         bf.exec(runtime.program.replace(/[^\+\-\,\.\<\>\[\]]/g, ''), {
           tick: function (_tick, update, state) {
             tick = null;
 
             var memory = [];
-            var breakpoints = [];
 
             for (var i = 0, len = state.memory.length; i < len; i++) {
               memory[i] = state.memory[i] || 0;
             }
 
-            for (var i = 0, len = runtime.breakpoints.length; i < len; i++) {
-              breakpoints[i] = runtime.breakpoints[i] || 0;
+            for (var i = 0, len = breakpoints.length; i < len; i++) {
+              breakpoints[i] = breakpoints[i] || 0;
             }
 
             app.ports.tick.send({
-              program: runtime.program,
               pointer: state.pointer,
               idx: state.idx,
               steps: state.steps,
-              speed: speed,
               memory: memory,
-              breakpoints: breakpoints,
             });
-
-            tick = _tick;
 
             // highlight active optcode
             var last = document.querySelector('.active');
@@ -172,6 +174,12 @@
             if (active) {
               active.classList.add('active');
             }
+
+            if (breakpoints.indexOf(state.idx + 1) >= 0) {
+              cmd(["pause"]);
+            }
+
+            tick = _tick;
           },
 
           write: function (str) {

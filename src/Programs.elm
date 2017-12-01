@@ -13,11 +13,27 @@ programLoad name =
         "random.bf" ->
             programRandom
 
+        "cat-buffer.bf" ->
+            programCatBuffer
+
+        "cat-stream.bf" ->
+            programCatStream
+
         "helloworld.bf" ->
             programHelloWorld
 
         _ ->
             ""
+
+
+programCatBuffer : String
+programCatBuffer =
+    """,[>,]<[<]>[.>]"""
+
+
+programCatStream : String
+programCatStream =
+    """,[.,]"""
 
 
 programHelloWorld : String

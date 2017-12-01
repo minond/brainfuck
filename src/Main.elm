@@ -23,6 +23,9 @@ port init : Bool -> Cmd msg
 port load : String -> Cmd msg
 
 
+port unload : (String -> msg) -> Sub msg
+
+
 port tick : (Runtime -> msg) -> Sub msg
 
 
@@ -82,6 +85,7 @@ subscriptions model =
     Sub.batch
         [ tick Tick
         , output Output
+        , unload EditorInput
         ]
 
 
@@ -198,6 +202,12 @@ editorControls _ =
         [ option
             []
             [ text "helloworld.bf" ]
+        , option
+            []
+            [ text "cat-buffer.bf" ]
+        , option
+            []
+            [ text "cat-stream.bf" ]
         , option
             []
             [ text "squares.bf" ]

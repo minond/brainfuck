@@ -13759,6 +13759,8 @@ var _minond$brainfuck$Programs$programRandom = '>>>++[\n    <++++++++[\n        
 var _minond$brainfuck$Programs$programFib = '>++++++++++>+>+[\n    [+++++[>++++++++<-]>.<++++++[>--------<-]+<<<]>.>>[\n        [-]<[>+<-]>>[<<+>+>-]<[>+<-[>+<-[>+<-[>+<-[>+<-[>+<-\n            [>+<-[>+<-[>+<-[>[-]>+>+<<<-[>+<-]]]]]]]]]]]+>>>\n    ]<<<\n]\nThis program doesn\'t terminate; you will have to kill it.\nDaniel B Cristofani (cristofdathevanetdotcom)\nhttp://www.hevanet.com/cristofd/brainfuck/';
 var _minond$brainfuck$Programs$programSquares = '++++[>+++++<-]>[<+++++>-]+<+[\n    >[>+>+<<-]++>>[<<+>>-]>>>[-]++>[-]+\n    >>>+[[-]++++++>>>]<<<[[<++++++++<++>>-]+<.<[>----<-]<]\n    <<[>>>>>[>>>[-]+++++++++<[>-<-]+++++++++>[-[<->-]+[<<<]]<[>+<-]>]<<-]<<-\n]\n[Outputs square numbers from 0 to 10000.\nDaniel B Cristofani (cristofdathevanetdotcom)\nhttp://www.hevanet.com/cristofd/brainfuck/]';
 var _minond$brainfuck$Programs$programHelloWorld = '+++++ +++++             initialize counter (cell #0) to 10\n[                       use loop to set 70/100/30/10\n    > +++++ ++              add  7 to cell #1\n    > +++++ +++++           add 10 to cell #2\n    > +++                   add  3 to cell #3\n    > +                     add  1 to cell #4\n<<<< -                  decrement counter (cell #0)\n]\n> ++ .                  print \'H\'\n> + .                   print \'e\'\n+++++ ++ .              print \'l\'\n.                       print \'l\'\n+++ .                   print \'o\'\n> ++ .                  print \' \'\n<< +++++ +++++ +++++ .  print \'W\'\n> .                     print \'o\'\n+++ .                   print \'r\'\n----- - .               print \'l\'\n----- --- .             print \'d\'\n> + .                   print \'!\'\n> .                     print \'eol\'';
+var _minond$brainfuck$Programs$programCatStream = ',[.,]';
+var _minond$brainfuck$Programs$programCatBuffer = ',[>,]<[<]>[.>]';
 var _minond$brainfuck$Programs$programLoad = function (name) {
 	var _p0 = name;
 	switch (_p0) {
@@ -13768,6 +13770,10 @@ var _minond$brainfuck$Programs$programLoad = function (name) {
 			return _minond$brainfuck$Programs$programFib;
 		case 'random.bf':
 			return _minond$brainfuck$Programs$programRandom;
+		case 'cat-buffer.bf':
+			return _minond$brainfuck$Programs$programCatBuffer;
+		case 'cat-stream.bf':
+			return _minond$brainfuck$Programs$programCatStream;
 		case 'helloworld.bf':
 			return _minond$brainfuck$Programs$programHelloWorld;
 		default:
@@ -14364,6 +14370,7 @@ var _minond$brainfuck$Main$update = F2(
 				};
 		}
 	});
+var _minond$brainfuck$Main$unload = _elm_lang$core$Native_Platform.incomingPort('unload', _elm_lang$core$Json_Decode$string);
 var _minond$brainfuck$Main$tick = _elm_lang$core$Native_Platform.incomingPort(
 	'tick',
 	A2(
@@ -14473,7 +14480,11 @@ var _minond$brainfuck$Main$subscriptions = function (model) {
 			_1: {
 				ctor: '::',
 				_0: _minond$brainfuck$Main$output(_minond$brainfuck$Main$Output),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: _minond$brainfuck$Main$unload(_minond$brainfuck$Main$EditorInput),
+					_1: {ctor: '[]'}
+				}
 			}
 		});
 };
@@ -14530,7 +14541,7 @@ var _minond$brainfuck$Main$editorControls = function (_p11) {
 							{ctor: '[]'},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html$text('squares.bf'),
+								_0: _elm_lang$html$Html$text('cat-buffer.bf'),
 								_1: {ctor: '[]'}
 							}),
 						_1: {
@@ -14540,7 +14551,7 @@ var _minond$brainfuck$Main$editorControls = function (_p11) {
 								{ctor: '[]'},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html$text('fib.bf'),
+									_0: _elm_lang$html$Html$text('cat-stream.bf'),
 									_1: {ctor: '[]'}
 								}),
 							_1: {
@@ -14550,10 +14561,32 @@ var _minond$brainfuck$Main$editorControls = function (_p11) {
 									{ctor: '[]'},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text('random.bf'),
+										_0: _elm_lang$html$Html$text('squares.bf'),
 										_1: {ctor: '[]'}
 									}),
-								_1: {ctor: '[]'}
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$option,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('fib.bf'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$option,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('random.bf'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}
 							}
 						}
 					}

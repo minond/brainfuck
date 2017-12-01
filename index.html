@@ -39,6 +39,10 @@
           mode: 'brainfuck',
           theme: 'custom',
         });
+
+        editor.on('change', function () {
+          app.ports.unload.send(editor.getValue());
+        });
       });
 
       app.ports.load.subscribe(function (prog) {

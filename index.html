@@ -28,6 +28,8 @@
     <script src="vendor/requirejs/require.js"></script>
     <script>
     requirejs(['vendor/embeddable-interpreters/brainfuck.js'], function (bf) {
+      var EDITOR_TOKENS = '.cm-keyword, .cm-bracket, .cm-def, .cm-atom';
+
       var app, tick, cont, timer, speed, editor;
 
       speed = 1;
@@ -63,8 +65,8 @@
           });
 
           editor.getWrapperElement().addEventListener('click', function (ev) {
-            if (ev.target.matches('.cm-keyword, .cm-bracket, .cm-def, .cm-atom')) {
-              var elems = document.querySelectorAll('.cm-keyword, .cm-bracket, .cm-def, .cm-atom');
+            if (ev.target.matches(EDITOR_TOKENS)) {
+              var elems = document.querySelectorAll(EDITOR_TOKENS);
               var index = [].indexOf.call(elems, ev.target);
 
               if (index >= 0) {
@@ -166,7 +168,7 @@
               last.classList.remove('active');
             }
 
-            var active = document.querySelectorAll('.cm-keyword, .cm-bracket, .cm-def, .cm-atom')[state.idx]
+            var active = document.querySelectorAll(EDITOR_TOKENS)[state.idx]
             if (active) {
               active.classList.add('active');
             }

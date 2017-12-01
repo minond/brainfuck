@@ -28,10 +28,20 @@
     <script src="vendor/requirejs/require.js"></script>
     <script>
     requirejs(['vendor/embeddable-interpreters/brainfuck.js'], function (bf) {
-      var app, tick, timer, delay, editor;
+      var app, tick, cont, timer, delay, editor;
 
       delay = 50;
       app = Elm.Main.embed(document.getElementById('view'));
+
+      function onTimer() {
+        if (tick) {
+          tick();
+
+          if (cont) {
+            timer = setTimeout(onTimer, delay);
+          }
+        }
+      }
 
       app.ports.init.subscribe(function () {
         editor = CodeMirror.fromTextArea(document.querySelector('textarea'), {
@@ -57,19 +67,22 @@
         }
 
         run(runtime);
+        cont = true;
+        onTimer()
+      });
 
-        function onTimer() {
-          if (tick) {
-            tick();
-            timer = setTimeout(onTimer, delay);
-          }
-        }
+      app.ports.pause.subscribe(function () {
+        cont = false;
+      })
 
+      app.ports.cont.subscribe(function () {
+        cont = true;
         onTimer()
       });
 
       app.ports.step.subscribe(function (runtime) {
         if (tick) {
+          cont = false;
           tick();
         } else {
           run(runtime);

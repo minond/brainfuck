@@ -15,6 +15,12 @@ import String
 port run : Runtime -> Cmd msg
 
 
+port cont : Runtime -> Cmd msg
+
+
+port pause : Runtime -> Cmd msg
+
+
 port step : Runtime -> Cmd msg
 
 
@@ -36,6 +42,8 @@ port output : (String -> msg) -> Sub msg
 type Msg
     = Run
     | Step
+    | Continue
+    | Pause
     | Tick Runtime
     | Output String
     | SetProgram String
@@ -96,6 +104,12 @@ update message model =
 
         Step ->
             ( model, step <| toRuntime model )
+
+        Continue ->
+            ( model, cont <| toRuntime model )
+
+        Pause ->
+            ( model, pause <| toRuntime model )
 
         Output addition ->
             let
@@ -238,9 +252,9 @@ editorControls _ =
     , div
         [ class "mb2" ]
         [ btn [ onClick Run ] "Run"
-        , btn [] "Pause"
+        , btn [ onClick Pause ] "Pause"
         , btn [ onClick Step ] "Step"
-        , btn [] "Continue"
+        , btn [ onClick Continue ] "Continue"
         ]
     ]
 

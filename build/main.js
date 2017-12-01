@@ -14340,6 +14340,34 @@ var _minond$brainfuck$Main$run = _elm_lang$core$Native_Platform.outgoingPort(
 			steps: v.steps
 		};
 	});
+var _minond$brainfuck$Main$cont = _elm_lang$core$Native_Platform.outgoingPort(
+	'cont',
+	function (v) {
+		return {
+			program: v.program,
+			memory: _elm_lang$core$Native_List.toArray(v.memory).map(
+				function (v) {
+					return v;
+				}),
+			idx: v.idx,
+			pointer: v.pointer,
+			steps: v.steps
+		};
+	});
+var _minond$brainfuck$Main$pause = _elm_lang$core$Native_Platform.outgoingPort(
+	'pause',
+	function (v) {
+		return {
+			program: v.program,
+			memory: _elm_lang$core$Native_List.toArray(v.memory).map(
+				function (v) {
+					return v;
+				}),
+			idx: v.idx,
+			pointer: v.pointer,
+			steps: v.steps
+		};
+	});
 var _minond$brainfuck$Main$step = _elm_lang$core$Native_Platform.outgoingPort(
 	'step',
 	function (v) {
@@ -14381,6 +14409,20 @@ var _minond$brainfuck$Main$update = F2(
 					ctor: '_Tuple2',
 					_0: model,
 					_1: _minond$brainfuck$Main$step(
+						_minond$brainfuck$Main$toRuntime(model))
+				};
+			case 'Continue':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _minond$brainfuck$Main$cont(
+						_minond$brainfuck$Main$toRuntime(model))
+				};
+			case 'Pause':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _minond$brainfuck$Main$pause(
 						_minond$brainfuck$Main$toRuntime(model))
 				};
 			case 'Output':
@@ -14536,6 +14578,8 @@ var _minond$brainfuck$Main$subscriptions = function (model) {
 			}
 		});
 };
+var _minond$brainfuck$Main$Pause = {ctor: 'Pause'};
+var _minond$brainfuck$Main$Continue = {ctor: 'Continue'};
 var _minond$brainfuck$Main$Step = {ctor: 'Step'};
 var _minond$brainfuck$Main$Run = {ctor: 'Run'};
 var _minond$brainfuck$Main$editorControls = function (_p15) {
@@ -14682,7 +14726,11 @@ var _minond$brainfuck$Main$editorControls = function (_p15) {
 										ctor: '::',
 										_0: A2(
 											_minond$brainfuck$Main$btn,
-											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(_minond$brainfuck$Main$Pause),
+												_1: {ctor: '[]'}
+											},
 											'Pause'),
 										_1: {
 											ctor: '::',
@@ -14698,7 +14746,11 @@ var _minond$brainfuck$Main$editorControls = function (_p15) {
 												ctor: '::',
 												_0: A2(
 													_minond$brainfuck$Main$btn,
-													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onClick(_minond$brainfuck$Main$Continue),
+														_1: {ctor: '[]'}
+													},
 													'Continue'),
 												_1: {ctor: '[]'}
 											}
@@ -14799,7 +14851,7 @@ var _minond$brainfuck$Main$main = _elm_lang$html$Html$program(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _minond$brainfuck$Main$main !== 'undefined') {
-    _minond$brainfuck$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Main.Msg":{"args":[],"tags":{"Tick":["Main.Runtime"],"SetProgram":["String"],"Run":[],"Output":["String"],"EditorInput":["String"],"Step":[]}}},"aliases":{"Main.Runtime":{"args":[],"type":"{ program : String , memory : List Int , idx : Int , pointer : Int , steps : Int }"}},"message":"Main.Msg"},"versions":{"elm":"0.18.0"}});
+    _minond$brainfuck$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Main.Msg":{"args":[],"tags":{"Tick":["Main.Runtime"],"SetProgram":["String"],"Run":[],"Output":["String"],"EditorInput":["String"],"Step":[],"Pause":[],"Continue":[]}}},"aliases":{"Main.Runtime":{"args":[],"type":"{ program : String , memory : List Int , idx : Int , pointer : Int , steps : Int }"}},"message":"Main.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

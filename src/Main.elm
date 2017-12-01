@@ -117,20 +117,13 @@ update message model =
 
 view : Model -> Html Msg
 view model =
-    let
-        containerClass =
-            "cf pa3 pa4-ns container helvetica"
-
-        sectionClass =
-            "fl w-100 w-50-ns editor-section"
-    in
-    div [ class containerClass ]
+    div [ class "cf pa3 pa4-ns container helvetica" ]
         [ editorTitle
         , div
-            [ class sectionClass ]
+            [ class "fl w-100 w-50-ns editor-section" ]
             editorIntroduction
         , div
-            [ class sectionClass ]
+            [ class "fl w-100 w-50-ns editor-section" ]
             [ section [] <| editorControls model
             , section [] <| editorMemory model
             , section [] <| editorProgram model

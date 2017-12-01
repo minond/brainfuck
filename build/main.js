@@ -14633,13 +14633,11 @@ var _minond$brainfuck$Main$editorControls = function (_p11) {
 	};
 };
 var _minond$brainfuck$Main$view = function (model) {
-	var sectionClass = 'fl w-100 w-50-ns editor-section';
-	var containerClass = 'cf pa3 pa4-ns container helvetica';
 	return A2(
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class(containerClass),
+			_0: _elm_lang$html$Html_Attributes$class('cf pa3 pa4-ns container helvetica'),
 			_1: {ctor: '[]'}
 		},
 		{
@@ -14651,7 +14649,7 @@ var _minond$brainfuck$Main$view = function (model) {
 					_elm_lang$html$Html$div,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class(sectionClass),
+						_0: _elm_lang$html$Html_Attributes$class('fl w-100 w-50-ns editor-section'),
 						_1: {ctor: '[]'}
 					},
 					_minond$brainfuck$Main$editorIntroduction),
@@ -14661,7 +14659,7 @@ var _minond$brainfuck$Main$view = function (model) {
 						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class(sectionClass),
+							_0: _elm_lang$html$Html_Attributes$class('fl w-100 w-50-ns editor-section'),
 							_1: {ctor: '[]'}
 						},
 						{

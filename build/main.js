@@ -14326,71 +14326,22 @@ var _minond$brainfuck$Main$editorIntroduction = {
 	}
 };
 var _minond$brainfuck$Main$initialModel = _minond$brainfuck$Main$cleanState(_minond$brainfuck$Programs$programHelloWorld);
-var _minond$brainfuck$Main$run = _elm_lang$core$Native_Platform.outgoingPort(
-	'run',
+var _minond$brainfuck$Main$cmd = _elm_lang$core$Native_Platform.outgoingPort(
+	'cmd',
 	function (v) {
-		return {
-			program: v.program,
-			memory: _elm_lang$core$Native_List.toArray(v.memory).map(
+		return [
+			v._0,
+			(v._1.ctor === 'Nothing') ? null : {
+			program: v._1._0.program,
+			memory: _elm_lang$core$Native_List.toArray(v._1._0.memory).map(
 				function (v) {
 					return v;
 				}),
-			idx: v.idx,
-			pointer: v.pointer,
-			steps: v.steps
-		};
-	});
-var _minond$brainfuck$Main$cont = _elm_lang$core$Native_Platform.outgoingPort(
-	'cont',
-	function (v) {
-		return {
-			program: v.program,
-			memory: _elm_lang$core$Native_List.toArray(v.memory).map(
-				function (v) {
-					return v;
-				}),
-			idx: v.idx,
-			pointer: v.pointer,
-			steps: v.steps
-		};
-	});
-var _minond$brainfuck$Main$pause = _elm_lang$core$Native_Platform.outgoingPort(
-	'pause',
-	function (v) {
-		return {
-			program: v.program,
-			memory: _elm_lang$core$Native_List.toArray(v.memory).map(
-				function (v) {
-					return v;
-				}),
-			idx: v.idx,
-			pointer: v.pointer,
-			steps: v.steps
-		};
-	});
-var _minond$brainfuck$Main$step = _elm_lang$core$Native_Platform.outgoingPort(
-	'step',
-	function (v) {
-		return {
-			program: v.program,
-			memory: _elm_lang$core$Native_List.toArray(v.memory).map(
-				function (v) {
-					return v;
-				}),
-			idx: v.idx,
-			pointer: v.pointer,
-			steps: v.steps
-		};
-	});
-var _minond$brainfuck$Main$init = _elm_lang$core$Native_Platform.outgoingPort(
-	'init',
-	function (v) {
-		return v;
-	});
-var _minond$brainfuck$Main$load = _elm_lang$core$Native_Platform.outgoingPort(
-	'load',
-	function (v) {
-		return v;
+			idx: v._1._0.idx,
+			pointer: v._1._0.pointer,
+			steps: v._1._0.steps
+		}
+		];
 	});
 var _minond$brainfuck$Main$update = F2(
 	function (message, model) {
@@ -14401,29 +14352,49 @@ var _minond$brainfuck$Main$update = F2(
 				return {
 					ctor: '_Tuple2',
 					_0: reset,
-					_1: _minond$brainfuck$Main$run(
-						_minond$brainfuck$Main$toRuntime(reset))
+					_1: _minond$brainfuck$Main$cmd(
+						{
+							ctor: '_Tuple2',
+							_0: 'start',
+							_1: _elm_lang$core$Maybe$Just(
+								_minond$brainfuck$Main$toRuntime(reset))
+						})
 				};
 			case 'Step':
 				return {
 					ctor: '_Tuple2',
 					_0: model,
-					_1: _minond$brainfuck$Main$step(
-						_minond$brainfuck$Main$toRuntime(model))
+					_1: _minond$brainfuck$Main$cmd(
+						{
+							ctor: '_Tuple2',
+							_0: 'step',
+							_1: _elm_lang$core$Maybe$Just(
+								_minond$brainfuck$Main$toRuntime(model))
+						})
 				};
 			case 'Continue':
 				return {
 					ctor: '_Tuple2',
 					_0: model,
-					_1: _minond$brainfuck$Main$cont(
-						_minond$brainfuck$Main$toRuntime(model))
+					_1: _minond$brainfuck$Main$cmd(
+						{
+							ctor: '_Tuple2',
+							_0: 'continue',
+							_1: _elm_lang$core$Maybe$Just(
+								_minond$brainfuck$Main$toRuntime(model))
+						})
 				};
 			case 'Pause':
 				return {
 					ctor: '_Tuple2',
 					_0: model,
-					_1: _minond$brainfuck$Main$pause(
-						_minond$brainfuck$Main$toRuntime(model))
+					_1: _minond$brainfuck$Main$cmd(
+						{
+							ctor: '_Tuple2',
+							_0: 'pause',
+							_1: _elm_lang$core$Maybe$Just(
+								_minond$brainfuck$Main$toRuntime(model))
+						})
 				};
 			case 'Output':
 				var output = A2(
@@ -14447,10 +14418,17 @@ var _minond$brainfuck$Main$update = F2(
 				};
 			case 'SetProgram':
 				var program = _minond$brainfuck$Programs$programLoad(_p12._0);
+				var runtime = _minond$brainfuck$Main$toRuntime(
+					_minond$brainfuck$Main$cleanState(program));
 				return {
 					ctor: '_Tuple2',
 					_0: _minond$brainfuck$Main$cleanState(program),
-					_1: _minond$brainfuck$Main$load(program)
+					_1: _minond$brainfuck$Main$cmd(
+						{
+							ctor: '_Tuple2',
+							_0: 'load',
+							_1: _elm_lang$core$Maybe$Just(runtime)
+						})
 				};
 			default:
 				return {
@@ -14841,7 +14819,8 @@ var _minond$brainfuck$Main$main = _elm_lang$html$Html$program(
 		init: {
 			ctor: '_Tuple2',
 			_0: _minond$brainfuck$Main$initialModel,
-			_1: _minond$brainfuck$Main$init(true)
+			_1: _minond$brainfuck$Main$cmd(
+				{ctor: '_Tuple2', _0: 'init', _1: _elm_lang$core$Maybe$Nothing})
 		},
 		view: _minond$brainfuck$Main$view,
 		update: _minond$brainfuck$Main$update,

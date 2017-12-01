@@ -33,6 +33,70 @@
       delay = 50;
       app = Elm.Main.embed(document.getElementById('view'));
 
+      app.ports.cmd.subscribe(function (args) {
+        var cmd = args[0],
+          runtime = args[1];
+
+        switch (cmd) {
+        case "init":
+          if (editor) {
+            return;
+          }
+
+          editor = CodeMirror.fromTextArea(document.querySelector('textarea'), {
+            flattenSpans: false,
+            mode: 'brainfuck',
+            theme: 'custom',
+          });
+
+          editor.on('change', function () {
+            tick = null;
+            app.ports.unload.send(editor.getValue());
+          });
+          break;
+
+        case "load":
+          tick = null;
+
+          if (runtime) {
+            editor.setValue(runtime.program);
+          }
+
+          break;
+
+        case "start":
+          if (timer) {
+            clearTimeout(timer);
+          }
+
+          if (runtime) {
+            run(runtime);
+            cont = true;
+            onTimer();
+          }
+
+          break;
+
+        case "step":
+          if (tick) {
+            cont = false;
+            tick();
+          } else if (runtime) {
+            run(runtime);
+          }
+          break;
+
+        case "pause":
+          cont = false;
+          break;
+
+        case "continue":
+          cont = true;
+          onTimer()
+          break;
+        }
+      })
+
       function onTimer() {
         if (tick) {
           tick();
@@ -42,52 +106,6 @@
           }
         }
       }
-
-      app.ports.init.subscribe(function () {
-        editor = CodeMirror.fromTextArea(document.querySelector('textarea'), {
-          flattenSpans: false,
-          mode: 'brainfuck',
-          theme: 'custom',
-        });
-
-        editor.on('change', function () {
-          tick = null;
-          app.ports.unload.send(editor.getValue());
-        });
-      });
-
-      app.ports.load.subscribe(function (prog) {
-        tick = null;
-        editor.setValue(prog);
-      });
-
-      app.ports.run.subscribe(function (runtime) {
-        if (timer) {
-          clearTimeout(timer);
-        }
-
-        run(runtime);
-        cont = true;
-        onTimer()
-      });
-
-      app.ports.pause.subscribe(function () {
-        cont = false;
-      })
-
-      app.ports.cont.subscribe(function () {
-        cont = true;
-        onTimer()
-      });
-
-      app.ports.step.subscribe(function (runtime) {
-        if (tick) {
-          cont = false;
-          tick();
-        } else {
-          run(runtime);
-        }
-      });
 
       function run(runtime) {
         bf.exec(runtime.program.replace(/[^\+\-\,\.\<\>\[\]]/g, ''), {

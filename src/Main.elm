@@ -12,22 +12,7 @@ import Programs exposing (..)
 import String
 
 
-port run : Runtime -> Cmd msg
-
-
-port cont : Runtime -> Cmd msg
-
-
-port pause : Runtime -> Cmd msg
-
-
-port step : Runtime -> Cmd msg
-
-
-port init : Bool -> Cmd msg
-
-
-port load : String -> Cmd msg
+port cmd : ( String, Maybe Runtime ) -> Cmd msg
 
 
 port unload : (String -> msg) -> Sub msg
@@ -71,7 +56,7 @@ type alias Runtime =
 
 main =
     Html.program
-        { init = ( initialModel, init True )
+        { init = ( initialModel, cmd ( "init", Nothing ) )
         , view = view
         , update = update
         , subscriptions = subscriptions
@@ -100,16 +85,16 @@ update message model =
                 reset =
                     cleanState model.program
             in
-            ( reset, run <| toRuntime reset )
+            ( reset, cmd ( "start", Just (toRuntime reset) ) )
 
         Step ->
-            ( model, step <| toRuntime model )
+            ( model, cmd ( "step", Just (toRuntime model) ) )
 
         Continue ->
-            ( model, cont <| toRuntime model )
+            ( model, cmd ( "continue", Just (toRuntime model) ) )
 
         Pause ->
-            ( model, pause <| toRuntime model )
+            ( model, cmd ( "pause", Just (toRuntime model) ) )
 
         Output addition ->
             let
@@ -125,8 +110,11 @@ update message model =
             let
                 program =
                     programLoad name
+
+                runtime =
+                    toRuntime <| cleanState program
             in
-            ( cleanState program, load program )
+            ( cleanState program, cmd ( "load", Just runtime ) )
 
         EditorInput program ->
             ( cleanState program, Cmd.none )

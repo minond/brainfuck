@@ -1,5 +1,6 @@
 port module Main exposing (main)
 
+import Array
 import Debug
 import Html exposing (Attribute, Html, a, button, code, div, h1, input, li, option, p, section, select, span, text, textarea, ul)
 import Html.Attributes exposing (class, href, spellcheck, type_)
@@ -311,19 +312,36 @@ editorMemory { memory } =
 
 
 editorInformation : Model -> List (Html Msg)
-editorInformation _ =
+editorInformation { program, idx, steps } =
+    let
+        isOptcode =
+            \opt ->
+                String.contains opt "+-[]<>,."
+
+        opts =
+            Array.fromList <| String.split "" program
+
+        opt =
+            Maybe.withDefault " " <| Array.get idx opts
+
+        programSize =
+            String.length program
+
+        codeSize =
+            Array.length <| Array.filter isOptcode <| opts
+    in
     [ p
         [ class "mt0 lh-copy" ]
         [ text "Here's some information about your program: it is "
-        , mono "793"
+        , mono <| toString programSize
         , text " bytes, "
-        , mono "111"
+        , mono <| toString codeSize
         , text " of which are valid commands. The interpreter is going to interpret the character at index "
-        , mono "0"
+        , mono <| toString idx
         , text ", which is "
-        , mono "+"
+        , mono opt
         , text ", and has taken a total of "
-        , mono "0"
+        , mono <| toString steps
         , text " steps so far. The program has had no output yet."
         ]
     ]

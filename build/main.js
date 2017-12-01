@@ -13833,44 +13833,66 @@ var _minond$brainfuck$Main$lbl = function (txt) {
 var _minond$brainfuck$Main$editorMemory = function (_p4) {
 	var _p5 = _p4;
 	var _p6 = _p5.memory;
-	var asCell = function (val) {
-		return A2(
-			_elm_lang$html$Html$div,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('memcell'),
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$span,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html$text(
-							_elm_lang$core$Basics$toString(val)),
-						_1: {ctor: '[]'}
-					}),
-				_1: {ctor: '[]'}
-			});
-	};
-	var asRow = function (vals) {
-		return A2(
-			_elm_lang$html$Html$div,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('cellrow'),
-				_1: {ctor: '[]'}
-			},
-			A2(_elm_lang$core$List$map, asCell, vals));
-	};
 	var memSize = _elm_lang$core$List$length(_p6);
 	var pageSize = 10;
 	var padded = (_elm_lang$core$Native_Utils.cmp(memSize, pageSize) < 0) ? A2(
 		_elm_lang$core$Basics_ops['++'],
 		_p6,
 		A2(_elm_lang$core$List$repeat, pageSize - memSize, 0)) : _p6;
+	var isActive = F2(
+		function (offset, index) {
+			return _elm_lang$core$Native_Utils.eq((pageSize * offset) + index, _p5.pointer);
+		});
+	var asCell = F3(
+		function (offset, index, val) {
+			return A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('memcell'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$classList(
+							{
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'selected',
+									_1: A2(isActive, offset, index)
+								},
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$span,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								_elm_lang$core$Basics$toString(val)),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				});
+		});
+	var asRow = F2(
+		function (index, vals) {
+			return A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('cellrow'),
+					_1: {ctor: '[]'}
+				},
+				A2(
+					_elm_lang$core$List$indexedMap,
+					asCell(index),
+					vals));
+		});
 	return {
 		ctor: '::',
 		_0: _minond$brainfuck$Main$lbl('Program memory'),
@@ -13884,7 +13906,7 @@ var _minond$brainfuck$Main$editorMemory = function (_p4) {
 					_1: {ctor: '[]'}
 				},
 				A2(
-					_elm_lang$core$List$map,
+					_elm_lang$core$List$indexedMap,
 					asRow,
 					A2(_elm_community$list_extra$List_Extra$greedyGroupsOf, pageSize, padded))),
 			_1: {ctor: '[]'}

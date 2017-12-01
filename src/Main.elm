@@ -3,7 +3,7 @@ port module Main exposing (main)
 import Array
 import Debug
 import Html exposing (Attribute, Html, a, button, code, div, h1, input, li, option, p, section, select, span, text, textarea, ul)
-import Html.Attributes exposing (class, href, spellcheck, type_, value)
+import Html.Attributes exposing (class, classList, href, spellcheck, type_, value)
 import Html.Events exposing (on, onClick, onInput)
 import Json.Decode as Json
 import List
@@ -353,7 +353,7 @@ editorTitle =
 
 
 editorMemory : Model -> List (Html Msg)
-editorMemory { memory } =
+editorMemory { memory, pointer } =
     let
         pageSize =
             10
@@ -367,22 +367,29 @@ editorMemory { memory } =
             else
                 memory
 
+        isActive =
+            \offset index ->
+                pageSize * offset + index == pointer
+
         asCell =
-            \val ->
-                div [ class "memcell" ]
+            \offset index val ->
+                div
+                    [ class "memcell"
+                    , classList [ ( "selected", isActive offset index ) ]
+                    ]
                     [ span
                         []
                         [ text (toString val) ]
                     ]
 
         asRow =
-            \vals ->
+            \index vals ->
                 div [ class "cellrow" ]
-                    (List.map asCell vals)
+                    (List.indexedMap (asCell index) vals)
     in
     [ lbl "Program memory"
     , div [ class "mb3" ] <|
-        List.map asRow <|
+        List.indexedMap asRow <|
             greedyGroupsOf pageSize padded
     ]
 

@@ -30,7 +30,7 @@
     requirejs(['vendor/embeddable-interpreters/brainfuck.js'], function (bf) {
       var app, tick, timer, delay, editor;
 
-      delay = 1;
+      delay = 10;
       app = Elm.Main.embed(document.getElementById('view'));
 
       app.ports.init.subscribe(function () {
@@ -75,19 +75,36 @@
       });
 
       function run(runtime) {
-        bf.exec(runtime.program, {
+        bf.exec(runtime.program.replace(/\s+/g, ''), {
           tick: function (_tick, update, state) {
             tick = null;
+
+            var memory = [];
+
+            for (var i = 0, len = state.memory.length; i < len; i++) {
+              memory[i] = state.memory[i] || 0;
+            }
 
             app.ports.tick.send({
               program: runtime.program,
               pointer: state.pointer,
               idx: state.idx,
               steps: state.steps,
-              memory: state.memory,
+              memory: memory,
             });
 
             tick = _tick;
+
+            // highlight active optcode
+            var last = document.querySelector('.active');
+            if (last) {
+              last.classList.remove('active');
+            }
+
+            var active = document.querySelectorAll('.cm-keyword, .cm-bracket, .cm-def, .cm-atom, .cm-comment')[state.idx]
+            if (active) {
+              active.classList.add('active');
+            }
           },
 
           write: function (str) {

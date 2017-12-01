@@ -95,6 +95,11 @@ code {
   color: #b5bac8;
 }
 
+.CodeMirror span.active {
+  background-color: black;
+  color: white;
+}
+
 .CodeMirror {
   display: block;
   min-height: 400px;

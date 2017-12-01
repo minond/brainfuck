@@ -8,7 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Brainfuck</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="build/styles.css">
+    <link rel="stylesheet" href="vendor/tachyons/tachyons.min.css">
+    <link rel="stylesheet" href="vendor/codemirror/codemirror.css">
 
     <meta name="theme-color" content="#ffffff">
     <meta name="og:site_name" content="Marcos Minond">
@@ -16,11 +17,360 @@
     <meta name="og:description" content="My name is Marcos Minond and I am a freelance programmer.">
     <meta name="description" content="My name is Marcos Minond and I am a freelance programmer.">
     <meta name="referrer" content="origin">
+
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Spectral');
+
+    body {
+      cursor: default;
+      margin: 0;
+    }
+
+    pre {
+      margin: 0;
+    }
+
+    .spectral {
+      font-family: 'Spectral', serif;
+    }
+
+    .helvetica {
+      letter-spacing: .7px;
+    }
+
+    .container {
+      max-width: 75rem;
+      margin: 0 auto;
+      box-sizing: content-box;
+    }
+
+    .editor-section {
+      box-sizing: border-box;
+    }
+
+    .cellrow {
+      font-size: 0;
+      max-width: 30rem;
+    }
+
+    .cellrow:not(:first-child) .memcell {
+      border-top: 0;
+    }
+
+    .memcell {
+      font-size: 1rem;
+      border-bottom: 1px solid #c0c0c0;
+      border-right: 1px solid #c0c0c0;
+      border-top: 1px solid #c0c0c0;
+      box-sizing: border-box;
+      display: inline-block;
+      font-family: monospace;
+      height: 0;
+      padding-bottom: 10%;
+      text-align: center;
+      width: 10%;
+      position: relative;
+      transition: color .2s, background-color .2s;
+    }
+
+    .memcell:first-child {
+      border-left: 1px solid #c0c0c0;
+    }
+
+    .memcell span {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+    }
+
+    .memcell.selected {
+      background-color: black;
+      color: white;
+    }
+
+    /* gt/lt/open/close */
+    .cm-s-custom span.cm-atom,
+    .cm-s-custom span.cm-bracket {
+      color: #229efc;
+    }
+
+    /* period/comma */
+    .cm-s-custom span.cm-def {
+      color: #6a3bfb;
+    }
+
+    /* plus/minus */
+    .cm-s-custom span.cm-keyword {
+      line-height: 1em;
+      font-weight: bold;
+      color: #fd8f34;
+    }
+
+    /* comment */
+    .cm-s-custom span.cm-comment {
+      color: #b5bac8;
+    }
+
+    .CodeMirror span.breakpoint.active,
+    .CodeMirror span.active {
+      background-color: black;
+      color: white;
+    }
+
+    .CodeMirror span.cm-keyword:hover,
+    .CodeMirror span.cm-bracket:hover,
+    .CodeMirror span.cm-def:hover,
+    .CodeMirror span.cm-atom:hover,
+    .CodeMirror span.breakpoint {
+      cursor: pointer;
+      background-color: #ff5252;
+      color: #fff;
+    }
+
+    .CodeMirror {
+      display: block;
+      min-height: 400px;
+      margin: 0;
+      font-size: 1rem;
+      cursor: text;
+      border: 1px solid #c0c0c0;
+      outline: 0;
+      height: 300px;
+      overflow: auto;
+      font-family: monospace;
+      padding: .75rem;
+    }
+
+    /* small */
+    @media screen and (min-width: 45em) {
+    }
+
+    /* not small?? */
+    @media screen and (min-width: 45em) {
+    }
+
+    /* medium */
+    @media screen and (min-width: 45em) and (max-width: 60em) {
+      .editor-section:first-of-type {
+        padding-right: 1rem;
+      }
+    }
+
+    /* large */
+    @media screen and (min-width: 60em) {
+      .editor-section:first-of-type {
+        padding-right: 1.5rem;
+      }
+
+      .editor-section + .editor-section {
+        padding-left: 1.5rem;
+      }
+    }
+    </style>
   </head>
   <body>
     <section id="view"></section>
-    <script src="build/vendor.js"></script>
-    <script src="build/editor.js"></script>
+    <script src="build/main.js"></script>
+    <script src="vendor/node-process/browser.js"></script>
+    <script src="vendor/codemirror/codemirror.js"></script>
+    <script src="vendor/codemirror/brainfuck.js"></script>
+    <script src="vendor/requirejs/require.js"></script>
+    <script>
+    requirejs(['vendor/embeddable-interpreters/brainfuck.js'], function (bf) {
+      var EDITOR_TOKENS = '.cm-keyword, .cm-bracket, .cm-def, .cm-atom';
+
+      var app, tick, cont, timer, speed, breakpoints, editor;
+
+      speed = 1;
+      breakpoints = [];
+      app = Elm.Main.embed(document.getElementById('view'));
+      app.ports.cmd.subscribe(cmd);
+
+      function cmd(args) {
+        var cmd = args[0],
+          runtime = args[1];
+
+        switch (cmd) {
+        case "speed":
+          speed = runtime.speed || 1;
+          break;
+
+        case "init":
+          if (editor) {
+            return;
+          }
+
+          if (runtime) {
+            speed = runtime.speed || 1;
+          }
+
+          editor = CodeMirror.fromTextArea(document.querySelector('textarea'), {
+            flattenSpans: false,
+            mode: 'brainfuck',
+            theme: 'custom',
+          });
+
+          editor.on('change', function () {
+            stop();
+            app.ports.unload.send(editor.getValue());
+          });
+
+          editor.getWrapperElement().addEventListener('click', function (ev) {
+            if (ev.target.matches(EDITOR_TOKENS)) {
+              var elems = document.querySelectorAll(EDITOR_TOKENS);
+              var index = [].indexOf.call(elems, ev.target);
+
+              if (index >= 0) {
+                app.ports.breakpoint.send(index);
+
+                if (ev.target.classList.contains('breakpoint')) {
+                  ev.target.classList.remove('breakpoint');
+                  breakpoints = breakpoints.filter(function (pos) {
+                    return pos !== index;
+                  });
+                } else {
+                  ev.target.classList.add('breakpoint');
+                  breakpoints.push(index);
+                }
+              }
+            }
+          });
+          break;
+
+        case "load":
+          stop();
+
+          if (runtime) {
+            editor.setValue(runtime.program);
+          }
+
+          break;
+
+        case "start":
+          if (runtime) {
+            run(runtime);
+            cont = true;
+            onTimer();
+          }
+
+          break;
+
+        case "step":
+          if (tick) {
+            cont = false;
+            tick();
+          } else if (runtime) {
+            run(runtime);
+          }
+          break;
+
+        case "pause":
+          cont = false;
+          break;
+
+        case "continue":
+          cont = true;
+
+          if (!timer) {
+            onTimer()
+          }
+
+          break;
+        }
+      }
+
+      function onTimer() {
+        if (timer) {
+          clearTimeout(timer);
+        }
+
+        if (tick) {
+          tick();
+
+          if (cont) {
+            timer = setTimeout(onTimer, speed);
+          }
+        }
+      }
+
+      function stop() {
+        if (timer) {
+          clearTimeout(timer);
+        }
+
+        tick = null;
+      }
+
+      function run(runtime) {
+        breakpoints = runtime.breakpoints;
+
+        bf.exec(runtime.program.replace(/[^\+\-\,\.\<\>\[\]]/g, ''), {
+          tick: function (_tick, update, state) {
+            tick = null;
+
+            var memory = [];
+
+            for (var i = 0, len = state.memory.length; i < len; i++) {
+              memory[i] = state.memory[i] || 0;
+            }
+
+            for (var i = 0, len = breakpoints.length; i < len; i++) {
+              breakpoints[i] = breakpoints[i] || 0;
+            }
+
+            app.ports.tick.send({
+              pointer: state.pointer,
+              idx: state.idx,
+              steps: state.steps,
+              memory: memory,
+            });
+
+            // highlight active optcode
+            var last = document.querySelector('.active');
+            if (last) {
+              last.classList.remove('active');
+            }
+
+            var active = document.querySelectorAll(EDITOR_TOKENS)[state.idx]
+            if (active) {
+              active.classList.add('active');
+            }
+
+            if (breakpoints.indexOf(state.idx + 1) >= 0) {
+              cmd(["pause"]);
+            }
+
+            tick = _tick;
+          },
+
+          write: function (str) {
+            app.ports.output.send(str);
+            console.log(str);
+          },
+
+          done: function () {
+            console.log('done');
+            tick = null;
+          },
+        });
+      }
+    });
+    </script>
+    <footer class="bt pa3 pa4-ns mt1 mt4-ns b--light-gray spectral pv3 pv4-ns">
+      <div class="container">
+        <p class="lh-copy w-50-ns">
+        My name is
+        <a href="/" class="link red dim">Marcos Minond</a>,
+        and I'm a computer programmer living in Provo, Utah. Checkout my
+        <a href="/resume" class="link red dim">resume</a>
+        and
+        <a target="_blank" href="https://github.com/minond" class="link red dim">GitHub</a>,
+        and if you'd like to contact me just
+        <a target="_self" href="mailto:minond.marcos+site@gmail.com" class="link red dim">send me an email</a>.
+        </p>
+      </div>
+    </footer>
   </body>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

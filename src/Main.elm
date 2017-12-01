@@ -1,6 +1,7 @@
 port module Main exposing (main)
 
 import Array
+import Debug
 import Html exposing (Attribute, Html, a, button, code, div, h1, input, li, option, p, section, select, span, text, textarea, ul)
 import Html.Attributes exposing (class, href, spellcheck, type_, value)
 import Html.Events exposing (on, onClick, onInput)
@@ -23,6 +24,9 @@ port tick : (Runtime -> msg) -> Sub msg
 port output : (String -> msg) -> Sub msg
 
 
+port breakpoint : (Int -> msg) -> Sub msg
+
+
 type Msg
     = Run
     | Step
@@ -33,6 +37,7 @@ type Msg
     | SetDelay String
     | SetProgram String
     | EditorInput String
+    | Breakpoint Int
 
 
 type alias Model =
@@ -82,6 +87,7 @@ subscriptions model =
         [ tick Tick
         , output Output
         , unload EditorInput
+        , breakpoint Breakpoint
         ]
 
 
@@ -124,6 +130,10 @@ update message model =
             ( { model | output = Just output }, Cmd.none )
 
         Tick runtime ->
+            let
+                x =
+                    Debug.log (toString runtime.idx) True
+            in
             ( mergeRuntime runtime model, Cmd.none )
 
         SetDelay raw ->
@@ -153,6 +163,16 @@ update message model =
 
         EditorInput program ->
             ( cleanState program, Cmd.none )
+
+        Breakpoint pos ->
+            let
+                breakpoints =
+                    if List.member pos model.breakpoints then
+                        List.filter ((/=) pos) model.breakpoints
+                    else
+                        pos :: model.breakpoints
+            in
+            ( { model | breakpoints = breakpoints }, Cmd.none )
 
 
 view : Model -> Html Msg

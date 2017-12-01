@@ -61,6 +61,23 @@
             tick = null;
             app.ports.unload.send(editor.getValue());
           });
+
+          editor.getWrapperElement().addEventListener('click', function (ev) {
+            if (ev.target.matches('.cm-keyword, .cm-bracket, .cm-def, .cm-atom')) {
+              var elems = document.querySelectorAll('.cm-keyword, .cm-bracket, .cm-def, .cm-atom');
+              var index = [].indexOf.call(elems, ev.target);
+
+              if (index >= 0) {
+                app.ports.breakpoint.send(index);
+
+                if (ev.target.classList.contains('breakpoint')) {
+                  ev.target.classList.remove('breakpoint');
+                } else {
+                  ev.target.classList.add('breakpoint');
+                }
+              }
+            }
+          });
           break;
 
         case "load":

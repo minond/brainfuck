@@ -13976,20 +13976,47 @@ var _minond$brainfuck$Main$editorOutput = function (model) {
 };
 var _minond$brainfuck$Main$editorInformation = function (_p7) {
 	var _p8 = _p7;
-	var _p10 = _p8.program;
-	var _p9 = _p8.idx;
-	var programSize = _elm_lang$core$String$length(_p10);
-	var opts = _elm_lang$core$Array$fromList(
-		A2(_elm_lang$core$String$split, '', _p10));
-	var opt = A2(
-		_elm_lang$core$Maybe$withDefault,
-		' ',
-		A2(_elm_lang$core$Array$get, _p9, opts));
+	var _p11 = _p8.program;
+	var _p10 = _p8.idx;
+	var outputMessage = function () {
+		var _p9 = _p8.output;
+		if (_p9.ctor === 'Nothing') {
+			return _elm_lang$html$Html$text('The program has had no output yet.');
+		} else {
+			return A2(
+				_elm_lang$html$Html$span,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Output length is '),
+					_1: {
+						ctor: '::',
+						_0: _minond$brainfuck$Main$mono(
+							_elm_lang$core$Basics$toString(
+								_elm_lang$core$String$length(_p9._0))),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(' characters long.'),
+							_1: {ctor: '[]'}
+						}
+					}
+				});
+		}
+	}();
+	var programSize = _elm_lang$core$String$length(_p11);
 	var isOptcode = function (opt) {
 		return A2(_elm_lang$core$String$contains, opt, '+-[]<>,.');
 	};
-	var codeSize = _elm_lang$core$Array$length(
-		A2(_elm_lang$core$Array$filter, isOptcode, opts));
+	var opts = A2(
+		_elm_lang$core$Array$filter,
+		isOptcode,
+		_elm_lang$core$Array$fromList(
+			A2(_elm_lang$core$String$split, '', _p11)));
+	var opt = A2(
+		_elm_lang$core$Maybe$withDefault,
+		' ',
+		A2(_elm_lang$core$Array$get, _p10, opts));
+	var codeSize = _elm_lang$core$Array$length(opts);
 	return {
 		ctor: '::',
 		_0: A2(
@@ -14019,7 +14046,7 @@ var _minond$brainfuck$Main$editorInformation = function (_p7) {
 								_1: {
 									ctor: '::',
 									_0: _minond$brainfuck$Main$mono(
-										_elm_lang$core$Basics$toString(_p9)),
+										_elm_lang$core$Basics$toString(_p10)),
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$html$Html$text(', which is '),
@@ -14035,8 +14062,12 @@ var _minond$brainfuck$Main$editorInformation = function (_p7) {
 														_elm_lang$core$Basics$toString(_p8.steps)),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html$text(' steps so far. The program has had no output yet.'),
-														_1: {ctor: '[]'}
+														_0: _elm_lang$html$Html$text(' steps so far. '),
+														_1: {
+															ctor: '::',
+															_0: outputMessage,
+															_1: {ctor: '[]'}
+														}
 													}
 												}
 											}
@@ -14335,8 +14366,8 @@ var _minond$brainfuck$Main$load = _elm_lang$core$Native_Platform.outgoingPort(
 	});
 var _minond$brainfuck$Main$update = F2(
 	function (message, model) {
-		var _p11 = message;
-		switch (_p11.ctor) {
+		var _p12 = message;
+		switch (_p12.ctor) {
 			case 'Run':
 				return {
 					ctor: '_Tuple2',
@@ -14357,7 +14388,7 @@ var _minond$brainfuck$Main$update = F2(
 				var output = A2(
 					_elm_lang$core$Basics_ops['++'],
 					A2(_elm_lang$core$Maybe$withDefault, '', model.output),
-					_p11._0);
+					_p12._0);
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -14370,11 +14401,11 @@ var _minond$brainfuck$Main$update = F2(
 			case 'Tick':
 				return {
 					ctor: '_Tuple2',
-					_0: A2(_minond$brainfuck$Main$mergeRuntime, _p11._0, model),
+					_0: A2(_minond$brainfuck$Main$mergeRuntime, _p12._0, model),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'SetProgram':
-				var program = _minond$brainfuck$Programs$programLoad(_p11._0);
+				var program = _minond$brainfuck$Programs$programLoad(_p12._0);
 				return {
 					ctor: '_Tuple2',
 					_0: _minond$brainfuck$Main$cleanState(program),
@@ -14383,7 +14414,7 @@ var _minond$brainfuck$Main$update = F2(
 			default:
 				return {
 					ctor: '_Tuple2',
-					_0: _minond$brainfuck$Main$cleanState(_p11._0),
+					_0: _minond$brainfuck$Main$cleanState(_p12._0),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 		}
@@ -14433,8 +14464,8 @@ var _minond$brainfuck$Main$Runtime = F5(
 var _minond$brainfuck$Main$EditorInput = function (a) {
 	return {ctor: 'EditorInput', _0: a};
 };
-var _minond$brainfuck$Main$editorProgram = function (_p12) {
-	var _p13 = _p12;
+var _minond$brainfuck$Main$editorProgram = function (_p13) {
+	var _p14 = _p13;
 	var getProgram = A2(
 		_elm_lang$core$Json_Decode$map,
 		function (s) {
@@ -14474,7 +14505,7 @@ var _minond$brainfuck$Main$editorProgram = function (_p12) {
 				},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text(_p13.program),
+					_0: _elm_lang$html$Html$text(_p14.program),
 					_1: {ctor: '[]'}
 				}),
 			_1: {ctor: '[]'}
@@ -14508,7 +14539,7 @@ var _minond$brainfuck$Main$subscriptions = function (model) {
 };
 var _minond$brainfuck$Main$Step = {ctor: 'Step'};
 var _minond$brainfuck$Main$Run = {ctor: 'Run'};
-var _minond$brainfuck$Main$editorControls = function (_p14) {
+var _minond$brainfuck$Main$editorControls = function (_p15) {
 	var setProgram = A2(
 		_elm_lang$core$Json_Decode$map,
 		function (s) {

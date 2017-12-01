@@ -317,23 +317,39 @@ editorMemory { memory } =
 
 
 editorInformation : Model -> List (Html Msg)
-editorInformation { program, idx, steps } =
+editorInformation { program, output, idx, steps } =
     let
         isOptcode =
             \opt ->
                 String.contains opt "+-[]<>,."
 
         opts =
-            Array.fromList <| String.split "" program
+            Array.filter isOptcode <|
+                Array.fromList <|
+                    String.split "" program
 
         opt =
-            Maybe.withDefault " " <| Array.get idx opts
+            Maybe.withDefault " " <|
+                Array.get idx opts
 
         programSize =
             String.length program
 
         codeSize =
-            Array.length <| Array.filter isOptcode <| opts
+            Array.length <| opts
+
+        outputMessage =
+            case output of
+                Nothing ->
+                    text "The program has had no output yet."
+
+                Just str ->
+                    span
+                        []
+                        [ text "Output length is "
+                        , mono <| toString <| String.length str
+                        , text " characters long."
+                        ]
     in
     [ p
         [ class "mt0 lh-copy" ]
@@ -347,7 +363,8 @@ editorInformation { program, idx, steps } =
         , mono opt
         , text ", and has taken a total of "
         , mono <| toString steps
-        , text " steps so far. The program has had no output yet."
+        , text " steps so far. "
+        , outputMessage
         ]
     ]
 

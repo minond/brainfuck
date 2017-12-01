@@ -88,7 +88,11 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update message model =
     case message of
         Run ->
-            ( { model | output = Nothing }, run <| toRuntime model )
+            let
+                reset =
+                    cleanState model.program
+            in
+            ( reset, run <| toRuntime reset )
 
         Step ->
             ( model, step <| toRuntime model )

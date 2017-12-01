@@ -14369,13 +14369,12 @@ var _minond$brainfuck$Main$update = F2(
 		var _p12 = message;
 		switch (_p12.ctor) {
 			case 'Run':
+				var reset = _minond$brainfuck$Main$cleanState(model.program);
 				return {
 					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{output: _elm_lang$core$Maybe$Nothing}),
+					_0: reset,
 					_1: _minond$brainfuck$Main$run(
-						_minond$brainfuck$Main$toRuntime(model))
+						_minond$brainfuck$Main$toRuntime(reset))
 				};
 			case 'Step':
 				return {

@@ -30,7 +30,7 @@
     requirejs(['vendor/embeddable-interpreters/brainfuck.js'], function (bf) {
       var app, tick, timer, delay, editor;
 
-      delay = 10;
+      delay = 50;
       app = Elm.Main.embed(document.getElementById('view'));
 
       app.ports.init.subscribe(function () {
@@ -52,16 +52,16 @@
       });
 
       app.ports.run.subscribe(function (runtime) {
-        run(runtime);
-
         if (timer) {
           clearTimeout(timer);
         }
 
+        run(runtime);
+
         function onTimer() {
           if (tick) {
             tick();
-            setTimeout(onTimer, delay);
+            timer = setTimeout(onTimer, delay);
           }
         }
 

@@ -10,7 +10,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="vendor/tachyons/tachyons.min.css">
     <link rel="stylesheet" href="vendor/codemirror/codemirror.css">
-    <link rel="stylesheet" href="src/editor.css">
 
     <meta name="theme-color" content="#ffffff">
     <meta name="og:site_name" content="Marcos Minond">
@@ -18,6 +17,157 @@
     <meta name="og:description" content="My name is Marcos Minond and I am a freelance programmer.">
     <meta name="description" content="My name is Marcos Minond and I am a freelance programmer.">
     <meta name="referrer" content="origin">
+
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Spectral');
+
+    body {
+      cursor: default;
+      margin: 0;
+    }
+
+    pre {
+      margin: 0;
+    }
+
+    .spectral {
+      font-family: 'Spectral', serif;
+    }
+
+    .helvetica {
+      letter-spacing: .7px;
+    }
+
+    .container {
+      max-width: 75rem;
+      margin: 0 auto;
+      box-sizing: content-box;
+    }
+
+    .editor-section {
+      box-sizing: border-box;
+    }
+
+    .cellrow {
+      font-size: 0;
+      max-width: 30rem;
+    }
+
+    .cellrow:not(:first-child) .memcell {
+      border-top: 0;
+    }
+
+    .memcell {
+      font-size: 1rem;
+      border-bottom: 1px solid #c0c0c0;
+      border-right: 1px solid #c0c0c0;
+      border-top: 1px solid #c0c0c0;
+      box-sizing: border-box;
+      display: inline-block;
+      font-family: monospace;
+      height: 0;
+      padding-bottom: 10%;
+      text-align: center;
+      width: 10%;
+      position: relative;
+      transition: color .2s, background-color .2s;
+    }
+
+    .memcell:first-child {
+      border-left: 1px solid #c0c0c0;
+    }
+
+    .memcell span {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+    }
+
+    .memcell.selected {
+      background-color: black;
+      color: white;
+    }
+
+    /* gt/lt/open/close */
+    .cm-s-custom span.cm-atom,
+    .cm-s-custom span.cm-bracket {
+      color: #229efc;
+    }
+
+    /* period/comma */
+    .cm-s-custom span.cm-def {
+      color: #6a3bfb;
+    }
+
+    /* plus/minus */
+    .cm-s-custom span.cm-keyword {
+      line-height: 1em;
+      font-weight: bold;
+      color: #fd8f34;
+    }
+
+    /* comment */
+    .cm-s-custom span.cm-comment {
+      color: #b5bac8;
+    }
+
+    .CodeMirror span.breakpoint.active,
+    .CodeMirror span.active {
+      background-color: black;
+      color: white;
+    }
+
+    .CodeMirror span.cm-keyword:hover,
+    .CodeMirror span.cm-bracket:hover,
+    .CodeMirror span.cm-def:hover,
+    .CodeMirror span.cm-atom:hover,
+    .CodeMirror span.breakpoint {
+      cursor: pointer;
+      background-color: #ff5252;
+      color: #fff;
+    }
+
+    .CodeMirror {
+      display: block;
+      min-height: 400px;
+      margin: 0;
+      font-size: 1rem;
+      cursor: text;
+      border: 1px solid #c0c0c0;
+      outline: 0;
+      height: 300px;
+      overflow: auto;
+      font-family: monospace;
+      padding: .75rem;
+    }
+
+    /* small */
+    @media screen and (min-width: 45em) {
+    }
+
+    /* not small?? */
+    @media screen and (min-width: 45em) {
+    }
+
+    /* medium */
+    @media screen and (min-width: 45em) and (max-width: 60em) {
+      .editor-section:first-of-type {
+        padding-right: 1rem;
+      }
+    }
+
+    /* large */
+    @media screen and (min-width: 60em) {
+      .editor-section:first-of-type {
+        padding-right: 1.5rem;
+      }
+
+      .editor-section + .editor-section {
+        padding-left: 1.5rem;
+      }
+    }
+    </style>
   </head>
   <body>
     <section id="view"></section>

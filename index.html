@@ -248,10 +248,6 @@
           break;
 
         case "start":
-          if (timer) {
-            clearTimeout(timer);
-          }
-
           if (runtime) {
             run(runtime);
             cont = true;
@@ -275,12 +271,20 @@
 
         case "continue":
           cont = true;
-          onTimer()
+
+          if (!timer) {
+            onTimer()
+          }
+
           break;
         }
       }
 
       function onTimer() {
+        if (timer) {
+          clearTimeout(timer);
+        }
+
         if (tick) {
           tick();
 

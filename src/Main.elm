@@ -72,13 +72,7 @@ main =
 
 initialModel : Model
 initialModel =
-    { program = programHelloWorld
-    , output = Nothing
-    , memory = []
-    , idx = 0
-    , pointer = 0
-    , steps = 0
-    }
+    cleanState programHelloWorld
 
 
 subscriptions : Model -> Sub Msg
@@ -114,10 +108,10 @@ update message model =
                 program =
                     programLoad name
             in
-            ( { model | program = program }, load program )
+            ( cleanState program, load program )
 
         EditorInput program ->
-            ( { model | program = program }, Cmd.none )
+            ( cleanState program, Cmd.none )
 
 
 view : Model -> Html Msg
@@ -166,6 +160,17 @@ lbl txt =
     div
         [ class "f6 mb2 gray i" ]
         [ text txt ]
+
+
+cleanState : String -> Model
+cleanState program =
+    { program = program
+    , output = Nothing
+    , memory = []
+    , idx = 0
+    , pointer = 0
+    , steps = 0
+    }
 
 
 toRuntime : Model -> Runtime

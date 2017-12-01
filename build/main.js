@@ -13804,6 +13804,16 @@ var _minond$brainfuck$Main$toRuntime = function (_p2) {
 	var _p3 = _p2;
 	return {program: _p3.program, memory: _p3.memory, idx: _p3.idx, pointer: _p3.pointer, steps: _p3.steps};
 };
+var _minond$brainfuck$Main$cleanState = function (program) {
+	return {
+		program: program,
+		output: _elm_lang$core$Maybe$Nothing,
+		memory: {ctor: '[]'},
+		idx: 0,
+		pointer: 0,
+		steps: 0
+	};
+};
 var _minond$brainfuck$Main$lbl = function (txt) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -14284,14 +14294,7 @@ var _minond$brainfuck$Main$editorIntroduction = {
 		}
 	}
 };
-var _minond$brainfuck$Main$initialModel = {
-	program: _minond$brainfuck$Programs$programHelloWorld,
-	output: _elm_lang$core$Maybe$Nothing,
-	memory: {ctor: '[]'},
-	idx: 0,
-	pointer: 0,
-	steps: 0
-};
+var _minond$brainfuck$Main$initialModel = _minond$brainfuck$Main$cleanState(_minond$brainfuck$Programs$programHelloWorld);
 var _minond$brainfuck$Main$run = _elm_lang$core$Native_Platform.outgoingPort(
 	'run',
 	function (v) {
@@ -14374,17 +14377,13 @@ var _minond$brainfuck$Main$update = F2(
 				var program = _minond$brainfuck$Programs$programLoad(_p11._0);
 				return {
 					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{program: program}),
+					_0: _minond$brainfuck$Main$cleanState(program),
 					_1: _minond$brainfuck$Main$load(program)
 				};
 			default:
 				return {
 					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{program: _p11._0}),
+					_0: _minond$brainfuck$Main$cleanState(_p11._0),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 		}

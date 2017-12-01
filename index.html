@@ -22,15 +22,18 @@
   <body>
     <section id="view"></section>
     <script src="build/main.js"></script>
+    <script src="vendor/node-process/browser.js"></script>
     <script src="vendor/codemirror/codemirror.js"></script>
     <script src="vendor/codemirror/brainfuck.js"></script>
     <script src="vendor/requirejs/require.js"></script>
     <script>
     requirejs(['vendor/embeddable-interpreters/brainfuck.js'], function (bf) {
-      var app = Elm.Main.embed(document.getElementById('view'));
-      var editor;
+      var app, tick, timer, delay, editor;
 
-      app.ports.initializeEditor.subscribe(function () {
+      delay = 1;
+      app = Elm.Main.embed(document.getElementById('view'));
+
+      app.ports.init.subscribe(function () {
         editor = CodeMirror.fromTextArea(document.querySelector('textarea'), {
           flattenSpans: false,
           mode: 'brainfuck',
@@ -38,9 +41,62 @@
         });
       });
 
-      app.ports.setProgram.subscribe(function (prog) {
+      app.ports.load.subscribe(function (prog) {
         editor.setValue(prog);
       });
+
+      app.ports.run.subscribe(function (runtime) {
+        run(runtime);
+
+        if (timer) {
+          clearTimeout(timer);
+        }
+
+        function onTimer() {
+          if (tick) {
+            tick();
+            setTimeout(onTimer, delay);
+          }
+        }
+
+        onTimer()
+      });
+
+      app.ports.step.subscribe(function (runtime) {
+        if (tick) {
+          tick();
+        } else {
+          run(runtime);
+        }
+      });
+
+      function run(runtime) {
+        bf.exec(runtime.program, {
+          tick: function (_tick, update, state) {
+            tick = null;
+
+            app.ports.tick.send({
+              program: runtime.program,
+              pointer: state.pointer,
+              idx: state.idx,
+              steps: state.steps,
+              memory: state.memory,
+            });
+
+            tick = _tick;
+          },
+
+          write: function (str) {
+            app.ports.output.send(str);
+            console.log(str);
+          },
+
+          done: function () {
+            console.log('done');
+            tick = null;
+          },
+        });
+      }
     });
     </script>
     <footer class="bt pa3 pa4-ns mt1 mt4-ns b--light-gray spectral pv3 pv4-ns">

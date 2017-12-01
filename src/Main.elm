@@ -1,9 +1,9 @@
 port module Main exposing (main)
 
 import Debug
-import Html exposing (Attribute, Html, a, button, code, div, h1, input, li, option, p, select, span, text, textarea, ul)
+import Html exposing (Attribute, Html, a, button, code, div, h1, input, li, option, p, section, select, span, text, textarea, ul)
 import Html.Attributes exposing (class, href, spellcheck, type_)
-import Html.Events exposing (on)
+import Html.Events exposing (on, onClick)
 import Json.Decode as Json
 import List
 import List.Extra exposing (greedyGroupsOf)
@@ -11,27 +11,55 @@ import Programs exposing (..)
 import String
 
 
-port initializeEditor : Bool -> Cmd msg
+port run : Runtime -> Cmd msg
 
 
-port setProgram : String -> Cmd msg
+port step : Runtime -> Cmd msg
+
+
+port init : Bool -> Cmd msg
+
+
+port load : String -> Cmd msg
+
+
+port tick : (Runtime -> msg) -> Sub msg
+
+
+port output : (String -> msg) -> Sub msg
 
 
 type Msg
-    = NoOp
+    = Run
+    | Step
+    | Tick Runtime
+    | Output String
     | SetProgram String
     | EditorInput String
 
 
 type alias Model =
     { program : String
+    , output : Maybe String
     , memory : List Int
+    , idx : Int
+    , pointer : Int
+    , steps : Int
+    }
+
+
+type alias Runtime =
+    { program : String
+    , memory : List Int
+    , idx : Int
+    , pointer : Int
+    , steps : Int
     }
 
 
 main =
     Html.program
-        { init = ( initialModel, initializeEditor True )
+        { init = ( initialModel, init True )
         , view = view
         , update = update
         , subscriptions = subscriptions
@@ -41,30 +69,50 @@ main =
 initialModel : Model
 initialModel =
     { program = programHelloWorld
+    , output = Nothing
     , memory = []
+    , idx = 0
+    , pointer = 0
+    , steps = 0
     }
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    Sub.batch
+        [ tick Tick
+        , output Output
+        ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update message model =
-    case ( message, model ) of
-        ( NoOp, _ ) ->
-            ( model, Cmd.none )
+    case message of
+        Run ->
+            ( { model | output = Nothing }, run <| toRuntime model )
 
-        ( SetProgram str, _ ) ->
+        Step ->
+            ( model, step <| toRuntime model )
+
+        Output addition ->
+            let
+                output =
+                    Maybe.withDefault "" model.output ++ addition
+            in
+            ( { model | output = Just output }, Cmd.none )
+
+        Tick runtime ->
+            ( mergeRuntime runtime model, Cmd.none )
+
+        SetProgram name ->
             let
                 program =
-                    programLoad str
+                    programLoad name
             in
-            ( { model | program = program }, setProgram program )
+            ( { model | program = program }, load program )
 
-        ( EditorInput str, { program } ) ->
-            ( { model | program = str }, Cmd.none )
+        EditorInput program ->
+            ( { model | program = program }, Cmd.none )
 
 
 view : Model -> Html Msg
@@ -75,15 +123,6 @@ view model =
 
         sectionClass =
             "fl w-100 w-50-ns editor-section"
-
-        editor =
-            List.concat
-                [ editorControls model
-                , editorMemory model
-                , editorProgram model
-                , editorOutput model
-                , editorInformation model
-                ]
     in
     div [ class containerClass ]
         [ editorTitle
@@ -92,7 +131,12 @@ view model =
             editorIntroduction
         , div
             [ class sectionClass ]
-            editor
+            [ section [] <| editorControls model
+            , section [] <| editorMemory model
+            , section [] <| editorProgram model
+            , section [] <| editorOutput model
+            , section [] <| editorInformation model
+            ]
         ]
 
 
@@ -124,6 +168,26 @@ lbl txt =
     div
         [ class "f6 mb2 gray i" ]
         [ text txt ]
+
+
+toRuntime : Model -> Runtime
+toRuntime { program, memory, idx, pointer, steps } =
+    { program = program
+    , memory = memory
+    , idx = idx
+    , pointer = pointer
+    , steps = steps
+    }
+
+
+mergeRuntime : Runtime -> Model -> Model
+mergeRuntime { memory, idx, pointer, steps } model =
+    { model
+        | memory = memory
+        , idx = idx
+        , pointer = pointer
+        , steps = steps
+    }
 
 
 editorControls : Model -> List (Html Msg)
@@ -160,23 +224,27 @@ editorControls _ =
     , lbl "Program controls"
     , div
         [ class "mb2" ]
-        [ btn [] "Run"
+        [ btn [ onClick Run ] "Run"
         , btn [] "Pause"
-        , btn [] "Step"
+        , btn [ onClick Step ] "Step"
         , btn [] "Continue"
         ]
     ]
 
 
 editorOutput : Model -> List (Html Msg)
-editorOutput _ =
+editorOutput model =
+    let
+        output =
+            Maybe.withDefault "none" model.output
+    in
     [ div
         [ class "mt3" ]
         []
     , lbl "Output"
     , div
         [ class "pb2 mb3" ]
-        [ mono "none" ]
+        [ mono output ]
     ]
 
 

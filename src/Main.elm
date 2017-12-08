@@ -190,8 +190,8 @@ view model =
             [ class "fl w-100 w-50-ns editor-section" ]
             [ section [] <| editorControls model
             , section [] <| editorMemory model
-            , section [] <| editorProgram model
             , section [] <| editorOutput model
+            , section [] <| editorProgram model
             , section [] <| editorInformation model
             ]
         ]
@@ -323,7 +323,7 @@ editorOutput model =
         []
     , lbl "Output"
     , div
-        [ class "pb2 mb3" ]
+        [ class "pb2 mb2" ]
         [ mono output ]
     ]
 
@@ -335,8 +335,7 @@ editorProgram { program } =
             Json.map (\s -> EditorInput s) <|
                 Json.at [ "target", "innerText" ] Json.string
     in
-    [ lbl "Editor"
-    , textarea
+    [ textarea
         [ spellcheck False
         , class "editor"
         , on "keyup" getProgram
@@ -430,7 +429,7 @@ editorInformation { program, output, idx, steps } =
                         ]
     in
     [ p
-        [ class "mt0 lh-copy" ]
+        [ class "lh-copy" ]
         [ text "Here's some information about your program: it is "
         , mono <| toString programSize
         , text " bytes, "

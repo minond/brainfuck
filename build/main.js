@@ -9829,7 +9829,7 @@ var _minond$brainfuck$Main$editorOutput = function (model) {
 					_elm_lang$html$Html$div,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('pb2 mb3'),
+						_0: _elm_lang$html$Html_Attributes$class('pb2 mb2'),
 						_1: {ctor: '[]'}
 					},
 					{
@@ -9891,7 +9891,7 @@ var _minond$brainfuck$Main$editorInformation = function (_p7) {
 			_elm_lang$html$Html$p,
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('mt0 lh-copy'),
+				_0: _elm_lang$html$Html_Attributes$class('lh-copy'),
 				_1: {ctor: '[]'}
 			},
 			{
@@ -10424,31 +10424,27 @@ var _minond$brainfuck$Main$editorProgram = function (_p15) {
 			_elm_lang$core$Json_Decode$string));
 	return {
 		ctor: '::',
-		_0: _minond$brainfuck$Main$lbl('Editor'),
-		_1: {
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$textarea,
-				{
+		_0: A2(
+			_elm_lang$html$Html$textarea,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$spellcheck(false),
+				_1: {
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$spellcheck(false),
+					_0: _elm_lang$html$Html_Attributes$class('editor'),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('editor'),
-						_1: {
-							ctor: '::',
-							_0: A2(_elm_lang$html$Html_Events$on, 'keyup', getProgram),
-							_1: {ctor: '[]'}
-						}
+						_0: A2(_elm_lang$html$Html_Events$on, 'keyup', getProgram),
+						_1: {ctor: '[]'}
 					}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text(_p16.program),
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		}
+				}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(_p16.program),
+				_1: {ctor: '[]'}
+			}),
+		_1: {ctor: '[]'}
 	};
 };
 var _minond$brainfuck$Main$SetProgram = function (a) {
@@ -10735,13 +10731,13 @@ var _minond$brainfuck$Main$view = function (model) {
 									_0: A2(
 										_elm_lang$html$Html$section,
 										{ctor: '[]'},
-										_minond$brainfuck$Main$editorProgram(model)),
+										_minond$brainfuck$Main$editorOutput(model)),
 									_1: {
 										ctor: '::',
 										_0: A2(
 											_elm_lang$html$Html$section,
 											{ctor: '[]'},
-											_minond$brainfuck$Main$editorOutput(model)),
+											_minond$brainfuck$Main$editorProgram(model)),
 										_1: {
 											ctor: '::',
 											_0: A2(

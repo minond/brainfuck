@@ -9896,7 +9896,7 @@ var _minond$brainfuck$Main$editorInformation = function (_p7) {
 			},
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html$text('Here\'s some information about your program: it is '),
+				_0: _elm_lang$html$Html$text('Here’s some information about your program: it is '),
 				_1: {
 					ctor: '::',
 					_0: _minond$brainfuck$Main$mono(
@@ -9970,7 +9970,7 @@ var _minond$brainfuck$Main$editorIntroduction = {
 					_0: A2(_minond$brainfuck$Main$link, 'esoteric programming languages', 'https://esolangs.org/wiki/Esoteric_programming_language'),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html$text(' you\'ve probably heard of. Partly because of its minimal instruction set but most likely because it has the word '),
+						_0: _elm_lang$html$Html$text(' you’ve probably heard of. Partly because of its minimal instruction set but most likely because it has the word '),
 						_1: {
 							ctor: '::',
 							_0: A2(
@@ -9987,7 +9987,7 @@ var _minond$brainfuck$Main$editorIntroduction = {
 								}),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html$text(' in its name. That said this language doesn\'t have to leave you thinking '),
+								_0: _elm_lang$html$Html$text(' in its name. That said this language doesn’t have to leave you thinking '),
 								_1: {
 									ctor: '::',
 									_0: A2(
@@ -9999,7 +9999,7 @@ var _minond$brainfuck$Main$editorIntroduction = {
 										},
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html$text('\"wtf?\"'),
+											_0: _elm_lang$html$Html$text('wtf?'),
 											_1: {ctor: '[]'}
 										}),
 									_1: {
@@ -10025,7 +10025,7 @@ var _minond$brainfuck$Main$editorIntroduction = {
 			},
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html$text('Besides this text you\'ll see buttons you can use to execute your program, which can be done in continuation or one command at a time, and as your program is running you can slide the range input field to alter the speed at which the code runs. Below those controls you\'ll notice a table filled with 0\'s (at least before you run a program), this is the internal memory. And finally your code editor, where you can set breakpoints by clicking on commands that will halt your program\'s execution. Now for a quick introduction to the language: '),
+				_0: _elm_lang$html$Html$text('Besides this text you’ll see buttons you can use to execute your program, which can be done in continuation or one command at a time, and as your program is running you can slide the range input field to alter the speed at which the code runs. Below those controls you’ll notice a table filled with 0’s (at least before you run a program), this is the internal memory. And finally your code editor, where you can set breakpoints by clicking on commands that will halt your program’s execution. Now for a quick introduction to the language: '),
 				_1: {ctor: '[]'}
 			}),
 		_1: {
@@ -10079,7 +10079,7 @@ var _minond$brainfuck$Main$editorIntroduction = {
 										_0: _minond$brainfuck$Main$mono('-'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$html$Html$text(' increment and decrement the active cell. Note that incrementing above 255 will \"wrap\" the value back around to 0, and decrementing below 0 will take you to 255.'),
+											_0: _elm_lang$html$Html$text(' increment and decrement the active cell. Note that incrementing above 255 will ‘wrap’ the value back around to 0, and decrementing below 0 will take you to 255.'),
 											_1: {ctor: '[]'}
 										}
 									}
@@ -10105,7 +10105,7 @@ var _minond$brainfuck$Main$editorIntroduction = {
 											_0: _minond$brainfuck$Main$mono(']'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html$text(' are the language\'s only control flow operators. The code inside of the loop is ran as long as that value of the active cell is not zero. Think of it as a '),
+												_0: _elm_lang$html$Html$text(' are the language’s only control flow operators. The code inside of the loop is ran as long as that value of the active cell is not zero. Think of it as a '),
 												_1: {
 													ctor: '::',
 													_0: _minond$brainfuck$Main$mono('while (ptr != 0) {}'),
@@ -10145,7 +10145,7 @@ var _minond$brainfuck$Main$editorIntroduction = {
 														_0: A2(_minond$brainfuck$Main$link, 'ASCII', 'https://en.wikipedia.org/wiki/ASCII'),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html$text(' in the active cell (so if the active cell has a value of 97 and you output its value, you should get an \"a\".) '),
+															_0: _elm_lang$html$Html$text(' in the active cell (so if the active cell has a value of 97 and you output its value, you should get an ‘a’.) '),
 															_1: {ctor: '[]'}
 														}
 													}
@@ -10169,13 +10169,13 @@ var _minond$brainfuck$Main$editorIntroduction = {
 					},
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text('So play around with this tool. Start by running the sample code or creating basic programs on your own and see for yourself how with even the most basic control flow and altering commands you can technically accomplish any task. If you\'re curious about the code and the interpreter that are running on this page, '),
+						_0: _elm_lang$html$Html$text('So play around with this tool. Start by running the sample code or creating basic programs on your own and see for yourself how with even the most basic control flow and altering commands you can technically accomplish any task. If you’re curious about the code and the interpreter that are running on this page, '),
 						_1: {
 							ctor: '::',
 							_0: A2(_minond$brainfuck$Main$link, 'go here', 'https://github.com/minond/brainfuck'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$html$Html$text(', and if you\'d like to learn more about Brainfuck and other really interesting esoteric programming languages then I recommend heading over to '),
+								_0: _elm_lang$html$Html$text(', and if you’d like to learn more about Brainfuck and other really interesting esoteric programming languages then I recommend heading over to '),
 								_1: {
 									ctor: '::',
 									_0: A2(_minond$brainfuck$Main$link, 'Esolang', 'https://esolangs.org/wiki/Main_Page'),

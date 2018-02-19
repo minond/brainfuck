@@ -43,6 +43,10 @@
       letter-spacing: .7px;
     }
 
+    .monospace {
+      font-family: Consolas,monaco,monospace;
+    }
+
     .container {
       max-width: 75rem;
       margin: 0 auto;
@@ -183,7 +187,11 @@
     <script src="vendor/requirejs/require.js"></script>
     <script>
     var app = Elm.Main.embed(document.getElementById('view'));
-    requirejs(['vendor/embeddable-interpreters/brainfuck.js'], function (bf) {
+
+    requirejs([
+      'vendor/embeddable-interpreters/common.js',
+      'vendor/embeddable-interpreters/brainfuck.js'
+    ], function (common, bf) {
       var EDITOR_TOKENS = '.cm-keyword, .cm-bracket, .cm-def, .cm-atom';
 
       var tick, cont, timer, speed, breakpoints, editor;
@@ -305,7 +313,9 @@
       }
 
       function run(runtime) {
+        console.log(runtime, runtime.input)
         breakpoints = runtime.breakpoints;
+        var readBuffer = new common.ReadBuffer(runtime.input);
 
         bf.exec(runtime.program.replace(/[^\+\-\,\.\<\>\[\]]/g, ''), {
           tick: function (_tick, update, state) {
@@ -355,7 +365,7 @@
             console.log('done');
             tick = null;
           },
-        });
+        }, readBuffer);
       }
 
       cmd(["init"]);

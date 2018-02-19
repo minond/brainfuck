@@ -8,68 +8,40 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+        define(["require", "exports", "./common"], factory);
     }
 })(function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var inBrowser = typeof window !== 'undefined';
-    var inputPrompt = 'input: ';
-    var nodeWrite = function (str) {
-        return process.stdout.write(str);
-    };
-    var browserWrite = function (str) {
-        return console.log(str);
-    };
-    var nodeRead = function (cb) {
-        var readline = require('readline');
-        var rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
-        rl.question(inputPrompt, function (input) {
-            rl.close();
-            cb(input);
-        });
-    };
-    var browserRead = function (cb) {
-        return cb(window.prompt(inputPrompt) || String.fromCharCode(0));
-    };
-    var read = function (cb) {
-        return inBrowser ? browserRead(cb) : nodeRead(cb);
-    };
-    var write = function (str) {
-        return inBrowser ? browserWrite(str) : nodeWrite(str);
-    };
-    var isset = function (val) {
-        return val !== null && val !== undefined;
-    };
-    var call = function (fn) {
-        return fn();
-    };
-    var pass = function (x) {
-        return x;
-    };
+    // - https://en.wikipedia.org/wiki/Brainfuck
+    // ## Setup
+    // Helper functions. We need to know if we should use browser or node apis for
+    // i/o. The following functions are read and write implementations for specific
+    // environments. They include: a write function for node; a write function for
+    // browsers; a read function for node; a read function for browsers; a generic
+    // read function. Use this in the interpreter; and a generic write function.
+    // Use this in the interpreter.
+    var common_1 = require("./common");
     // ## The interpreter
-    exports.exec = function (prog, userHooks) {
+    var exec = function (prog, userHooks, buff) {
         // First, split the program into an array of characters so we can take action
         // upon each of them one by one. That is stores in `cmds`. Then store the
         // number of "commands" so that we know when to stop and not have to check
-        // the `.length` property over and over again. That is stores in `len`
+        // the `.length` property over and over again. That is stored in `len`.
         var cmds = prog.split('');
         var len = cmds.length;
         // Now to the state variables. First, two less important ones: `steps` is
         // used to track how many times the `dump` function has been called and `cmd`
         // is the local variable of the current command we are processing. This is a
         // local variable, so there is no need to pass it around to functions that
-        // are in the state of the interpreter
+        // are in the state of the interpreter.
         var steps = 0;
         var cmd;
         // The rest of the state variables: `jumps` is a stack of loop starting
         // indexes. See `[` and `]` operators.  `memory` is where we store the memory
         // cells of our program.  `pointer` this is where we are pointing to in
         // memory. Always starts at zero.  Finally, `ids` tracks the index of where
-        // we are in the program
+        // we are in the program.
         var jumps = [];
         var memory = [];
         var pointer = 0;
@@ -86,22 +58,31 @@
         };
         // Do you want to see the state after every command?
         var canDebug = function (cmd) {
-            return !!process.env.DEBUG && '-+<>[],.'.indexOf(cmd) !== -1;
+            return !!process.env.DEBUG && [
+                "-" /* MINUS */,
+                "+" /* PLUS */,
+                "<" /* LT */,
+                ">" /* GT */,
+                "[" /* OBRACKET */,
+                "]" /* CBRACKET */,
+                "," /* COMMA */,
+                "." /* PERIOD */
+            ].indexOf(cmd) !== -1;
         };
         var dump = function (cmd) {
             return console.log('[%s:%s]\t\tcmd: %s\t\tcurr: %s[%s]\t\tmem: %s', steps, idx, cmd, pointer, curr(), JSON.stringify(memory));
         };
         // Finds the matching closing bracket of the start of a loop. see `[` and `]`
         // operators. increment for every `[` and decrement for every `]`. we'll know
-        // we're at our closing bracket when we get to zero
+        // we're at our closing bracket when we get to zero.
         var findEnd = function (idx) {
             var stack = 1;
             while (cmds[idx]) {
                 switch (cmds[idx]) {
-                    case '[':
+                    case "[" /* OBRACKET */:
                         stack++;
                         break;
-                    case ']':
+                    case "]" /* CBRACKET */:
                         stack--;
                         break;
                 }
@@ -117,15 +98,15 @@
         // ### Hooks
         // Hooks allow other programs to interact with the internals of the
         // interpreter. They allow for custom io functions as well as ways to move on
-        // to the next step and update state
+        // to the next step and update state.
         var internalUpdate = function (state) {
-            memory = isset(state.memory) ? state.memory : memory;
-            pointer = isset(state.pointer) ? state.pointer : pointer;
-            idx = isset(state.idx) ? state.idx : idx;
+            memory = common_1.isset(state.memory) ? state.memory : memory;
+            pointer = common_1.isset(state.pointer) ? state.pointer : pointer;
+            idx = common_1.isset(state.idx) ? state.idx : idx;
         };
         // Moves on to the next command. Checks that we still have commands left to
         // read and also show debugging information. In a `process.nextTick` (or one
-        // of its siblings) to prevent call stack overflows
+        // of its siblings) to prevent call stack overflows.
         var internalTick = function () {
             if (canDebug(cmd)) {
                 dump(cmd);
@@ -147,7 +128,10 @@
                 memory: memory.slice(0)
             });
         };
-        var hooks = Object.assign({ read: read, write: write, tick: call, done: pass }, userHooks);
+        var readBuff = function (cb) {
+            return common_1.read(cb, buff || new common_1.ReadBuffer());
+        };
+        var hooks = Object.assign({ read: readBuff, write: common_1.write, tick: common_1.call, done: common_1.pass }, userHooks);
         // ### Operators
         // | tok  | description                                                                                                                                                                         |
         // |:----:|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -159,13 +143,13 @@
         // | `,`  | accept one byte of input, storing its value in the byte at the data pointer.                                                                                                        |
         // | `[`  | if the byte at the data pointer is zero, then instead of moving the instruction pointer forward to the next command, jump it forward to the command after the matching `]` command. |
         // | `]`  | if the byte at the data pointer is nonzero, then instead of moving the instruction pointer forward to the next command, jump it back to the command after the matching `[` command. |
-        var ops = {
-            '+': function () { return save((curr() === 255 ? 0 : curr() + 1)); },
-            '-': function () { return save((curr() || 256) - 1); },
-            '<': function () { return --pointer; },
-            '>': function () { return ++pointer; },
-            '.': function () { return hooks.write(String.fromCharCode(curr())); },
-            '[': function () {
+        var ops = (_a = {},
+            _a["+" /* PLUS */] = function () { return save((curr() === 255 ? 0 : curr() + 1)); },
+            _a["-" /* MINUS */] = function () { return save((curr() || 256) - 1); },
+            _a["<" /* LT */] = function () { return --pointer; },
+            _a[">" /* GT */] = function () { return ++pointer; },
+            _a["." /* PERIOD */] = function () { return hooks.write(String.fromCharCode(curr())); },
+            _a["[" /* OBRACKET */] = function () {
                 if (curr() === 0) {
                     idx = findEnd(idx + 1);
                 }
@@ -173,39 +157,41 @@
                     jumps.push(idx);
                 }
             },
-            ']': function () {
+            _a["]" /* CBRACKET */] = function () {
                 if (curr() !== 0) {
                     idx = jumps[jumps.length - 1];
                 }
                 else {
                     jumps.pop();
                 }
-            }
-        };
-        // This is what executes every command
+            },
+            _a);
+        // This is what executes every command.
         var run = function () {
             cmd = cmds[idx];
             if (cmd in ops) {
                 // Is the current command a standard operator? if so just run it.
-                // Standard operators update the state themselvels
+                // Standard operators update the state themselvels.
                 ops[cmd]();
                 tick();
             }
-            else if (cmd === ',') {
+            else if (cmd === "," /* COMMA */) {
                 // Since read functions may not always be blocking, we handle ',' as a
                 // special operator, separately from the flow of the rest of the
-                // operators
+                // operators.
                 hooks.read(function (input) {
                     save(input.charCodeAt(0));
                     tick();
                 });
             }
             else {
-                // Not a brainfuck command - ignore it
+                // Not a brainfuck command - ignore it.
                 tick();
             }
         };
-        // Run this fucker
+        // Run this fucker.
         run();
+        var _a;
     };
+    exports.exec = exec;
 });

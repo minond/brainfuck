@@ -2,7 +2,7 @@ port module Main exposing (main)
 
 import Array
 import Html exposing (Attribute, Html, a, button, code, div, h1, input, li, option, p, section, select, span, text, textarea, ul)
-import Html.Attributes exposing (class, classList, href, spellcheck, type_, value)
+import Html.Attributes exposing (class, classList, href, id, spellcheck, type_, value)
 import Html.Events exposing (on, onClick, onInput)
 import Json.Decode as Json
 import List
@@ -36,11 +36,13 @@ type Msg
     | SetDelay String
     | SetProgram String
     | EditorInput String
+    | UpdateProgramInput String
     | Breakpoint Int
 
 
 type alias Model =
     { program : String
+    , input : String
     , output : Maybe String
     , memory : List Int
     , breakpoints : List Int
@@ -63,6 +65,7 @@ type alias Runtime =
     { program : String
     , memory : List Int
     , breakpoints : List Int
+    , input : String
     , idx : Int
     , pointer : Int
     , steps : Int
@@ -109,6 +112,9 @@ update message model =
                 breakpoints =
                     model.breakpoints
 
+                input =
+                    model.input
+
                 clean =
                     cleanState model.program
 
@@ -116,6 +122,7 @@ update message model =
                     { clean
                         | delay = model.delay
                         , breakpoints = breakpoints
+                        , input = input
                     }
             in
                 ( reset, cmd ( "start", Just (toRuntime reset) ) )
@@ -159,13 +166,29 @@ update message model =
                 program =
                     programLoad name
 
+                clean =
+                    cleanState program
+
+                update =
+                    { clean | input = model.input }
+
                 runtime =
-                    toRuntime <| cleanState program
+                    toRuntime <| update
             in
-                ( cleanState program, cmd ( "load", Just runtime ) )
+                ( update, cmd ( "load", Just runtime ) )
 
         EditorInput program ->
-            ( cleanState program, Cmd.none )
+            let
+                clean =
+                    cleanState program
+
+                update =
+                    { clean | input = model.input }
+            in
+                ( update, Cmd.none )
+
+        UpdateProgramInput input ->
+            ( { model | input = input }, Cmd.none )
 
         Breakpoint pos ->
             let
@@ -229,6 +252,7 @@ lbl txt =
 cleanState : String -> Model
 cleanState program =
     { program = program
+    , input = ""
     , output = Nothing
     , memory = []
     , breakpoints = []
@@ -240,10 +264,11 @@ cleanState program =
 
 
 toRuntime : Model -> Runtime
-toRuntime { program, memory, breakpoints, idx, pointer, steps, delay } =
+toRuntime { program, memory, breakpoints, input, idx, pointer, steps, delay } =
     { program = program
     , memory = memory
     , breakpoints = breakpoints
+    , input = input
     , idx = idx
     , pointer = pointer
     , steps = steps
@@ -320,6 +345,16 @@ editorOutput model =
         [ div
             [ class "mt3" ]
             []
+        , lbl "Input"
+        , div
+            [ class "pb2 mb2" ]
+            [ input
+                [ class "w-50 f6 monospace"
+                , id "readBuffer"
+                , onInput UpdateProgramInput
+                ]
+                []
+            ]
         , lbl "Output"
         , div
             [ class "pb2 mb2" ]
@@ -493,7 +528,7 @@ editorIntroduction =
             , mono ","
             , text " are the io functions. A period will output the character associated with the "
             , link "ASCII" "https://en.wikipedia.org/wiki/ASCII"
-            , text " in the active cell (so if the active cell has a value of 97 and you output its value, you should get an ‘a’.) "
+            , text " in the active cell (so if the active cell has a value of 97 and you output its value, you should get an ‘a’.) You'll notice an input field labeled as `input`. This is where you can predefine the input for your program and if this is empty, the editor will prompt for the input intead."
             ]
         ]
     , p [ class "lh-copy" ]

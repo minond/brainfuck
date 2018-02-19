@@ -9646,11 +9646,12 @@ var _minond$brainfuck$Main$mergeState = F2(
 	});
 var _minond$brainfuck$Main$toRuntime = function (_p2) {
 	var _p3 = _p2;
-	return {program: _p3.program, memory: _p3.memory, breakpoints: _p3.breakpoints, idx: _p3.idx, pointer: _p3.pointer, steps: _p3.steps, speed: ((1000 * _p3.delay) / 100) | 0};
+	return {program: _p3.program, memory: _p3.memory, breakpoints: _p3.breakpoints, input: _p3.input, idx: _p3.idx, pointer: _p3.pointer, steps: _p3.steps, speed: ((1000 * _p3.delay) / 100) | 0};
 };
 var _minond$brainfuck$Main$cleanState = function (program) {
 	return {
 		program: program,
+		input: '',
 		output: _elm_lang$core$Maybe$Nothing,
 		memory: {ctor: '[]'},
 		breakpoints: {ctor: '[]'},
@@ -9807,40 +9808,6 @@ var _minond$brainfuck$Main$mono = function (str) {
 			_0: _elm_lang$html$Html$text(str),
 			_1: {ctor: '[]'}
 		});
-};
-var _minond$brainfuck$Main$editorOutput = function (model) {
-	var output = A2(_elm_lang$core$Maybe$withDefault, 'none', model.output);
-	return {
-		ctor: '::',
-		_0: A2(
-			_elm_lang$html$Html$div,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('mt3'),
-				_1: {ctor: '[]'}
-			},
-			{ctor: '[]'}),
-		_1: {
-			ctor: '::',
-			_0: _minond$brainfuck$Main$lbl('Output'),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('pb2 mb2'),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: _minond$brainfuck$Main$mono(output),
-						_1: {ctor: '[]'}
-					}),
-				_1: {ctor: '[]'}
-			}
-		}
-	};
 };
 var _minond$brainfuck$Main$editorInformation = function (_p7) {
 	var _p8 = _p7;
@@ -10145,7 +10112,7 @@ var _minond$brainfuck$Main$editorIntroduction = {
 														_0: A2(_minond$brainfuck$Main$link, 'ASCII', 'https://en.wikipedia.org/wiki/ASCII'),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$html$Html$text(' in the active cell (so if the active cell has a value of 97 and you output its value, you should get an ‘a’.) '),
+															_0: _elm_lang$html$Html$text(' in the active cell (so if the active cell has a value of 97 and you output its value, you should get an ‘a’.) You\'ll notice an input field labeled as `input`. This is where you can predefine the input for your program and if this is empty, the editor will prompt for the input intead.'),
 															_1: {ctor: '[]'}
 														}
 													}
@@ -10209,6 +10176,7 @@ var _minond$brainfuck$Main$cmd = _elm_lang$core$Native_Platform.outgoingPort(
 				function (v) {
 					return v;
 				}),
+			input: v._1._0.input,
 			idx: v._1._0.idx,
 			pointer: v._1._0.pointer,
 			steps: v._1._0.steps,
@@ -10222,10 +10190,11 @@ var _minond$brainfuck$Main$update = F2(
 		switch (_p12.ctor) {
 			case 'Run':
 				var clean = _minond$brainfuck$Main$cleanState(model.program);
+				var input = model.input;
 				var breakpoints = model.breakpoints;
 				var reset = _elm_lang$core$Native_Utils.update(
 					clean,
-					{delay: model.delay, breakpoints: breakpoints});
+					{delay: model.delay, breakpoints: breakpoints, input: input});
 				var delay = model.delay;
 				return {
 					ctor: '_Tuple2',
@@ -10319,11 +10288,14 @@ var _minond$brainfuck$Main$update = F2(
 				};
 			case 'SetProgram':
 				var program = _minond$brainfuck$Programs$programLoad(_p12._0);
-				var runtime = _minond$brainfuck$Main$toRuntime(
-					_minond$brainfuck$Main$cleanState(program));
+				var clean = _minond$brainfuck$Main$cleanState(program);
+				var update = _elm_lang$core$Native_Utils.update(
+					clean,
+					{input: model.input});
+				var runtime = _minond$brainfuck$Main$toRuntime(update);
 				return {
 					ctor: '_Tuple2',
-					_0: _minond$brainfuck$Main$cleanState(program),
+					_0: update,
 					_1: _minond$brainfuck$Main$cmd(
 						{
 							ctor: '_Tuple2',
@@ -10332,9 +10304,17 @@ var _minond$brainfuck$Main$update = F2(
 						})
 				};
 			case 'EditorInput':
+				var clean = _minond$brainfuck$Main$cleanState(_p12._0);
+				var update = _elm_lang$core$Native_Utils.update(
+					clean,
+					{input: model.input});
+				return {ctor: '_Tuple2', _0: update, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'UpdateProgramInput':
 				return {
 					ctor: '_Tuple2',
-					_0: _minond$brainfuck$Main$cleanState(_p12._0),
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{input: _p12._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			default:
@@ -10385,20 +10365,91 @@ var _minond$brainfuck$Main$tick = _elm_lang$core$Native_Platform.incomingPort(
 			_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$int))));
 var _minond$brainfuck$Main$output = _elm_lang$core$Native_Platform.incomingPort('output', _elm_lang$core$Json_Decode$string);
 var _minond$brainfuck$Main$breakpoint = _elm_lang$core$Native_Platform.incomingPort('breakpoint', _elm_lang$core$Json_Decode$int);
-var _minond$brainfuck$Main$Model = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {program: a, output: b, memory: c, breakpoints: d, idx: e, pointer: f, steps: g, delay: h};
+var _minond$brainfuck$Main$Model = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {program: a, input: b, output: c, memory: d, breakpoints: e, idx: f, pointer: g, steps: h, delay: i};
 	});
 var _minond$brainfuck$Main$ProgramState = F4(
 	function (a, b, c, d) {
 		return {memory: a, idx: b, pointer: c, steps: d};
 	});
-var _minond$brainfuck$Main$Runtime = F7(
-	function (a, b, c, d, e, f, g) {
-		return {program: a, memory: b, breakpoints: c, idx: d, pointer: e, steps: f, speed: g};
+var _minond$brainfuck$Main$Runtime = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {program: a, memory: b, breakpoints: c, input: d, idx: e, pointer: f, steps: g, speed: h};
 	});
 var _minond$brainfuck$Main$Breakpoint = function (a) {
 	return {ctor: 'Breakpoint', _0: a};
+};
+var _minond$brainfuck$Main$UpdateProgramInput = function (a) {
+	return {ctor: 'UpdateProgramInput', _0: a};
+};
+var _minond$brainfuck$Main$editorOutput = function (model) {
+	var output = A2(_elm_lang$core$Maybe$withDefault, 'none', model.output);
+	return {
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('mt3'),
+				_1: {ctor: '[]'}
+			},
+			{ctor: '[]'}),
+		_1: {
+			ctor: '::',
+			_0: _minond$brainfuck$Main$lbl('Input'),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('pb2 mb2'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$input,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('w-50 f6 monospace'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$id('readBuffer'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onInput(_minond$brainfuck$Main$UpdateProgramInput),
+										_1: {ctor: '[]'}
+									}
+								}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _minond$brainfuck$Main$lbl('Output'),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('pb2 mb2'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _minond$brainfuck$Main$mono(output),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}
+	};
 };
 var _minond$brainfuck$Main$EditorInput = function (a) {
 	return {ctor: 'EditorInput', _0: a};

@@ -1,6 +1,8 @@
 port module Main exposing (main)
 
 import Array
+import Browser exposing (Document)
+import Debug exposing (toString)
 import Html exposing (Attribute, Html, a, button, code, div, h1, input, li, option, p, section, select, span, text, textarea, ul)
 import Html.Attributes exposing (class, classList, href, id, spellcheck, type_, value)
 import Html.Events exposing (on, onClick, onInput)
@@ -43,7 +45,7 @@ type Msg
 type alias Model =
     { program : String
     , input : String
-    , output : Maybe String
+    , output_ : Maybe String
     , memory : List Int
     , breakpoints : List Int
     , idx : Int
@@ -77,9 +79,11 @@ main =
     let
         model =
             initialModel
+        init : () -> (Model, Cmd Msg)
+        init _ = ( model, cmd ( "init", Just (toRuntime model) ))
     in
-        Html.program
-            { init = ( model, cmd ( "init", Just (toRuntime model) ) )
+        Browser.document
+            { init = init
             , view = view
             , update = update
             , subscriptions = subscriptions
@@ -138,10 +142,10 @@ update message model =
 
         Output addition ->
             let
-                output =
-                    Maybe.withDefault "" model.output ++ addition
+                output_ =
+                    Maybe.withDefault "" model.output_ ++ addition
             in
-                ( { model | output = Just output }, Cmd.none )
+                ( { model | output_ = Just output_ }, Cmd.none )
 
         Tick state ->
             ( mergeState state model, Cmd.none )
@@ -150,16 +154,16 @@ update message model =
             let
                 delay =
                     case String.toInt raw of
-                        Err _ ->
+                        Nothing ->
                             50
 
-                        Ok delay ->
-                            delay
+                        Just val ->
+                            val
 
-                update =
+                update_ =
                     { model | delay = delay }
             in
-                ( update, cmd ( "speed", Just (toRuntime update) ) )
+                ( update_, cmd ( "speed", Just (toRuntime update_) ) )
 
         SetProgram name ->
             let
@@ -169,23 +173,23 @@ update message model =
                 clean =
                     cleanState program
 
-                update =
+                update_ =
                     { clean | input = model.input }
 
                 runtime =
-                    toRuntime <| update
+                    toRuntime <| update_
             in
-                ( update, cmd ( "load", Just runtime ) )
+                ( update_, cmd ( "load", Just runtime ) )
 
         EditorInput program ->
             let
                 clean =
                     cleanState program
 
-                update =
+                update_ =
                     { clean | input = model.input }
             in
-                ( update, Cmd.none )
+                ( update_, Cmd.none )
 
         UpdateProgramInput input ->
             ( { model | input = input }, Cmd.none )
@@ -201,9 +205,10 @@ update message model =
                 ( { model | breakpoints = breakpoints }, Cmd.none )
 
 
-view : Model -> Html Msg
+view : Model -> Document Msg
 view model =
-    div [ class "cf pa3 pa4-ns container helvetica" ]
+    { title = "random title"
+    , body= [div [ class "cf pa3 pa4-ns container helvetica" ]
         [ editorTitle
         , div
             [ class "fl w-100 w-50-ns editor-section" ]
@@ -217,7 +222,8 @@ view model =
             , section [] <| editorInformation model
             ]
         ]
-
+    ]
+    }
 
 mono : String -> Html Msg
 mono str =
@@ -253,7 +259,7 @@ cleanState : String -> Model
 cleanState program =
     { program = program
     , input = ""
-    , output = Nothing
+    , output_ = Nothing
     , memory = []
     , breakpoints = []
     , idx = 0
@@ -339,8 +345,8 @@ editorControls { delay } =
 editorOutput : Model -> List (Html Msg)
 editorOutput model =
     let
-        output =
-            Maybe.withDefault "none" model.output
+        output_ =
+            Maybe.withDefault "none" model.output_
     in
         [ div
             [ class "mt3" ]
@@ -358,7 +364,7 @@ editorOutput model =
         , lbl "Output"
         , div
             [ class "pb2 mb2" ]
-            [ mono output ]
+            [ mono output_ ]
         ]
 
 
@@ -428,11 +434,11 @@ editorMemory { memory, pointer } =
 
 
 editorInformation : Model -> List (Html Msg)
-editorInformation { program, output, idx, steps } =
+editorInformation { program, output_, idx, steps } =
     let
         isOptcode =
-            \opt ->
-                String.contains opt "+-[]<>,."
+            \opt_ ->
+                String.contains opt_ "+-[]<>,."
 
         opts =
             Array.filter isOptcode <|
@@ -450,7 +456,7 @@ editorInformation { program, output, idx, steps } =
             Array.length <| opts
 
         outputMessage =
-            case output of
+            case output_ of
                 Nothing ->
                     text "The program has had no output yet."
 

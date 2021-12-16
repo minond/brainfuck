@@ -186,7 +186,7 @@
     <script src="vendor/codemirror/brainfuck.js"></script>
     <script src="vendor/requirejs/require.js"></script>
     <script>
-    var app = Elm.Main.embed(document.getElementById('view'));
+    const app = Elm.Main.init({ node: document.getElementById('view') });
 
     requirejs([
       'vendor/embeddable-interpreters/common.js',

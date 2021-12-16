@@ -5999,7 +5999,7 @@ var $author$project$Main$editorIntroduction = _List_fromArray(
 						$author$project$Main$mono('.'),
 						$elm$html$Html$text(' and '),
 						$author$project$Main$mono(','),
-						$elm$html$Html$text(' are the io functions! A period will output the character associated with the '),
+						$elm$html$Html$text(' are the io functions. A period will output the character associated with the '),
 						A2($author$project$Main$link, 'ASCII', 'https://en.wikipedia.org/wiki/ASCII'),
 						$elm$html$Html$text(' in the active cell (so if the active cell has a value of 97 and you output its value, you should get an ‘a’.) You\'ll notice an input field labeled as `input`. This is where you can predefine the input for your program and if this is empty, the editor will prompt for the input intead.')
 					]))

@@ -1,8 +1,5 @@
-build: install
+build:
 	elm make src/Main.elm --output=build/main.js
 
-install:
-	elm package install
-
 run:
-	elm live src/Main.elm --output=build/main.js --open --debug
+	elm-live src/Main.elm --open --debug -- --output=build/main.js

@@ -7,4 +7,4 @@ nice [intro](http://www.hevanet.com/cristofd/brainfuck/epistle.html) and
 came prior to mine.
 
 To play around with the debugger, go to [my site](http://minond.xyz/brainfuck/)
-or run locally by downloading this repo and running `make install run`.
+or run locally by downloading this repo and running `make run`.

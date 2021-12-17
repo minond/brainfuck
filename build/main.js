@@ -6429,7 +6429,7 @@ var $author$project$Main$view = function (model) {
 							]))
 					]))
 			]),
-		title: 'random title'
+		title: 'Brainfuck'
 	};
 };
 var $author$project$Main$main = function () {

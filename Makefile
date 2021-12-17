@@ -1,3 +1,5 @@
+.PHONY: all build clean
+
 build:
 	elm make src/Main.elm --output=build/main.js
 

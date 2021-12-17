@@ -96,7 +96,7 @@ initialModel =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
+subscriptions _ =
     Sub.batch
         [ tick Tick
         , output Output
@@ -110,9 +110,6 @@ update message model =
     case message of
         Run ->
             let
-                delay =
-                    model.delay
-
                 breakpoints =
                     model.breakpoints
 
@@ -207,7 +204,7 @@ update message model =
 
 view : Model -> Document Msg
 view model =
-    { title = "random title"
+    { title = "Brainfuck"
     , body= [div [ class "cf pa3 pa4-ns container helvetica" ]
         [ editorTitle
         , div

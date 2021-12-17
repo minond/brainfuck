@@ -5247,7 +5247,7 @@ var $author$project$Main$tick = _Platform_incomingPort(
 		},
 		A2($elm$json$Json$Decode$field, 'steps', $elm$json$Json$Decode$int)));
 var $author$project$Main$unload = _Platform_incomingPort('unload', $elm$json$Json$Decode$string);
-var $author$project$Main$subscriptions = function (model) {
+var $author$project$Main$subscriptions = function (_v0) {
 	return $elm$core$Platform$Sub$batch(
 		_List_fromArray(
 			[
@@ -5359,7 +5359,6 @@ var $author$project$Main$update = F2(
 		switch (message.$) {
 			case 'Run':
 				var input = model.input;
-				var delay = model.delay;
 				var clean = $author$project$Main$cleanState(model.program);
 				var breakpoints = model.breakpoints;
 				var reset = _Utils_update(

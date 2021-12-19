@@ -6,5 +6,9 @@ nice [intro](http://www.hevanet.com/cristofd/brainfuck/epistle.html) and
 [Fabian](https://copy.sh/) for the great [art](https://copy.sh/brainfuck/) that
 came prior to mine.
 
+**You need to have [Elm](https://guide.elm-lang.org/install/elm.html) and
+[elm-live](https://www.elm-live.com/) installed.**
+
 To play around with the debugger, go to [my site](http://minond.xyz/brainfuck/)
-or run locally by downloading this repo and running `make install run`.
+or run locally by downloading this repo and running `make run`. Use `make build`
+to update `build/main.js` accordingly.
